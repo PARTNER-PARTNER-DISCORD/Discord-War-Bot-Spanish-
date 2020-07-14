@@ -62,7 +62,7 @@
   "scripts": {
     "check": "tsc",
     "purge": "rm -rf save/guilds/ save/users/ save/pingHistory.json save/reboot*.json save/rigged-counter.txt webClients.json",
-    "install": ".hooks/install-hooks.sh",
+    "install": "dos2unix .hooks/install-hooks.sh && sh .hooks/install-hooks.sh",
     "lint": "eslint --no-ignore $(find ./ -iname '*.js' -not -path './node_modules/*' -not -path './docs/*' -not -path './dist/*' -not -path './.git/*' -not -path './src/web/HTTPS-Proxy/*' -printf '%p ')",
     "lint:fix": "eslint --fix --no-ignore $(find ./ -iname '*.js' -not -path './node_modules/*' -not -path './docs/*' -not -path './dist/*' -not -path './.git/*' -not -path './src/web/HTTPS-Proxy/*' -printf '%p ')",
     "lintandtest": "npm run lint && npm run test",
