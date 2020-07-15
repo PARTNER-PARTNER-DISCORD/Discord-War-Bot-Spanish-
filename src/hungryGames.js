@@ -661,11 +661,11 @@ function HG() {
    */
   function mkCmd(cb) {
     return function(msg) {
-      if (self.common.isRelease &&
-          (msg.guild && msg.guild.memberCount > 75000)) {
-        reply(msg, 'largeServerDisabled', 'largeServerDisabledSub');
-        return;
-      }
+      /**if (self.common.isRelease && (msg.guild && msg.guild.memberCount > 75000)) { // Limitación del número de usuarios
+        *reply(msg, 'largeServerDisabled', 'largeServerDisabledSub');
+        *return;
+      *}
+	*/
       const id = msg.guild && msg.guild.id;
       const cached = id && hg._games[id];
       hg.fetchGame(id, (game) => {
