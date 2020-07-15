@@ -65,9 +65,17 @@
   "release": [
     "./main.js",
     "./hungryGames.js",
+	"./echo.js",
+	"./botCommands.js",
+	"./roleManager.js",
+	"./localeManager.js",
     "./web/hg.js",
+    "./web/account.js",
     "./web/stats.js",
-    "./web/settings.js"
+    "./web/settings.js",
+    "./web/webApi.js",
+	"./images.js",
+	"./autoReact.js"
   ],
   "FALLBACK": []
 }

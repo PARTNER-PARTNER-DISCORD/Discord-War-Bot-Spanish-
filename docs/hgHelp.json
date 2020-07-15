@@ -1,6 +1,6 @@
 {
-  "title": "Hungry Games",
-  "description": "Use https://www.spikeybot.com/hg/ if commands are too hard.",
+  "title": "Discord War Bot",
+  "description": "Use https://www.spikeybot.com/hg/ si los comandos son demasiado difíciles.",
   "prefix": "hg ",
   "sections": [
     {
@@ -8,12 +8,12 @@
       "rows": [
         {
           "command": "auto",
-          "description": "Automatically start the game and continue until the game is completely over.",
+          "description": "Inicie automáticamente el juego y continúe hasta que el juego haya terminado por completo.",
           "aliases": "autoplay, auto, play, go",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "go",
               "result": "Autoplay is enabled, if a game is not in progress, it will be created and started."
             }
@@ -25,7 +25,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "pause",
               "result": "The current day will be paused and can then be resumed with `hg resume` or `hg next`."
             }
@@ -38,7 +38,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "start",
               "result": "If you use Autoplay, this isn't necessary. Starts the game, but doesn't start the first day automatically."
             }
@@ -51,7 +51,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "end",
               "result": "The game will be aborted, and completely stopped and cannot be restarted."
             }
@@ -64,7 +64,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "next"
             }
           ]
@@ -76,7 +76,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "step"
             }
           ]
@@ -93,7 +93,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "create"
             }
           ]
@@ -214,7 +214,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "players"
             }
           ]
@@ -332,7 +332,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "react",
               "result": "A message will be sent, and those who add a reaction to it, will be included in the next game. Everyone else is excluded."
             },
@@ -355,7 +355,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "npcs",
               "result": "All currently created NPCs will be listed."
             },
@@ -373,7 +373,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "npc exclude MyCoolNPC",
               "result": "The NPC named 'MyCoolNPC' will be removed from future games."
             },
@@ -391,7 +391,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "npc include MyCoolNPC",
               "result": "The NPC named 'MyCoolNPC' will be added into future games."
             },
@@ -445,7 +445,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "npc delete MyCoolNPC",
               "result": "The NPC named 'MyCoolNPC' will be deleted without confirmation. If there are multiple NPCs named MyCoolNPC, the bot will pick one at random. To avoid deleting the wrong one, use the NPC's ID instead."
             },
@@ -467,7 +467,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "team swap @SpikeyRobot @SpikeyBot",
               "result": "SpikeyRobot will be put on SpikeyBot's Team, and SpikeyBot will be put on SpikeyRobot's original team."
             }
@@ -514,7 +514,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "team randomize",
               "result": "All teams will be reset, and users will be swapped at random to make entirely new teams."
             }
@@ -526,7 +526,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "team reset",
               "result": "All teams will be reset."
             }
@@ -544,7 +544,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "events",
               "result": "These commands are currently disabled, and no longer supported due to development challenges. Use https://www.spikeybot.com/hg/ to manage and view events."
             }
@@ -556,7 +556,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "claimlegacy",
               "result": "Transition custom events from legacy storage system to the newer format. Legacy custom events will solely be editable by the one who runs this command. Unfortunately events that give weapons, will have the given weapon data reset. Issues with conversion can be fixed at https://www.spikeybot.com/hg/."
             }
@@ -574,12 +574,12 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "stats",
               "result": "Lifetime, previous game, and the selected group stats for the user who ran the command will be sent."
             },
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "stats SpikeyRobot",
               "result": "Tracked stats for SpikeyRobot will be sent."
             }
@@ -592,7 +592,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "top",
               "result": "The top 10 players all time by number of games won will be shown."
             },
@@ -625,7 +625,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "groups",
               "result": "List all created stat groups. "
             },
@@ -668,7 +668,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "kill @SpikeyRobot#0001",
               "result": "A message will be added to the current day or the next day, that kills SpikeyRobot if he is not already dead."
             },
@@ -691,7 +691,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "wound @SpikeyRobot#0001",
               "result": "A message will be added to the current day or the next day, that wounds SpikeyRobot if he is not already wounded."
             },
@@ -714,7 +714,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "heal @SpikeyRobot#0001",
               "result": "A message will be added to the current day or the next day, that resurrects or heals SpikeyRobot if he is not already fully healed."
             },
@@ -737,7 +737,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "give @SpikeyRobot#0001 knife",
               "result": "SpikeyRobot will immediately be given a knife."
             },
@@ -755,7 +755,7 @@
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Basic Usage",
+              "description": "Uso básico",
               "command": "take @SpikeyRobot#0001 knife",
               "result": "SpikeyRobot will immediately lose a knife. If they end up with 0 or less, a message saying they lost all of their knives will still be sent."
             },
