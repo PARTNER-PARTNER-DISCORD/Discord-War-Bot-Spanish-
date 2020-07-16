@@ -168,7 +168,7 @@ class EsEsHG extends Locale {
     this.excludeBlocked = 'ahora están bloqueados de los juegos.';
     this.excludeFuture = 'serán eliminado del próximo juego.';
     this.excludePast = 'han sido eliminados de los juegos.';
-    this.includeUnblocked = 'ahora se puede agregar a los juegos.';
+    this.includeUnblocked = 'ahora pueden participar en los juegos.';
     this.includeFuture = 'se agregarán al próximo juego.';
     this.includePast = 'han sido agregados a los juegos.';
     this.noGame = 'No juego';
@@ -248,7 +248,7 @@ class EsEsHG extends Locale {
     this.optionChangeTeam =
         'Establecido {0} desde {1} hasta {2}\nPara restablecer los equipos al tamaño correcto, escriba ' +
         '"{3}teams reset".\nEsto eliminará todos los equipos y creará nuevos.';
-    this.optionChange = 'Establecido {0} desde {1} hasta {2}';
+    this.optionChange = 'Establecido {0} de {2} a {1}';
     this.optionInvalidBoolean =
         'Ese no es un valor válido para {0}, que requiere true o false. ' +
         '(Actualmente {1})';

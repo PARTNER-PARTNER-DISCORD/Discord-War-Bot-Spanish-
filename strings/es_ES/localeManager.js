@@ -12,12 +12,12 @@ class EsEsLocaleManager extends Locale {
    */
   constructor() {
     super();
-    this.title = 'Locale Manager';
+    this.title = 'Configurar localización';
     this.invalidLocale =
-        'Unknown language. I don\'t know what language you have requested.';
-    this.confirmLocale = 'Are you sure you wish to change your language?';
-    this.confirmLocaleReact = '{}\nReact with {} to confirm.';
-    this.currentLocale = 'Current language: `{}`';
+        'Lenguaje desconocido No sé qué idioma ha solicitado.';
+    this.confirmLocale = '¿Estás seguro de que deseas cambiar tu idioma?';
+    this.confirmLocaleReact = '{}\nReaccione con {} para confirmar.';
+    this.currentLocale = 'Idioma actual: `{}`';
   }
 }
 
