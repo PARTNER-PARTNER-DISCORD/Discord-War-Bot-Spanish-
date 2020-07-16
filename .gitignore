@@ -10,6 +10,8 @@ save/users/*
 save/shards/*
 save/hg/events/*
 
+save/hgBattles.json
+save/hgEvents.json
 save/hgWebClients.json
 save/webClients.json
 save/rigged-counter.txt
