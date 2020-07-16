@@ -32,7 +32,7 @@ class EsEsHGMessages extends Locale {
       '¡El día {day} ha terminado con {alive} supervivientes!',
       '{alive} han sobrevivido para ver el final del día {day}.',
       '{alive} han sobrevivido al día {day}.',
-      'El día {day} fue amable con solo {alives} supervivientes.',
+      'El día {day} fue amable con solo {alive} supervivientes.',
       'El día {day} pone su sol en los {alive} supervivientes.',
       'Solamente {alive} ven el final del día {day}.',
       '{alive} sobrevivieron a los eventos del día {day}.',
