@@ -1,5 +1,5 @@
 {
-  "title": "Discord War Bot",
+  "title": "Hungry Games",
   "description": "Use https://www.spikeybot.com/hg/ si los comandos son demasiado difíciles.",
   "prefix": "hg ",
   "sections": [
@@ -15,51 +15,51 @@
             {
               "description": "Uso básico",
               "command": "go",
-              "result": "Autoplay is enabled, if a game is not in progress, it will be created and started."
+              "result": "La reproducción automática está habilitada, si un juego no está en progreso, se creará e iniciará."
             }
           ]
         },
         {
           "command": "pause",
-          "description": "Pause the game and immediately stop sending messages without ending the game entirely.",
+          "description": "Pausa el juego e inmediatamente deja de enviar mensajes sin terminarlo por completo.",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "pause",
-              "result": "The current day will be paused and can then be resumed with `hg resume` or `hg next`."
+              "result": "El día actual se pausará y luego se puede reanudar con `hg resume` o `hg next`."
             }
           ]
         },
         {
           "command": "start",
-          "description": "This will start a game with your settings, but waits until you tell it to start the bloodbath.",
+          "description": "Esto iniciará un juego con tu configuración, pero espera hasta que le digas que comience el baño de sangre.",
           "aliases": "start, s",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "start",
-              "result": "If you use Autoplay, this isn't necessary. Starts the game, but doesn't start the first day automatically."
+              "result": "Si usa la reproducción automática, esto no es necesario. Inicia el juego, pero no comienza el primer día automáticamente."
             }
           ]
         },
         {
           "command": "end",
-          "description": "This will end a game early.",
+          "description": "Esto terminará un juego que no ha finalizado.",
           "aliases": "end, abort, stop",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "end",
-              "result": "The game will be aborted, and completely stopped and cannot be restarted."
+              "result": "El juego se cancelará, se detendrá por completo y no se podrá reiniciar."
             }
           ]
         },
         {
           "command": "next",
-          "description": "Simulate the next day of the Games!",
+          "description": "¡Simula el próximo día de los juegos!",
           "aliases": "next, nextday, resume, continue, unpause",
           "validOnlyInGuild": true,
           "examples": [
@@ -88,7 +88,7 @@
       "rows": [
         {
           "command": "create",
-          "description": "You shouldn't need to use this. But it will force a new game to be created, and update players for a new game.",
+          "description": "No deberías necesitar usar esto. Pero obligará a crear un nuevo juego y actualizará a los jugadores para un nuevo juego.",
           "aliases": "create, c, new",
           "validOnlyInGuild": true,
           "examples": [
@@ -100,105 +100,105 @@
         },
         {
           "command": "options",
-          "description": "List options if no name, or change the option if you give a name.",
+          "description": "Enumere las opciones si no tiene nombre, o cambie la opción si le da un nombre.",
           "aliases": "options, option, opt, opts, settings, setting, set",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Show Current Options",
+              "description": "Mostrar opciones actuales",
               "command": "opt",
-              "result": "All changeable options, their current values, and a description will be sent. Change pages by clicking on the reactions."
+              "result": "Se enviarán todas las opciones modificables, sus valores actuales y una descripción. Cambia las páginas haciendo clic en las reacciones."
             },
             {
-              "description": "Change a Boolean Option",
+              "description": "Cambiar una opción booleana",
               "command": "opt includeBots true",
-              "result": "Bots will be allowed in the games."
+              "result": "Se permitirán bots en los juegos."
             },
             {
-              "description": "Change a Percentage Option",
+              "description": "Cambiar una opción de porcentaje",
               "command": "opt probabilityOfArenaEvent 0.1",
-              "result": "The probability of an arena event will be set to 10%."
+              "result": "La probabilidad de un evento de arena se establecerá en 10%."
             },
             {
-              "description": "Change a Object Option",
+              "description": "Cambiar una opción de objeto",
               "command": "opt playerOutcomeProbs kill 50",
-              "result": "The relative probability of a player being killed will become 50."
+              "result": "La probabilidad relativa de que un jugador muera será 50."
             }
           ]
         },
         {
           "command": "rename",
-          "description": "Rename the game to your own custom name. The default is \"{SERVER NAME}'s Hungry Games\". The custom name must be 100 characters or fewer.",
+          "description": "Cambia el nombre del juego a tu propio nombre personalizado. El valor predeterminado es \"{SERVER NAME}'s Hungry Games\". El nombre personalizado debe tener 100 caracteres o menos.",
           "aliases": "rename, name",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Set a custom name.",
+              "description": "Establecer un nombre personalizado.",
               "command": "rename My Super Cool Game",
-              "result": "The name of the game will be changed to \"My Super Cool Game\""
+              "result": "El nombre del juego se cambiará a \"My Super Cool Game\""
             },
             {
-              "description": "Remove custom name.",
+              "description": "Eliminar nombre personalizado.",
               "command": "rename",
-              "result": "The game will return to using the server's name as the name of future games."
+              "result": "El juego volverá a usar el nombre del servidor como el nombre de futuros juegos."
             }
           ]
         },
         {
           "command": "reset",
-          "description": "Delete data about the Games. Don't choose an option for more info.",
+          "description": "Eliminar datos sobre los juegos. No elija una opción para más información.",
           "aliases": "reset, clear",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Show Reset Options",
+              "description": "Mostrar opciones de restablecimiento",
               "command": "reset",
-              "result": "Bot will send resettable values and a little info about each."
+              "result": "Bot enviará valores reiniciables y una pequeña información sobre cada uno."
             },
             {
-              "description": "Delete All Data",
+              "description": "Eliminar todos los datos",
               "command": "reset all",
-              "result": "Bot will delete <strong>all</strong> data about the games in this server. This cannot be undone.<br>(Includes custom game events. When I say <strong>all</strong>, I mean <strong>all</strong> data.)"
+              "result": "Bot eliminará <strong>todos</strong> los datos sobre los juegos en este servidor. Esto no se puede deshacer.<br>(Incluye eventos de juego personalizados. Cuando digo <strong>todos</strong>, me refiero a <strong>todos</strong> los datos)."
             },
             {
-              "description": "Delete Events Data",
+              "description": "Eliminar datos de eventos",
               "command": "reset events",
-              "result": "Bot will delete all custom events. This cannot be undone."
+              "result": "Bot eliminará todos los eventos personalizados. Esto no se puede deshacer."
             },
             {
-              "description": "Delete Current Game Data",
+              "description": "Eliminar datos del juego actual",
               "command": "reset current",
-              "result": "Bot will delete all data about the current game that may be paused. This should only be useful if data becomes corrupted."
+              "result": "Bot eliminará todos los datos sobre el juego actual que puedan estar en pausa. Esto solo debería ser útil si los datos se corrompen."
             },
             {
-              "description": "Reset Options",
+              "description": "Restablecer opciones",
               "command": "reset options",
-              "result": "All options will be reset to their default values. This cannot be undone."
+              "result": "Todas las opciones se restablecerán a sus valores predeterminados. Esto no se puede deshacer."
             },
             {
               "description": "Reset Teams",
               "command": "reset teams",
-              "result": "Bot will delete teams and automatically re-create them with the current settings."
+              "result": "Bot eliminará equipos y los volverá a crear automáticamente con la configuración actual."
             },
             {
-              "description": "Reset Included and Excluded Users",
+              "description": "Restablecer usuarios incluidos y excluidos",
               "command": "reset users",
-              "result": "Bot will remove all users from both blacklist and whitelist and reset them with the current game settings."
+              "result": "Bot eliminará a todos los usuarios de la lista negra y la lista blanca y los restablecerá con la configuración actual del juego."
             },
             {
-              "description": "Reset Stats and Stat Groups",
+              "description": "Restablecer estadísticas y grupos de estadísticas",
               "command": "reset stats",
-              "result": "Bot will remove and reset all tracked stats and stat groups. All lifetime stats will also be reset."
+              "result": "Bot eliminará y restablecerá todas las estadísticas rastreadas y los grupos de estadísticas. Todas las estadísticas de por vida también se restablecerán."
             },
             {
-              "description": "Reset Actions",
+              "description": "Restablecer acciones",
               "command": "reset actions",
-              "result": "Bot will remove and reset all Actions to default values."
+              "result": "Bot eliminará y restablecerá todas las acciones a los valores predeterminados."
             },
             {
-              "description": "Reset React Command",
+              "description": "Restablecer comando de reacción",
               "command": "reset react",
-              "result": "Bot will clear all of its internal information about the react command. Use this if hg react appears to be broken."
+              "result": "Bot borrará toda su información interna sobre el comando reaccionar. Use esto si hg react parece estar roto."
             }
           ]
         }
@@ -209,7 +209,7 @@
       "rows": [
         {
           "command": "players",
-          "description": "This will list all players I currently care about.",
+          "description": "Esto enumerará todos los jugadores que me importan actualmente.",
           "aliases": "players, player, list",
           "validOnlyInGuild": true,
           "examples": [
@@ -221,125 +221,125 @@
         },
         {
           "command": "exclude",
-          "description": "Prevent someone from being added to the next game.",
+          "description": "Evita que alguien sea agregado al próximo juego.",
           "aliases": "exclude, remove, exc, ex",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Exclude a Single User",
+              "description": "Excluir a un solo usuario",
               "command": "exclude @SpikeyRobot",
-              "result": "SpikeyRobot will not participate in the next game that is started. He will not be removed from a game that is currently in progress."
+              "result": "SpikeyRobot no participará en el próximo juego que se inicie. No será eliminado de un juego que está actualmente en progreso."
             },
             {
-              "description": "Exclude Multiple Users",
+              "description": "Excluir múltiples usuarios",
               "command": "exclude @SpikeyRobot @SpikeyBot",
-              "result": "SpikeyRobot and SpikeyBot will not participate in the next game that is started. They will not be removed from a game that is currently in progress."
+              "result": "SpikeyRobot y SpikeyBot no participarán en el próximo juego que se inicie. No se eliminarán de un juego que está actualmente en progreso."
             },
             {
-              "description": "Exclude Everyone",
+              "description": "Excluir a todos",
               "command": "exclude everyone",
-              "result": "All users will be removed from the next games."
+              "result": "Todos los usuarios serán eliminados de los próximos juegos."
             },
             {
               "description": "Exclude Online Users",
               "command": "exclude online",
-              "result": "All users who are currently online will be added to the next games (Does not exclude idle or dnd)."
+              "result": "Todos los usuarios que están actualmente en línea se agregarán a los próximos juegos (no excluye a ausentes o con estado DND)."
             },
             {
-              "description": "Exclude Offline Users",
+              "description": "Excluir usuarios desconectados",
               "command": "exclude offline",
-              "result": "All offline users will be removed from the next games."
+              "result": "Todos los usuarios desconectados serán eliminados de los próximos juegos."
             },
             {
-              "description": "Exclude Idle",
+              "description": "Excluir ausentes",
               "command": "exclude idle",
-              "result": "All users who are currently idle will be removed."
+              "result": "Todos los usuarios que actualmente están ausentes serán eliminados."
             },
             {
-              "description": "Exclude Do Not Disturb",
+              "description": "Excluir con estado DND",
               "command": "exclude dnd",
-              "result": "All users who are currently in DND will be removed."
+              "result": "Todos los usuarios que están actualmente con estado DND serán eliminados."
             },
             {
-              "description": "Exclude NPCs",
+              "description": "Excluir NPC",
               "command": "exclude npcs",
-              "result": "All NPCs who are currently included will be removed."
+              "result": "Se eliminarán todos los NPC que están incluidos actualmente."
             },
             {
-              "description": "Prevent Including Bots",
+              "description": "Prevenir Bots",
               "command": "exclude bots",
-              "result": "This is an alias for `{prefix}opt includeBots false`."
+              "result": "Este es un alias para `{prefix}opt includeBots false`."
             }
           ]
         },
         {
           "command": "include",
-          "description": "Add a person back into the next game.",
+          "description": "Agrega una persona de nuevo al próximo juego.",
           "aliases": "include, add, inc, in",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Include a Single User",
+              "description": "Incluir un solo usuario",
               "command": "include @SpikeyRobot",
-              "result": "SpikeyRobot will participate in the next game that is started. He will not be added to a game that is currently in progress."
+              "result": "SpikeyRobot participará en el próximo juego que se inicie. No será agregado a un juego que está actualmente en progreso."
             },
             {
-              "description": "Include Multiple Users",
+              "description": "Incluir múltiples usuarios",
               "command": "include @SpikeyRobot @SpikeyBot",
-              "result": "SpikeyRobot and SpikeyBot will participate in the next game that is started. They will not be added to a game that is currently in progress."
+              "result": "SpikeyRobot y SpikeyBot participarán en el próximo juego que se inicie. No se agregarán a un juego que está actualmente en progreso."
             },
             {
-              "description": "Include Everyone",
+              "description": "Incluir a todos",
               "command": "include everyone",
-              "result": "All users will be added to the next games."
+              "result": "Todos los usuarios se añadirán a los próximos juegos."
             },
             {
-              "description": "Include Online Users",
+              "description": "Incluir usuarios en línea",
               "command": "include online",
-              "result": "All users who are currently online will be added to the next games (Does not include idle or dnd)."
+              "result": "Todos los usuarios que están actualmente en línea se agregarán a los próximos juegos (No incluye ausentes o con estado DND)."
             },
             {
-              "description": "Include Offline Users",
+              "description": "Incluir usuarios desconectados",
               "command": "include offline",
-              "result": "All offline users will be added to the next games."
+              "result": "Todos los usuarios desconectados se agregarán a los próximos juegos."
             },
             {
-              "description": "Include Idle",
+              "description": "Incluir ausentes",
               "command": "include idle",
-              "result": "All users who are currently idle will be added."
+              "result": "Se agregarán todos los usuarios que actualmente están ausentes."
             },
             {
-              "description": "Include Do Not Disturb",
+              "description": "Incluir con estado NDN",
               "command": "include dnd",
-              "result": "All users who are currently in DND will be added."
+              "result": "Se agregarán todos los usuarios que están actualmente con estado DND."
             },
             {
-              "description": "Include NPCs",
+              "description": "Incluir NPC",
               "command": "include npcs",
-              "result": "All NPCs who are currently excluded will be added."
+              "result": "Se agregarán todos los NPC que están actualmente excluidos."
             },
             {
-              "description": "Allow Including Bots",
+              "description": "Permitir bots",
               "command": "include bots",
-              "result": "This is an alias for `{prefix}opt includeBots true`, and does not actually include bots."
+              "result": "Este es un alias para `{prefix}opt includeBots true`, y si los bots no estan incluidos."
             }
           ]
         },
         {
           "command": "react",
-          "description": "Allow players to join a game by adding reactions to a message.",
+          "description": "Permita que los jugadores se unan a un juego reaccionando a un mensaje.",
           "aliases": "react, reaction, emote, emoji",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "react",
-              "result": "A message will be sent, and those who add a reaction to it, will be included in the next game. Everyone else is excluded."
+              "result": "Se enviará un mensaje, y aquellos que agreguen una reacción a él, se incluirán en el próximo juego. Todos los demás están excluidos."
             },
             {
-              "description": "Ending Reactions",
+              "description": "Parar reacciones",
               "command": "react",
-              "result": "There are 2 ways to end the reaction message. Type the command again, or just start the game."
+              "result": "Hay 2 formas de finalizar el mensaje de reacción. Escribe el comando nuevamente o simplemente inicia el juego."
             }
           ]
         }
@@ -350,109 +350,109 @@
       "rows": [
         {
           "command": "npcs",
-          "description": "This will list all players I currently care about.",
+          "description": "Esto enumerará todos los jugadores que me importan actualmente.",
           "aliases": "npc, ai, npcs, ais, bots, bot",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "npcs",
-              "result": "All currently created NPCs will be listed."
+              "result": "Se enumerarán todos los NPC creados actualmente."
             },
             {
-              "description": "More Info",
+              "description": "Más información",
               "command": "npc That One Cool NPC I Have",
-              "result": "All known information about \"THat One Cool NPC I Have\" will be shown. NPC ID can also be used instead of name."
+              "result": "Se mostrará toda la información conocida sobre \"THat One Cool NPC I Have\". La ID del NPC también se puede usar en lugar del nombre."
             }
           ]
         },
         {
           "command": "npc exclude",
-          "description": "Prevent an NPC from being added to the next game.",
+          "description": "Evita que se agregue un NPC al próximo juego.",
           "aliases": "exclude, exc, ex",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "npc exclude MyCoolNPC",
-              "result": "The NPC named 'MyCoolNPC' will be removed from future games."
+              "result": "El NPC llamado 'MyCoolNPC' será eliminado de futuros juegos."
             },
             {
-              "description": "NPC ID",
+              "description": "ID del NPC",
               "command": "npc exclude NPC707EE794C7D42049",
-              "result": "An NPC with the same ID will not be included in future games."
+              "result": "Un NPC con la misma ID no se incluirá en futuros juegos."
             }
           ]
         },
         {
           "command": "npc include",
-          "description": "Allow an NPC to be added to the next game.",
+          "description": "Permitir que se agregue un NPC al próximo juego.",
           "aliases": "include, inc, in",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "npc include MyCoolNPC",
-              "result": "The NPC named 'MyCoolNPC' will be added into future games."
+              "result": "El NPC llamado 'MyCoolNPC' se agregará a futuros juegos."
             },
             {
-              "description": "NPC ID",
+              "description": "ID del NPC",
               "command": "npc include NPC707EE794C7D42049",
-              "result": "An NPC with the same ID will be included in future games."
+              "result": "Se incluirá un NPC con la misma ID en futuros juegos."
             }
           ]
         },
         {
           "command": "npc create",
-          "description": "Create an NPC.",
+          "description": "Crea un NPC.",
           "aliases": "create, add",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Create with image URL",
+              "description": "Crear con URL de imagen",
               "command": "npc create SB 2 https://www.spikeybot.com/SBIcon-128x128.png",
-              "result": "The NPC named 'SB 2' will be created using the image downloaded from spikeybot.com."
+              "result": "El NPC llamado 'SB 2' se creará usando la imagen descargada de spikeybot.com."
             },
             {
-              "description": "Create with uploaded image",
+              "description": "Crear con imagen enviada",
               "command": "npc create New Best Friend",
-              "result": "The NPC named 'New Best Friend' will be created using an image attached to the message. The command is the 'Description' part when uploading an image to Discord."
+              "result": "El NPC llamado 'New Best Friend' se creará usando una imagen adjunta al mensaje. El comando es la parte 'Descripción' cuando se envia una imagen en Discord."
             }
           ]
         },
         {
           "command": "npc rename",
-          "description": "Rename an NPC.",
+          "description": "Renombrar un NPC.",
           "aliases": "rename, name, edit",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Rename an NPC using its name",
+              "description": "Cambiar el nombre de un NPC usando su nombre",
               "command": "npc rename Bad Name Good Name",
-              "result": "The NPC named 'Bad Name' will be renamed to 'Good Name'."
+              "result": "El NPC llamado 'Bad Name' será renombrado como 'Good Name'."
             },
             {
-              "description": "Rename an NPC using its ID",
+              "description": "Renombrar un NPC usando su ID",
               "command": "npc rename NPC707EE794C7D42049 Good Name",
-              "result": "The NPC with the same ID will be renamed to 'Good Name'."
+              "result": "El NPC con la misma ID cambiará de nombre a 'Good Name'."
             }
           ]
         },
         {
           "command": "npc delete",
-          "description": "Delete an NPC.",
+          "description": "Eliminar un NPC.",
           "aliases": "delete, remove",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "npc delete MyCoolNPC",
-              "result": "The NPC named 'MyCoolNPC' will be deleted without confirmation. If there are multiple NPCs named MyCoolNPC, the bot will pick one at random. To avoid deleting the wrong one, use the NPC's ID instead."
+              "result": "El NPC llamado 'MyCoolNPC' se eliminará sin confirmación. Si hay varios NPC llamados MyCoolNPC, el bot elegirá uno al azar. Para evitar eliminar el incorrecto, use la ID del NPC."
             },
             {
-              "description": "Delete an NPC using its ID",
+              "description": "Eliminar un NPC usando su ID",
               "command": "npc delete NPC707EE794C7D42049",
-              "result": "The NPC with the same ID will be deleted without confirmation."
+              "result": "El NPC con la misma ID se eliminará sin confirmación."
             }
           ]
         }
@@ -463,72 +463,72 @@
       "rows": [
         {
           "command": "teams swap",
-          "description": "This will swap two players to the other team.",
+          "description": "Esto intercambiará a dos jugadores de dos equipos.",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "team swap @SpikeyRobot @SpikeyBot",
-              "result": "SpikeyRobot will be put on SpikeyBot's Team, and SpikeyBot will be put on SpikeyRobot's original team."
+              "result": "SpikeyRobot se pondrá en el equipo de SpikeyBot, y SpikeyBot se pondrá en el equipo original de SpikeyRobot."
             }
           ]
         },
         {
           "command": "teams move",
-          "description": "This will move the first player, to another team. (Ignores teamSize option)",
+          "description": "Esto moverá al primer jugador a otro equipo. (Ignora la opción teamSize)",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Move Using ID",
+              "description": "Mover usando la ID",
               "command": "team move @SpikeyRobot 2",
-              "result": "SpikeyRobot will be put on Team 2 even if the team is full."
+              "result": "SpikeyRobot se pondrá en el Equipo 2 incluso si el equipo está lleno."
             },
             {
-              "description": "Move Using Mention",
+              "description": "Mover usando la mención",
               "command": "team move @SpikeyRobot @SpikeyBot",
-              "result": "SpikeyRobot will be put on the team that SpikeyBot is on even if the team is full."
+              "result": "SpikeyRobot se pondrá en el equipo en el que está SpikeyBot, incluso si el equipo está lleno."
             }
           ]
         },
         {
           "command": "teams rename",
-          "description": "Rename a team. Specify its id, or mention someone on a team.",
+          "description": "Renombrar un equipo. Especifique su ID o mencione a alguien en un equipo.",
           "validOnlyInGuild": true,
           "examples": [
             {
-              "description": "Rename Using ID",
+              "description": "Cambiar nombre usando ID",
               "command": "team rename 3 The Bestest Team",
-              "result": "Team 3 will be called \"The Bestest Team\"."
+              "result": "El equipo 3 se llamará \"The Bestest Team\"."
             },
             {
-              "description": "Rename Using Mention",
+              "description": "Renombrar usando la mención",
               "command": "team rename @SpikeyRobot The Greatest Team Ever!!!",
-              "result": "The team that SpikeyRobot is on will be called \"The Greatest Team Ever!!!\"."
+              "result": "El equipo en el que está SpikeyRobot se llamará \"The Greatest Team Ever!!!\"."
             }
           ]
         },
         {
           "command": "teams randomize",
           "aliases": "randomize, shuffle",
-          "description": "Randomize who is on what team.",
+          "description": "Aleatorizar quién está en qué equipo.",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "team randomize",
-              "result": "All teams will be reset, and users will be swapped at random to make entirely new teams."
+              "result": "Todos los equipos se restablecerán y los usuarios se intercambiarán al azar para formar equipos completamente nuevos."
             }
           ]
         },
         {
           "command": "teams reset",
-          "description": "Delete all teams and start over.",
+          "description": "Eliminar todos los equipos y comenzar de nuevo.",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "team reset",
-              "result": "All teams will be reset."
+              "result": "Todos los equipos se reiniciarán."
             }
           ]
         }
@@ -539,26 +539,26 @@
       "rows": [
         {
           "command": "events",
-          "description": "These commands are currently disabled, and no longer supported due to development challenges. Use https://www.spikeybot.com/hg/ to manage and view events.",
+          "description": "Estos comandos están actualmente deshabilitados y ya no son compatibles debido a desafíos de desarrollo. Use https://www.spikeybot.com/hg/ para administrar y ver eventos.",
           "aliases": "events, event",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "events",
-              "result": "These commands are currently disabled, and no longer supported due to development challenges. Use https://www.spikeybot.com/hg/ to manage and view events."
+              "result": "Estos comandos están actualmente deshabilitados y ya no son compatibles debido a desafíos de desarrollo. Use https://www.spikeybot.com/hg/ para administrar y ver eventos."
             }
           ]
         },
         {
           "command": "claimlegacy",
-          "description": "Transition custom events from legacy storage system to the newer format. Legacy custom events will solely be editable by the one who runs this command.",
+          "description": "Transición de eventos personalizados del sistema de almacenamiento heredado al formato más nuevo. Los eventos personalizados heredados solo serán editables por el que ejecuta este comando.",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "claimlegacy",
-              "result": "Transition custom events from legacy storage system to the newer format. Legacy custom events will solely be editable by the one who runs this command. Unfortunately events that give weapons, will have the given weapon data reset. Issues with conversion can be fixed at https://www.spikeybot.com/hg/."
+              "result": "Transición de eventos personalizados del sistema de almacenamiento heredado al formato más nuevo. Los eventos personalizados heredados solo serán editables por el que ejecuta este comando. Desafortunadamente, los eventos que dan armas tendrán restablecidos los datos de armas. Los problemas con la conversión se pueden solucionar en https://www.spikeybot.com/hg/."
             }
           ]
         }
@@ -569,90 +569,90 @@
       "rows": [
         {
           "command": "stats",
-          "description": "Show all tracked stats about players.",
+          "description": "Mostrar todas las estadísticas rastreadas sobre los jugadores.",
           "aliases": "stats, stat, info, me",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "stats",
-              "result": "Lifetime, previous game, and the selected group stats for the user who ran the command will be sent."
+              "result": "Se enviarán las estadísticas de tiempo con vida, del juego anterior y del grupo seleccionado para el usuario que ejecutó el comando."
             },
             {
               "description": "Uso básico",
               "command": "stats SpikeyRobot",
-              "result": "Tracked stats for SpikeyRobot will be sent."
+              "result": "Se enviarán estadísticas rastreadas para SpikeyRobot."
             }
           ]
         },
         {
           "command": "leaderboard",
-          "description": "Show the top players ordered by stats.",
+          "description": "Mostrar los mejores jugadores ordenados por estadísticas.",
           "aliases": "leaderboard, leaderboards, leader, leaders, lb, top, rank, ranks",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "top",
-              "result": "The top 10 players all time by number of games won will be shown."
+              "result": "Se mostrarán los 10 mejores jugadores de todos los tiempos por número de juegos ganados."
             },
             {
-              "description": "Different Stats",
+              "description": "Diferentes estadísticas",
               "command": "top kills",
-              "result": "Players will be ranked by kills. (Available stats: kills, deaths, wounds, heals, revives, wins, losses, daysAlive, daysDead, daysWounded)"
+              "result": "Los jugadores serán clasificados por asesinatos. (Estadísticas disponibles: kills, deaths, wounds, heals, revives, wins, losses, daysAlive, daysDead, daysWounded)"
             },
             {
-              "description": "Previous Game Only",
+              "description": "Juego anterior solamente",
               "command": "top previous kills",
-              "result": "The previous game stats will be used for ranking player kills."
+              "result": "Las estadísticas del juego anterior se usarán para clasificar las muertes de jugadores."
             },
             {
-              "description": "Different Group",
+              "description": "Grupo diferente",
               "command": "top A37C",
-              "result": "Group with the ID A37C stats will be shown. If a specific stat is not specified, it defaults to number of wins."
+              "result": "Se mostrarán las estadísticas del grupo con ID A37C. Si no se especifica una estadística específica, su valor predeterminado es el número de victorias."
             },
             {
-              "description": "Number of Players",
+              "description": "Numero de jugadores",
               "command": "top lifetime kills 3",
-              "result": "The top 3 players by number of kills of all time, will be shown."
+              "result": "Se mostrarán los 3 mejores jugadores por número de asesinatos de todos los tiempos."
             }
           ]
         },
         {
           "command": "groups",
-          "description": "Show all stat groups. A stat group can be enabled or disabled anytime to allow for collecting stats only when specified.",
+          "description": "Mostrar todos los grupos de estadísticas. Un grupo de estadísticas se puede habilitar o deshabilitar en cualquier momento para permitir la recopilación de estadísticas solo cuando se especifique.",
           "aliases": "group, groups, season, seasons, g, gr",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "groups",
-              "result": "List all created stat groups. "
+              "result": "Lista todos los grupos de estadísticas creados."
             },
             {
-              "description": "Create Group",
+              "description": "Crea un grupo",
               "command": "group new My Cool Stat Group",
-              "result": "A new stat group will be created and is selected by default."
+              "result": "Se creará un nuevo grupo de estadísticas y se seleccionará de forma predeterminada."
             },
             {
-              "description": "Delete Group",
+              "description": "Eliminar grupo",
               "command": "group delete A726",
-              "result": "Delete the group with the ID of A726. This cannot be undone."
+              "result": "Elimine el grupo con la ID de A726. Esto no se puede deshacer."
             },
             {
-              "description": "Rename Group",
+              "description": "Cambiar nombre de grupo",
               "command": "group rename A726 Season 2",
-              "result": "Rename group with the ID A726 to 'Season 2'."
+              "result": "Cambie el nombre del grupo con la ID A726 a"
             },
             {
-              "description": "Select Group",
+              "description": "Selecciona grupo",
               "command": "group select A726",
-              "result": "Set group A726 as the active group to collect stats on."
+              "result": "Establezca el grupo A726 como el grupo activo para recopilar estadísticas."
             },
             {
-              "description": "Disable Group",
+              "description": "Deshabilitar grupo",
               "command": "group select",
-              "result": "Disable the current group so none are being used."
+              "result": "Deshabilite el grupo actual para que no se use ninguno."
             }
           ]
         }
@@ -663,106 +663,106 @@
       "rows": [
         {
           "command": "kill",
-          "description": "This will cause players to end the current or next day as dead.",
+          "description": "Esto hará que los jugadores finalicen el día actual o el siguiente como muertos.",
           "aliases": "kill, smite",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "kill @SpikeyRobot#0001",
-              "result": "A message will be added to the current day or the next day, that kills SpikeyRobot if he is not already dead."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que mata a SpikeyRobot si aún no está muerto."
             },
             {
-              "description": "Multiple Players",
+              "description": "Múltiples jugadores",
               "command": "kill @SpikeyRobot#0001 @SpikeyBot#4928",
-              "result": "A message will be added to the current day or the next day, that kills SpikeyRobot and SpikeyBot if they are not already dead."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que mata a SpikeyRobot y SpikeyBot si aún no están muertos."
             },
             {
-              "description": "Groups of Players",
+              "description": "Grupos de jugadores",
               "command": "kill everyone",
-              "result": "All groups that the include and exclude commands support, this also supports (online, offline, idle, dnd, everyone, bots, npcs)."
+              "result": "Todos los grupos que admiten los comandos de inclusión y exclusión, esto también es compatible (online, offline, idle, dnd, everyone, bots, npcs)."
             }
           ]
         },
         {
           "command": "wound",
-          "description": "This will cause players to end the current or next day as wounded.",
+          "description": "Esto hará que los jugadores terminen el día actual o el siguiente como heridos.",
           "aliases": "wound, hurt, damage, stab, punch, slap, injure",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "wound @SpikeyRobot#0001",
-              "result": "A message will be added to the current day or the next day, that wounds SpikeyRobot if he is not already wounded."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que hiere a SpikeyRobot si aún no está herido."
             },
             {
-              "description": "Multiple Players",
+              "description": "Múltiples jugadores",
               "command": "wound @SpikeyRobot#0001 @SpikeyBot#4928",
-              "result": "A message will be added to the current day or the next day, that wounds SpikeyRobot and SpikeyBot if they are not already wounded."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que hiere a SpikeyRobot y SpikeyBot si aún no están heridos."
             },
             {
-              "description": "Groups of Players",
+              "description": "Grupos de jugadores",
               "command": "wound everyone",
-              "result": "All groups that the include and exclude commands support, this also supports (online, offline, idle, dnd, everyone, bots, npcs)."
+              "result": "Todos los grupos que admiten los comandos de inclusión y exclusión, esto también es compatible (online, offline, idle, dnd, everyone, bots, npcs)."
             }
           ]
         },
         {
           "command": "heal",
-          "description": "This will cause players to end the current or next day as alive and fully healed.",
+          "description": "Esto hará que los jugadores terminen el día actual o el siguiente como vivos y completamente curados.",
           "aliases": "heal, revive, thrive, resurrect, restore",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "heal @SpikeyRobot#0001",
-              "result": "A message will be added to the current day or the next day, that resurrects or heals SpikeyRobot if he is not already fully healed."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que resucita o cura a SpikeyRobot si aún no está completamente curado."
             },
             {
               "description": "Multiple Players",
               "command": "heal @SpikeyRobot#0001 @SpikeyBot#4928",
-              "result": "A message will be added to the current day or the next day, that heals SpikeyRobot and SpikeyBot if they are not already fully healed."
+              "result": "Se agregará un mensaje al día actual o al día siguiente, que cura a SpikeyRobot y SpikeyBot si aún no están completamente curados."
             },
             {
-              "description": "Groups of Players",
+              "description": "Grupos de jugadores",
               "command": "heal everyone",
-              "result": "All groups that the include and exclude commands support, this also supports (online, offline, idle, dnd, everyone, bots, npcs)."
+              "result": "Todos los grupos que admiten los comandos de inclusión y exclusión, esto también es compatible (online, offline, idle, dnd, everyone, bots, npcs)."
             }
           ]
         },
         {
           "command": "give",
-          "description": "This will give a player a weapon that you specify.",
+          "description": "Esto le dará a un jugador un arma que especifiques.",
           "aliases": "give, reward, rewards, award, awards, sponsor, sponsors, gift, gifts",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "give @SpikeyRobot#0001 knife",
-              "result": "SpikeyRobot will immediately be given a knife."
+              "result": "SpikeyRobot recibirá inmediatamente un cuchillo."
             },
             {
-              "description": "Multiple Consumables",
+              "description": "Múltiples consumibles",
               "command": "give @SpikeyRobot#0001 bow 20",
-              "result": "SpikeyRobot will immediately be given a bow with 20 arrows."
+              "result": "SpikeyRobot recibirá inmediatamente un arco con 20 flechas."
             }
           ]
         },
         {
           "command": "take",
-          "description": "This will take a weapon from a player that you specify.",
+          "description": "Esto quitará un arma de un jugador que especifiques.",
           "aliases": "take, destroy, reduce",
           "validOnlyInGuild": true,
           "examples": [
             {
               "description": "Uso básico",
               "command": "take @SpikeyRobot#0001 knife",
-              "result": "SpikeyRobot will immediately lose a knife. If they end up with 0 or less, a message saying they lost all of their knives will still be sent."
+              "result": "SpikeyRobot perderá inmediatamente un cuchillo. Si terminan con 0 o menos, se seguirá enviando un mensaje que dice que perdieron todos sus cuchillos."
             },
             {
-              "description": "Multiple Consumables",
+              "description": "Múltiples consumibles",
               "command": "take @SpikeyRobot#0001 bow 20",
-              "result": "SpikeyRobot will immediately lose 20 arrows from their bow. If they end up with 0 or less, a message saying they lost all their arrows will be sent."
+              "result": "SpikeyRobot perderá inmediatamente 20 flechas de su arco. Si terminan con 0 o menos, se enviará un mensaje que dice que perdieron todas sus flechas."
             }
           ]
         }
