@@ -3863,6 +3863,17 @@ function HG() {
           }
         })
         .catch(() => reply(msg, 'helpMessageFailed').catch(() => {}));
+		const hasPatron = null;
+		if (msg.guild != null){
+			const game = hg.getGame(msg.guild.id);
+			const hasPatron =
+				game.currentGame.includedUsers.find((el) => el.settings.isPatron);
+		}
+		if (!hasPatron) {
+		  msg.author.send(
+			  'If you enjoy SpikeyBot, please consider supporting it on Patreon:\n' +
+			  '<https://www.patreon.com/campbellcrowley>');
+		}
   }
 
   /**

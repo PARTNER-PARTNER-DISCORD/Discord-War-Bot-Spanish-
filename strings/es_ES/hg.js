@@ -354,13 +354,13 @@ class EsEsHG extends Locale {
     this.statsPrevious = 'Juego anterior';
     this.noGroupData = 'No hay datos de grupo todavía.';
     this.groupCreateFirst = 'Por favor crea un grupo primero.';
-    this.groupTitle = 'Estadísticas de grupos';
+    this.groupTitle = 'Grupode estadísticas';
     this.groupNotFound = 'No pude encontrar ese grupo.';
     this.groupListFailedTitle = 'Error al obtener la lista de grupos.';
-    this.groupListFailedBody = 'Something broke...';
+    this.groupListFailedBody = 'Algo se rompió ...';
     this.groupNone = 'No hay grupos creados.';
-    this.groupCreatedAndSelected = 'Nuevas estadísticas de grupo creadas y seleccionadas';
-    this.groupDisabled = 'Estadísticas de grupo deshabilitadas';
+    this.groupCreatedAndSelected = 'Nuevo grupo de estadísticas creado y seleccionado';
+    this.groupDisabled = 'Grupo de estadísticas deshabilitado';
     this.groupListCommand = 'Lista los grupos con `{}groups`';
     this.groupSelected = 'Grupo seleccionado';
     this.groupSpecifyId = 'Por favor, especifique una ID de grupo válida.';
