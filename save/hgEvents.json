@@ -96,87 +96,87 @@
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} takes a mace out of {victim}'s hands.",
+      "message": "{attacker} coge un mazo de las manos de {victim}.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "mace", "count": 1 } },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} stays near the cornucopia for resources.",
+      "message": "{attacker} se queda cerca de la cornucopia en busca de recursos.",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} gather[As|] food.",
+      "message": "{attacker} recolecta[A|n] comida.",
       "attacker": { "count": "-1", "outcome": "thrives" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} grabs a sword.",
+      "message": "{attacker} coge una espada.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "sword", "count": 1 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} takes a spear from the cornucopia.",
+      "message": "{attacker} coge una lanza de la cornucopia.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "spear", "count": 1 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} manages to find a bag full of explosives.",
+      "message": "{attacker} encuentra una caja con explosivos.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "explosive", "count": 3 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} collect[As|] supplies.",
+      "message": "{attacker} recoge[A|n] suministros.",
       "attacker": { "count": "-1", "outcome": "nothing" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} grabs all of the alcohol.",
+      "message": "{attacker} coge botellas con alcohol.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "alcohol", "count": 3 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} takes a tent and runs away.",
+      "message": "{attacker} coge una tienda de campaña y huye.",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{victim} grabs {attacker}'s backpack, not realizing {attacker} lit the fuse.",
+      "message": "{victim} coge[V|n] la mochila de {attacker}, sin darse cuenta de que {attacker} encendió la mecha.",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true },
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{attacker} breaks {victim}'s nose for a slice of bread!",
+      "message": "¡{attacker} le rompe la nariz a {victim} por una rebanada de pan!",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "wounded" }
     },
     {
-      "message": "{attacker} split their supplies, then part ways.",
+      "message": "{attacker} tiene[A|n] divido[A|s] sus suministros en partes, los va[A|n] racionando.",
       "attacker": { "count": "-2", "outcome": "thrives" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{victim} starts singing their national anthem, so {attacker} knocks them out with a headbutt.",
+      "message": "{victim} comienza a cantar el himno nacional, por lo que {attacker} le da un cabezazo.",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "wounded" }
     },
     {
-      "message": "{attacker} kicks {victim} between [Vthe|their] legs for a bottle of water!",
+      "message": "¡{attacker} le da un golpe en la entrepierna a {victim} por una botella de agua!",
       "attacker": { "count": "1", "outcome": "nothing" },
-      "victim": { "count": "-1", "outcome": "wounded" }
+      "victim": { "count": "1", "outcome": "wounded" }
     },
     {
-      "message": "{victim} had stepped off their podium[V|s] too soon and [Vwas|were] blown up.",
+      "message": "{victim} había[V|n] bajado de su[V|s] podio[V|s] demasiado pronto y explot[Vó|aron].",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{attacker} throws their only knife into {victim}'s head[V|s]!",
+      "message": "¡{attacker} lanza su único cuchillo a la cabeza de {victim}!",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true },
-      "victim": { "count": "-1", "outcome": "dies" }
+      "victim": { "count": "1", "outcome": "dies" }
     },
     {
-      "message": "{victim} accidentally step[Vs|] on a landmine!",
+      "message": "¡{victim} accidentalmente pisa[V|n] una mina terrestre!",
       "attacker": { "count": "0", "outcome": "nothing"},
       "victim": { "count": "-1", "outcome": "dies" }
     },
