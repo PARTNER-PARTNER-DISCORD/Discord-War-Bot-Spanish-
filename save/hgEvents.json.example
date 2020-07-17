@@ -1,20 +1,32 @@
 {
   "bloodbath": [
-    {
+    
+	//Ejemplo básico:
+	
+	{
       "message": "¡{attacker} apuñala a {victim} en la espalda con un tridente!",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true},
       "victim": { "count": "-1", "outcome": "dies" }
     },
-    {
-      "message": "{victim} trip[Vs|] and get[Vs|] impaled by the cornucopia!",
-      "attacker": { "count": "0", "outcome": "nothing"},
-      "victim": { "count": "-1", "outcome": "dies" }
-    },
-    {
-      "message": "{victim} hides in the cornucopia.",
-      "attacker": { "count": "0", "outcome": "nothing" },
-      "victim": { "count": "1", "outcome": "nothing" }
-    },
+	
+	// Parámetros de message:
+		// {attacker} - Atacante[A|s]
+		// {victim} - Victima[V|s]
+	// Parámetros de attaker/victim:
+		// "count": "*", - Sustituya * por el numero de atacantes/victimas que quiera para la acción. Si no hay atacantes/victimas, establezcalo en 0. Si se pone un número negativo, se trata del número minimo de atacantes/victimas que hay en la acción.
+		// "outcome": "nothing", - Estado del atacante/victima al terminar la acción.
+			// "nothing" - No le ocurrió nada.
+			// "dies" - Murió.
+			// "thrives" - Se curó
+			// "revived" - Revivió
+			// "wounded" - Se hirió
+		// "weapon": { "name": "*", "count": ** } - Objeto conseguido por atacantes/victimas.
+			// * - Nombre del arma/consumible
+				// granada
+			// ** - Cantidad
+
+	// Ejemplo más avanzado
+
     {
       "message": "{attacker} finds a grenade in the cornucopia.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "grenade", "count": 1 } },

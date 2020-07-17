@@ -6,92 +6,92 @@
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{victim} trip[Vs|] and get[Vs|] impaled by the cornucopia!",
+      "message": "¡{victim} tropieza[V|n] y [Ves|son] empalado[V|s] por la cornucopia!",
       "attacker": { "count": "0", "outcome": "nothing"},
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{victim} hides in the cornucopia.",
+      "message": "{victim} se esconde en la cornucopia.",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} finds a grenade in the cornucopia.",
+      "message": "{attacker} encuentra una granada en la cornucopia.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "grenade", "count": 1 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{victim} grabs a gun with 6 shots in it.",
+      "message": "{victim} coge una pistola con 6 balas.",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing", "weapon": {"name": "gun", "count": 6 } }
     },
     {
-      "message": "{victim} grabs a gun that may or may not work!",
+      "message": "{victim} coge una pistola que puede o no funcionar!",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing", "weapon": {"name": "gun", "count": 6 } }
     },
     {
-      "message": "{victim} grabs a gun that may or may not work!",
+      "message": "{victim} coge una pistola que puede o no funcionar!coge una pistola que puede o no funcionar!",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{victim} grabs a gun that definitely does not work.",
+      "message": "{victim} coge una pistola que definitivamente no funciona.",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} finds a gun with one bullet, and kills {victim} with it!",
+      "message": "¡{attacker} encuentra una pistola con una bala y mata a {victim} con ella!",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true },
       "victim": { "count": "1", "outcome": "dies" }
     },
     {
-      "message": "{attacker} finds a gun with one bullet, but misses {victim} with it!",
+      "message": "¡{attacker} encuentra una pistola con una bala, ¡pero falla al apuntar {victim} con ella!",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} finds a gun with one bullet, and {victim} both die somehow!",
+      "message": "¡{attacker} encuentra una pistola con una bala, y {victim} mueren de alguna manera!",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true },
       "victim": { "count": "2", "outcome": "dies" }
     },
     {
-      "message": "{victim} end[Vs|] their own [Vlife|lives] with [Va |]butter [Vknife|knives]!",
+      "message": "¡{victim} termina[V|n] con su propia vida con [Vun |]cuchillo[V|s] de mantequilla!",
       "attacker": { "count": "0", "outcome": "nothing" },
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{attacker} grabs a shovel.",
+      "message": "{attacker} coge una pala.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "shovel", "count": "1" } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} grab[As|] a backpack and retreat[As|].",
+      "message": "{attacker} coge[A|n] [Auna |]mochila[A|s] y se va[A|n].",
       "attacker": { "count": "-1", "outcome": "nothing" },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} and {victim} fight for a bag. {victim} gives up and runs away.",
+      "message": "{attacker} y {victim} luchan por una mochila. {victim} se rinde y huye.",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} and {victim} fight for a bag. {attacker} gives up and runs away.",
+      "message": "{attacker} y {victim} luchan por una mochila. {attacker} se rinde y huye.",
       "attacker": { "count": "1", "outcome": "nothing" },
       "victim": { "count": "1", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} finds a bow, 5 arrows, and a quiver.",
+      "message": "{attacker} encuentra un arco, 5 flechas y un carcaj.",
       "attacker": { "count": "1", "outcome": "nothing", "weapon": { "name": "bow", "count": 5 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
     {
-      "message": "{attacker} finds a bow, arrows and a quiver, and manages to kill {victim}.",
+      "message": "{attacker} encuentra un arco, flechas y un carcaj, y logra matar a {victim}.",
       "attacker": { "count": "1", "outcome": "nothing", "killer": true, "weapon": { "name": "bow", "count": 2 } },
       "victim": { "count": "-1", "outcome": "dies" }
     },
     {
-      "message": "{attacker} take[As|] a handful of throwing knives.",
+      "message": "{attacker} coge[A|n] un puñado de cuchillos arrojadizos.",
       "attacker": { "count": "-1", "outcome": "nothing", "weapon": { "name": "throwingknives", "count": 5 } },
       "victim": { "count": "0", "outcome": "nothing" }
     },
