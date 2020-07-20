@@ -8,7 +8,7 @@ auth.js
 save/guilds/*
 save/users/*
 save/shards/*
-save/hg/events/custom/*
+save/hg/events/custom/*.json
 
 save/hgBattles.json
 save/hgDefaultEvents.json
