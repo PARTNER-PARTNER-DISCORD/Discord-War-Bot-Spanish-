@@ -63,14 +63,7 @@
     "./autoReact.js"
   ],
   "release": [
-    "./main.js",
-    "./hungryGames.js",
-	"./echo.js",
-	"./botCommands.js",
-	"./roleManager.js",
-	"./localeManager.js",
-    "./images.js",
-	"./autoReact.js"
+    "./hungryGames.js"	
   ],
   "FALLBACK": []
 }
