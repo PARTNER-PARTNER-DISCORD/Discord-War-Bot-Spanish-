@@ -4,15 +4,14 @@ save/reboot.json
 save/reboot-*.json
 *.log
 auth.js
-subModules.json
 
 save/guilds/*
 save/users/*
 save/shards/*
-save/hg/events/*
+save/hg/events/custom/*
 
 save/hgBattles.json
-save/hgEvents.json
+save/hgDefaultEvents.json
 save/hgWebClients.json
 save/webClients.json
 save/rigged-counter.txt
