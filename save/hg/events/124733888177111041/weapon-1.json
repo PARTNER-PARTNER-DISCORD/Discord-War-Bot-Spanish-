@@ -1,5 +1,5 @@
 {
-	"id":"124733888177111041/weapon-1",
+	"id":"124733888177111041/weapon-granada",
 	"message":"Mensaje de arma",
 	"creator":"124733888177111041",
 	"privacy":"public",
@@ -53,8 +53,8 @@
 			"id":"weapon-1-6",
 			"message":"{attacker} lanza[A|n] [Cuna |]granada[C|s] a {víctima} matándolo[V|s].",
 			"creator":"124733888177111041",
-			"victim":{"count":-1,"outcome":"dies","killer":false,"weapon":null},
-			"attacker":{"count":-1,"outcome":"nothing","killer":true,"weapon":null},
+			"victim":{"count":-1,"outcome":"dies",},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
 			"consumes":1
 		},
 		{
@@ -62,7 +62,7 @@
 			"message":"¡{victim} le roba una granada a {attacker}!",
 			"creator":"124733888177111041",
 			"victim":{"count":1,"outcome":"nothing","weapon":{"name":"granada","count":1}},
-			"attacker":{"count":1,"outcome":"nothing","killer":false},
+			"attacker":{"count":1,"outcome":"nothing"},
 			"consumes":1
 		},
 		{
