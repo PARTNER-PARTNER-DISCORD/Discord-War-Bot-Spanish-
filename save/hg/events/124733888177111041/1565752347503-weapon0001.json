@@ -1,6 +1,5 @@
 {
 	"id":"124733888177111041/1565752347503-weapon0001",
-	"message":"Mensaje de arma",
 	"creator":"124733888177111041",
 	"privacy":"public",
 	"type":"weapon",
@@ -53,7 +52,7 @@
 			"id":"06weapon0001",
 			"message":"{attacker} lanza[A|n] [Cuna |]granada[C|s] a {víctima} matándolo[V|s].",
 			"creator":"124733888177111041",
-			"victim":{"count":-1,"outcome":"dies",},
+			"victim":{"count":-1,"outcome":"dies"},
 			"attacker":{"count":-1,"outcome":"nothing","killer":true},
 			"consumes":1
 		},
