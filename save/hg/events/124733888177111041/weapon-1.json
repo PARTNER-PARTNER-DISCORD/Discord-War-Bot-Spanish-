@@ -2,6 +2,7 @@
 	"id":"124733888177111041/weapon-1",
 	"message":"Mensaje de arma",
 	"creator":"124733888177111041",
+	"privacy":"public",
 	"type":"weapon",
 	"outcomes":[
 		{
