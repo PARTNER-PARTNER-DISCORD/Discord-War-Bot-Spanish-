@@ -4977,13 +4977,13 @@ function HG() {
         image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
           if (err) {
             self.error(
-                `Failed to convert image into buffer: ${filename || url}`);
+                `Error al convertir la imagen en búfer: ${filename || url}`);
             console.error(err);
             return;
           }
           self.common.mkAndWrite(filename, dir, buffer, (err) => {
             if (err) {
-              self.error(`Failed to cache avatar: ${filename}`);
+              self.error(`Error al almacenar en caché el avatar: ${filename}`);
               console.error(err);
             }
           });
@@ -5008,7 +5008,7 @@ function HG() {
       }
       return Jimp.read(path).catch((err) => {
         if (fromCache) {
-          self.error(`Failed to read from cache: ${path}`);
+          self.error(`Error al leer del caché: ${path}`);
           console.error(err);
           fromCache = false;
           return toJimp(url);
@@ -5078,7 +5078,7 @@ function HG() {
       try {
         el(self, ...args);
       } catch (err) {
-        self.error('Caught error during event firing: ' + evt);
+        self.error('Error detectado durante la activación del evento: ' + evt);
         console.error(err);
       }
     });
