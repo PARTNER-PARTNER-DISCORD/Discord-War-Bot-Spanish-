@@ -18,10 +18,10 @@ class SendAutoplayingMessageAlertAction extends ChannelAction {
   constructor() {
     super((hg, game, channel) => {
       if (!game.options.disableOutput && game.autoPlay) {
-        channel.send('`Autoplaying...`').then((msg) => {
+        channel.send('`Reproducción automática...`').then((msg) => {
           msg.delete({
             timeout: game.options.delayDays - this.delay + 50,
-            reason: 'I can do whatever I want!',
+            reason: '¡Puedo hacer lo que yo quiera!',
           }).catch(() => {});
         }).catch(() => {});
       }

@@ -137,7 +137,7 @@ class StatGroup {
   _fetchUser(uId, cb) {
     if (typeof uId !== 'string' ||
         (uId !== 'meta' && !uId.match(/^(\d{17,19}|NPC[A-F0-9]+)$/))) {
-      throw new TypeError('uId (' + uId + ') is not a valid ID.');
+      throw new TypeError('uId (' + uId + ') no es una ID válida.');
     }
     // Data is queued to be saved, and is still cached, return the cached
     // version instead of reading the stale version from file.
@@ -262,7 +262,7 @@ class StatGroup {
       opts = {};
     }
     if (typeof cb !== 'function') {
-      throw new TypeError('Callback must be a function');
+      throw new TypeError('La devolución de llamada debe ser una función');
     }
     if (!opts || typeof opts !== 'object') {
       opts = {};
@@ -376,7 +376,7 @@ class StatGroup {
    */
   increment(uId, key, amount = 1, cb) {
     if (typeof amount !== 'number' || isNaN(amount)) {
-      throw new TypeError('Amount is not a number.');
+      throw new TypeError('La cantidad no es un número.');
     }
     this._fetchUser(uId, (err, data) => {
       if (err) {
@@ -389,7 +389,7 @@ class StatGroup {
       }
       if (!data.get(key)) data.set(key, 0);
       if (typeof data.get(key) !== 'number') {
-        const err = new TypeError('Fetched value is not a number.');
+        const err = new TypeError('El valor obtenido no es un número.');
         if (typeof cb !== 'function') {
           console.error(err);
         } else {
@@ -442,7 +442,7 @@ class StatGroup {
       const fn = `${this._dir}${data.id}.json`;
       common.unlink(fn, (err) => {
         if (err) {
-          console.error('Failed to remove legacy user stat file:', fn);
+          console.error('Error al eliminar el archivo de estadísticas de usuario heredado:', fn);
           console.error(err);
         }
       });

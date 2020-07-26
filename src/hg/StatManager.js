@@ -31,7 +31,7 @@ class StatManager {
     const current = game && game.currentGame;
     const events = current && current.day && current.day.events;
     if (!events || !Array.isArray(events)) {
-      throw new Error('GuildGame does not have event data to parse.');
+      throw new Error('GuildGame no tiene datos de eventos para analizar.');
     } else if (events.length == 0) {
       return;
     }
@@ -126,11 +126,11 @@ class StatManager {
       id = 'global';
     }
     if (typeof id !== 'string') {
-      cb(new TypeError('ID must be a string'));
+      cb(new TypeError('ID debe ser un string'));
     } else if (StatGroup.exists(this.game, id)) {
       cb(null, new StatGroup(this.game, id));
     } else {
-      cb(new Error('Group doesn\'t exist'));
+      cb(new Error('El grupo no existe'));
     }
   }
 

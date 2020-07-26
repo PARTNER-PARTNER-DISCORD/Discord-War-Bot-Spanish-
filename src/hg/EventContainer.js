@@ -242,7 +242,7 @@ class EventContainer {
     const keys = Object.keys(obj);
     keys.forEach((type) => {
       if (!EventContainer.types.includes(type)) {
-        if (type !== 'battles') console.error('Unknown type of event: ' + type);
+        if (type !== 'battles') console.error('Tipo de evento desconocido: ' + type);
         return;
       }
       const out = this.ids(type);

@@ -30,13 +30,13 @@ class RunCommandAction extends ChannelAction {
         if (!res) {
           channel
               .send(
-                  `<@${this._author}> RunCommandAction Failed: ` +
-                  `Unknown command: ${this._message}`)
+                  `<@${this._author}> RunCommandAction Error: ` +
+                  `Comando desconocido: ${this._message}`)
               .catch(() => {});
         }
       } catch (err) {
         channel
-            .send(`<@${this._author}> RunCommandAction Failed: ${err.message}.`)
+            .send(`<@${this._author}> RunCommandAction Error: ${err.message}.`)
             .catch(() => {});
       }
     });
@@ -58,7 +58,7 @@ class RunCommandAction extends ChannelAction {
    */
   set command(msg) {
     if (typeof msg !== 'string' || msg.length === 0) {
-      throw new TypeError('Text must be a string!');
+      throw new TypeError('¡El texto debe ser un string!');
     }
     this._message = msg;
     this._saveData.command = msg;
@@ -82,13 +82,13 @@ class RunCommandAction extends ChannelAction {
    */
   set author(author) {
     if (typeof author === 'string') {
-      if (author.length === 0) throw new TypeError('Author cannot be empty!');
+      if (author.length === 0) throw new TypeError('¡El autor no puede estar vacío!');
     } else if (author && author.id) {
       author = author.id;
     } else if (author && author.user && author.user.id) {
       author = author.user.id;
     } else {
-      throw new TypeError('Author is invalid!');
+      throw new TypeError('¡El autor no es válido!');
     }
     this._author = author;
     this._saveData.author = author;
