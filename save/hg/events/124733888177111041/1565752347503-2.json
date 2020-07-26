@@ -37,7 +37,7 @@
 		{
 			"message":"{victim} steal[Vs|] [Aan |]explosive[A|s] from {attacker}!",
 			"attacker":{"count":"1","outcome":"nothing"},
-			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/weapon-2"}},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"name":"explosivo"}},
 			"consumes":1,
 			"id":"1bax3ct"
 		},
@@ -58,7 +58,7 @@
 	],
 	"name":"explosivo",
 	"consumable":"explosivo[C|s]",
-	"id":"124733888177111041/weapon-2",
+	"id":"124733888177111041/1565752347503-2",
 	"type":"weapon",
 	"creator":"124733888177111041",
 	"privacy":"public"
