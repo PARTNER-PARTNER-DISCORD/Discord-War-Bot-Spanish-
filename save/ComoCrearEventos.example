@@ -1,3 +1,37 @@
+
+
+
+
+############################### ARMAS ###############################
+
+{
+	{
+	"id":"124733888177111041/weapon-1",
+	"message":"Mensaje de arma",
+	"custom":true,
+	"creator":"124733888177111041",
+	"type":"weapon",
+	"outcomes":[
+		eventos_con_armas
+	],
+	"consumable":"nombre_consumibles",
+	"name":"nombre_arma"
+}
+
+############################### EVENTOS CON ARMAS ###############################
+
+		{
+			"id":"id_evento_arma",
+			"message":"acción_ecutable",
+			"custom":true,
+			"creator":"124733888177111041",
+			//action":action_realizada_por_los_atacantes,
+			"victim":{informacion_victimas},
+			"attacker":{ínformación_atacantes},
+			//"battle":true,
+			"consumes":numero_cosumido
+		},
+
 {
   "bloodbath": [
     
