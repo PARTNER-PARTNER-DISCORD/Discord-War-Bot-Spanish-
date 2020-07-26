@@ -17,7 +17,9 @@
 		{
 			"action":"kill[As|]",
 			"attacker":{"count":"-1","outcome":"nothing","killer":true},
-			"victim":{"count":"-1","outcome":"dies"},"consumes":1,"id":"1hovu2y"
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":1,
+			"id":"1hovu2y"
 		},
 		{
 			"action":"miss[Aes|]",
@@ -35,7 +37,7 @@
 		{
 			"message":"{victim} steal[Vs|] [Aan |]explosive[A|s] from {attacker}!",
 			"attacker":{"count":"1","outcome":"nothing"},
-			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347503-hkxkxq"}},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/weapon-2"}},
 			"consumes":1,
 			"id":"1bax3ct"
 		},
@@ -56,7 +58,8 @@
 	],
 	"name":"explosivo",
 	"consumable":"explosivo[C|s]",
-	"id":"124733888177111041/1565752347503-hkxkxq",
+	"id":"124733888177111041/weapon-2",
 	"type":"weapon",
 	"creator":"124733888177111041",
-	"privacy":"public"}
+	"privacy":"public"
+}
