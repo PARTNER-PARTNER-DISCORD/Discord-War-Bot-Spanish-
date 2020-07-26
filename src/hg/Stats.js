@@ -16,7 +16,7 @@ class Stats {
     if (!data || typeof data !== 'object') data = {id: data};
     if (typeof data.id !== 'string' ||
         !data.id.match(/^(\d{17,19}|NPC[A-F0-9]+)$/)) {
-      throw new TypeError(`ID is not a valid user ID. (${data.id})`);
+      throw new TypeError(`ID no es un user ID válido. (${data.id})`);
     }
     /**
      * @description The ID of the user this object represents.
@@ -108,8 +108,8 @@ class Stats {
    * @param {number} value The new value to set.
    */
   set(key, value) {
-    if (typeof value !== 'number') throw new TypeError('Value is not a number');
-    if (typeof this._data[key] === 'undefined') throw new Error('Unknown key');
+    if (typeof value !== 'number') throw new TypeError('El valor no es un número');
+    if (typeof this._data[key] === 'undefined') throw new Error('Clave desconocida');
     this._data[key] = value;
   }
 

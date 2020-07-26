@@ -249,7 +249,7 @@ class HungryGames {
       self.getAllPlayers(members, [], false, [], false, [], (res) => {
         self._games[guild.id] = new HungryGames.GuildGame(
             self._parent.client.user.id, guild.id, opts,
-            `${guild.name}'s Hungry Games`, res);
+            `$Hungry Games de {guild.name}`, res);
         cb(self._games[guild.id]);
         self._parent._fire('create', guild.id);
       });
@@ -259,7 +259,7 @@ class HungryGames {
       getAll(guild.members.cache);
     } else {
       guild.members.fetch().then(getAll).catch((err) => {
-        this._parent.error('Failed to fetch all users for guild: ' + guild.id);
+        this._parent.error('Error al buscar todos los usuarios del servidor' + guild.id);
         console.error(err);
         cb(null);
       });
@@ -286,7 +286,7 @@ class HungryGames {
         return;
       }
       const name = (game.currentGame && game.currentGame.name) ||
-          (`${guild.name}'s Hungry Games`);
+          (`$Hungry Games de {guild.name}`);
       const teams = game.currentGame && game.currentGame.teams;
 
       const self = this;
@@ -429,14 +429,14 @@ class HungryGames {
       game._stats.fetchGroupList((err, list) => {
         if (err) {
           if (err.code !== 'ENOENT') {
-            this._parent.error('Failed to fetch stat group list: ' + id);
+            this._parent.error('Error al recuperar la lista de grupos de estadísticas: ' + id);
             console.error(err);
           }
           return;
         }
         list.forEach((el) => game._stats.fetchGroup(el, (err, group) => {
           if (err) {
-            this._parent.error('Failed to fetch group: ' + id + '/' + el);
+            this._parent.error('Error al recuperar el grupo: ' + id + '/' + el);
             console.error(err);
             return;
           }
@@ -447,7 +447,7 @@ class HungryGames {
       rimraf(this._parent.common.guildSaveDir + id + this.hgSaveDir, (err) => {
         if (!err) return;
         this._parent.error(
-            'Failed to delete directory: ' + this._parent.common.guildSaveDir +
+            'Error al eliminar el directorio: ' + this._parent.common.guildSaveDir +
             id + this.hgSaveDir);
         console.error(err);
       });
@@ -456,14 +456,14 @@ class HungryGames {
       game._stats.fetchGroupList((err, list) => {
         if (err) {
           if (err.code !== 'ENOENT') {
-            this._parent.error('Failed to fetch stat group list: ' + id);
+            this._parent.error('Error al recuperar la lista de grupos de estadísticas: ' + id);
             console.error(err);
           }
           return;
         }
         list.forEach((el) => game._stats.fetchGroup(el, (err, group) => {
           if (err) {
-            this._parent.error('Failed to fetch group: ' + id + '/' + el);
+            this._parent.error('Error al recuperar el grupo: ' + id + '/' + el);
             console.error(err);
             return;
           }
@@ -534,27 +534,27 @@ class HungryGames {
 
     this.fetchGame(gId, (game) => {
       if (!game) {
-        cb('No game has been created.');
+        cb('No se ha creado ningún juego.');
         return;
       }
       const act =
           HungryGames.Action.actionList.find((el) => el.name === action);
       if (!act) {
-        cb('Unknown action.');
+        cb('Acción desconocida');
         return;
       }
       if (!game.actions) {
-        cb('Game doesn\'t have any action data.');
+        cb('El juego no tiene ningún dato de acción.');
         return;
       }
       if (!Array.isArray(game.actions[trigger])) {
-        cb('Unknown trigger.');
+        cb('Desencadenante desconocido');
         return;
       }
       const created =
           HungryGames.Action[action].create(this._parent.client, gId, args);
       if (!created) {
-        cb('Bad Args');
+        cb('Argumentos malos');
         return;
       }
       const res = game.actions.insert(trigger, created);
@@ -563,7 +563,7 @@ class HungryGames {
         cb(null);
         return;
       } else {
-        cb('Bad trigger.');
+        cb('Mala activación');
         return;
       }
     });
@@ -583,15 +583,15 @@ class HungryGames {
 
     this.fetchGame(gId, (game) => {
       if (!game) {
-        cb('No game has been created.');
+        cb('No se ha creado ningún juego.');
         return;
       }
       if (!game.actions) {
-        cb('Game doesn\'t have any action data.');
+        cb('El juego no tiene ningún dato de acción.');
         return;
       }
       if (!Array.isArray(game.actions[trigger])) {
-        cb('Unknown trigger.');
+        cb('Desencadenante desconocido');
         return;
       }
       const res = game.actions.remove(trigger, id);
@@ -600,7 +600,7 @@ class HungryGames {
         cb();
         return;
       } else {
-        cb('Bad Index.');
+        cb('Mal índice.');
         return;
       }
     });
@@ -622,24 +622,24 @@ class HungryGames {
 
     this.fetchGame(gId, (game) => {
       if (!game) {
-        cb('No game has been created.');
+        cb('No se ha creado ningún juego.');
         return;
       }
       if (!game.actions) {
-        cb('Game doesn\'t have any action data.');
+        cb('El juego no tiene ningún dato de acción.');
         return;
       }
       if (!Array.isArray(game.actions[trigger])) {
-        cb('Unknown trigger.');
+        cb('Desencadenante desconocido');
         return;
       }
       const action = game.actions[trigger].find((el) => el.id === id);
       if (!action) {
-        cb('Unknown action.');
+        cb('Acción desconocida');
         return;
       }
       if (typeof value !== typeof action[key]) {
-        cb('Bad value.');
+        cb('Mal valor');
         return;
       }
       action[key] = value;
@@ -962,7 +962,7 @@ class HungryGames {
         game = HungryGames.GuildGame.from(game, self._parent.client);
         game.id = id;
       } catch (err) {
-        self._parent.error('Failed to parse game data for guild ' + id);
+        self._parent.error('Error al analizar los datos del juego para el servidor ' + id);
         console.error(err);
         return null;
       }
@@ -1023,7 +1023,7 @@ class HungryGames {
           if (err.code === 'ENOENT') {
             cb(null);
           } else {
-            this._parent.debug('Failed to load game data for guild:' + id);
+            this._parent.debug('Error al cargar los datos del juego para el servidor:' + id);
             console.error(err);
           }
           return;
@@ -1037,15 +1037,15 @@ class HungryGames {
         try {
           this._games[id] = JSON.parse(tmp);
           if (this._parent.initialized) {
-            this._parent.debug('Loaded game from file ' + id);
+            this._parent.debug('Juego cargado del archivo ' + id);
           }
         } catch (e2) {
-          this._parent.error('Failed to parse game data for guild ' + id);
+          this._parent.error('Error al analizar los datos del juego para el servidor ' + id);
           return null;
         }
       } catch (e) {
         if (e.code !== 'ENOENT') {
-          this._parent.debug('Failed to load game data for guild:' + id);
+          this._parent.debug('Error al cargar los datos del juego para el servidor:' + id);
           console.error(e);
         }
         return null;
@@ -1064,7 +1064,7 @@ class HungryGames {
     Object.entries(this._games).forEach((obj) => {
       const id = obj[0];
       if (!obj[1]) {
-        console.error(id, 'Doesn\'t exist.');
+        console.error(id, 'No existe.');
         delete this._games[obj[0]];
         return;
       }
@@ -1076,14 +1076,14 @@ class HungryGames {
       try {
         stringified = JSON.stringify(data);
       } catch (err) {
-        this._parent.error('Failed to stringify synchronously');
+        this._parent.error('Error al stringificar sincrónicamente');
         console.error(err);
         return;
       }
       if (opt == 'async') {
         this._parent.common.mkAndWrite(filename, dir, stringified, (err) => {
           if (err) {
-            this._parent.error(`Failed to save HG data for ${filename}`);
+            this._parent.error(`Error al guardar datos de HG para ${filename}`);
             console.error(err);
           } else if (
             this._findTimestamps[id] - saveStartTime < -this._purgeDelta) {

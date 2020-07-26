@@ -51,7 +51,7 @@ class WeaponEvent extends HungryGames.Event {
    * @default
    */
   static get action() {
-    return '{attacker} {action} {victim} with {weapon}.';
+    return '{attacker} {action} {victim} con {weapon}.';
   }
   /**
    * @description Validate that the given data is properly typed and structured
