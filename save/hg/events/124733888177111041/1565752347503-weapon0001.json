@@ -1,12 +1,12 @@
 {
-	"id":"124733888177111041/1565752347503-weapon-1",
+	"id":"124733888177111041/1565752347503-weapon0001",
 	"message":"Mensaje de arma",
 	"creator":"124733888177111041",
 	"privacy":"public",
 	"type":"weapon",
 	"outcomes":[
 		{
-			"id":"weapon-1-1",
+			"id":"weapon000101",
 			"message":"{attacker} hace[A|n] explotar a {victim} con [Cuna |]granada[C|s] de {owner}.",
 			"creator":"124733888177111041",
 			"action":"hace[A|n] explotar",
