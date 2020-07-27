@@ -11,12 +11,16 @@
 	"custom":true,
 	"creator":"user_ID",
 	"type":"weapon",
+	"consumable":"nombre_consumibles",
+	"name":"nombre_arma",
 	"outcomes":[
 		eventos_con_armas
-	],
-	"consumable":"nombre_consumibles",
-	"name":"nombre_arma"
+	]
 }
+
+# id__arma => {timestamp}-{código}
+	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
+	## código para que puedas identificar el arma del evento
 
 ############################### EVENTOS CON ARMAS ###############################
 
@@ -25,12 +29,15 @@
 			"message":"acción_ecutable",
 			"custom":true,
 			"creator":"user_ID",
-			//action":action_realizada_por_atacantes,
+			//action":acción_realizada_por_atacantes,
 			"victim":{información_victimas},
 			"attacker":{nformación_atacantes},
 			//"battle":true,
 			"consumes":numero_cosumido
 		},
+
+# acción_realizada_por_atacantes => solamente tienes que poner la acción que hicieron (mata[A|n] a, hiere[A|n] a,...)
+# numero_cosumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V".
 
 {
   "bloodbath": [
