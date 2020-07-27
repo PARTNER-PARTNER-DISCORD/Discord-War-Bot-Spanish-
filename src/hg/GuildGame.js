@@ -972,11 +972,11 @@ class GuildGame {
         } else { */
         game.currentGame.day.events.push(evt);
         // }
-        cb('modifyPlayerNowHas', player.name, count, name);
+        cb('modifyPlayerNowHas', player.name, count, consum);
         return;
       } else {
         game.currentGame.nextDay.events.push(evt);
-        cb('modifyPlayerWillHave', player.name, count, name);
+        cb('modifyPlayerWillHave', player.name, count, consum);
         return;
       }
     });
