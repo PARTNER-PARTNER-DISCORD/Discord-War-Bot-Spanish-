@@ -1,14 +1,15 @@
 {
 	"id":"124733888177111041/1565752347503-weapon0001",
 	"creator":"124733888177111041",
-	"privacy":"public",
 	"type":"weapon",
+	"consumable":"granada[C|s]",
+	"name":"granada",
 	"outcomes":[
 		{
 			"id":"01weapon0001",
 			"message":"{attacker} hace[A|n] explotar a {victim} con [Cuna |]granada[C|s] de {owner}.",
 			"creator":"124733888177111041",
-			"action":"hace[A|n] explotar",
+			"action":"hace[A|n] explotar a",
 			"victim":{"count":-1,"outcome":"dies"},
 			"attacker":{"count":-1,"outcome":"nothing","killer":true},
 			"consumes":1
@@ -17,7 +18,7 @@
 			"id":"02weapon0001",
 			"message":"{attacker} hiere[A|n] a {victim} con [Cuna |]granada[C|s] de {owner}.",
 			"creator":"124733888177111041",
-			"action":"hiere[A|n]",
+			"action":"hiere[A|n] a",
 			"victim":{"count":-1,"outcome":"wounded"},
 			"attacker":{"count":-1,"outcome":"nothing"},
 			"consumes":1
@@ -26,7 +27,7 @@
 			"id":"03weapon0001",
 			"message":"{attacker} mata[A|n] a {victim} con [Cuna |]granada[C|s] de {owner}.",
 			"creator":"124733888177111041",
-			"action":"mata[A|n]",
+			"action":"mata[A|n] a",
 			"victim":{"count":-1,"outcome":"dies"},
 			"attacker":{"count":-1,"outcome":"nothing","killer":true},
 			"consumes":1
@@ -35,7 +36,7 @@
 			"id":"04weapon0001",
 			"message":"{attacker} intenta[A|n] matar a {victim} con [Cuna |]granada[C|s] de {owner}, pero no consiguen hacerle nada.",
 			"creator":"124733888177111041",
-			"action":"miss[Aes|]",
+			"action":"intenta[A|n] matar a",
 			"victim":{"count":-1,"outcome":"nothing"},
 			"attacker":{"count":-1,"outcome":"nothing"},
 			"consumes":1
@@ -80,7 +81,5 @@
 			"attacker":{"count":-1,"outcome":"dies"},
 			"consumes":1
 		}
-	],
-	"consumable":"granada[C|s]",
-	"name":"granada"
+	]
 }
