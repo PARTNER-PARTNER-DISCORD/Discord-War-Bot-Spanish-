@@ -2,7 +2,7 @@
 	"name":"alcohol",
 	"id":"124733888177111041/1565752347503-weapon0003",
 	"type":"weapon",
-	"creator":"124733888177111041"
+	"creator":"124733888177111041",
 	"consumable":"botella[C|s] de alcohol",
 	"outcomes":[
 		{
