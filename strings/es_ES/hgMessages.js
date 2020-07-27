@@ -182,15 +182,15 @@ class EsEsHGMessages extends Locale {
       '{victim} está[V|n] herido[V|s] por los creadores del juego.',
     ];
     this.giveWeapon = [
-      '¡{attacker} recibe[A|n] {weapon} de un patrocinador!',
-      'Un paracaídas con {weapon} cae delante de {attacker}.',
-      'Un patrocinador tenía ganas de ser amable y darle a {attacker} {weapon}.',
-      'Algunos patrocinadores decidieron que {attacker} necesita[A|n] {weapon}.',
+      '¡{attacker} recibe[A|n] {consumable} de un patrocinador!',
+      'Un paracaídas con {consumable} cae delante de {attacker}.',
+      'Un patrocinador tenía ganas de ser amable y darle a {attacker} {consumable}.',
+      'Algunos patrocinadores decidieron que {attacker} necesita[A|n] {consumable}.',
     ];
     this.takeWeapon = [
-      '{attacker} pierde {weapon} porque los creadores del juego pensaron que era[W|n] OP.',
-      'A los creadores de juegos no les gustaba que {attacker} tenga[A|n] {weapon}, por lo que desapareci[Wó|eron].',
-      'Los creadores del juego consideran que {attacker} no [Aes|son] digno[A|s] de tener {weapon}.',
+      '{attacker} pierde {consumable} porque los creadores del juego pensaron que era[W|n] OP.',
+      'A los creadores de juegos no les gustaba que {attacker} tenga[A|n] {consumable}, por lo que desapareci[Wó|eron].',
+      'Los creadores del juego consideran que {attacker} no [Aes|son] digno[A|s] de tener {consumable}.',
     ];
   }
 }

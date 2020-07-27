@@ -898,7 +898,7 @@ class GuildGame {
           const pick = HungryGames.NormalEvent.from(
               eventPool[Math.floor(eventPool.length * Math.random())]);
 
-          text = pick.message = pick.message.replace(/\{owner\}/g, 'their');
+          text = pick.message = pick.message.replace(/\{owner\}/g, 'él');
           evt = pick.finalize(game, [player]);
         }
       }
@@ -912,9 +912,14 @@ class GuildGame {
       if (!evt) {
         const name = weapons[weapon].name;
         text = text.replace(
-            /\{weapon\}/g, Math.abs(diff) === 1 ? `su ${name}` : `${name}s`);
-        text = text.replace(
+            /\{weapon\}/g, `${name}`);
+		text = text.replace(
             /\[W([^|]*)\|([^\]]*)\]/g, (Math.abs(diff) == 1 ? '$1' : '$2'));
+		const consum = weapons[weapon].consumable;
+        text = text.replace(
+            /\{consumable\}/g, `${consum}`);
+		text = text.replace(
+            /\[C([^|]*)\|([^\]]*)\]/g, (Math.abs(diff) == 1 ? '$1' : '$2'));
         evt = HungryGames.NormalEvent.finalize(
             text, [player], 0, 1, 'nothing', 'nothing', game);
       }

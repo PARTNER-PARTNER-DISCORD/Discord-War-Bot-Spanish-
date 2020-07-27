@@ -1039,14 +1039,14 @@ Simulator.formatWeaponEvent = function(
     subMessage = `\n${ownerName} pierde ${count} ${consumableName}.`;
   }
 
-  let owner = 'their';
+  let owner = 'él';
   if (numAttacker > 1 || (numAttacker == 1 && !firstAttacker)) {
-    owner = `${ownerName}'s`;
+    owner = `${ownerName}`;
   }
   if (!eventTry.message) {
     eventTry.message =
         HungryGames.WeaponEvent.action
-            .replace(/\{weapon\}/g, `${owner} ${weaponName}`)
+            .replace(/\{weapon\}/g, `${weaponName} de ${owner}`)
             .replace(/\{action\}/g, eventTry.action)
             .replace(/\[C([^|]*)\|([^\]]*)\]/g, (consumed == 1 ? '$1' : '$2'));
   } else {
