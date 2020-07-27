@@ -947,7 +947,7 @@ class GuildGame {
           vW.count = diff;
         }
       }
-
+	  const consum = weapons[weapon].consumable;
       if (game.currentGame.day.state > 1) {
         if (count <= 0) {
           count = 0;
