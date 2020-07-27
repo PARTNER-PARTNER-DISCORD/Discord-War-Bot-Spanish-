@@ -948,7 +948,7 @@ class GuildGame {
         }
       }
 	  const consum = weapons[weapon].consumable;
-	  consum = consum.replace(
+	  txconsum = consum.replace(
             /\[C([^|]*)\|([^\]]*)\]/g, (Math.abs(count) == 1 ? '$1' : '$2'));
       if (game.currentGame.day.state > 1) {
         if (count <= 0) {
@@ -974,11 +974,11 @@ class GuildGame {
         } else { */
         game.currentGame.day.events.push(evt);
         // }
-        cb('modifyPlayerNowHas', player.name, count, consum);
+        cb('modifyPlayerNowHas', player.name, count, txconsum);
         return;
       } else {
         game.currentGame.nextDay.events.push(evt);
-        cb('modifyPlayerWillHave', player.name, count, consum);
+        cb('modifyPlayerWillHave', player.name, count, txconsum);
         return;
       }
     });
