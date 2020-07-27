@@ -41,9 +41,9 @@
 			"id":"05weapon0002"
 		},
 		{
-			"message":"¡{victim} le roba [Cun |]explosivo[C|s] a {attacker}!",
+			"message":"?{victim} le roba [Cun |]explosivo[C|s] a {attacker}!",
 			"attacker":{"count":1,"outcome":"nothing"},
-			"victim":{"count":1,"outcome":"nothing","weapon":{"count":1,"name":"explosivo"}},
+			"victim":{"count":1,"outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347503-weapon0002"}},
 			"consumes":1,
 			"id":"06weapon0002"
 		},
@@ -55,7 +55,7 @@
 			"id":"07weapon0002"
 		},
 		{
-			"message":"¡{attacker} explota mientras prepara explosivos para {owner}!",
+			"message":"?{attacker} explota mientras prepara explosivos para {owner}!",
 			"attacker":{"count":1,"outcome":"dies"},
 			"victim":{"count":0,"outcome":"nothing"},
 			"consumes":1,
