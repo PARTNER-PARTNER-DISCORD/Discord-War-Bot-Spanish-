@@ -639,7 +639,7 @@ class HungryGames {
         return;
       }
       if (typeof value !== typeof action[key]) {
-        cb('Mal valor');
+        cb('Valor erroneo');
         return;
       }
       action[key] = value;

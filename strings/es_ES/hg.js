@@ -214,10 +214,10 @@ class EsEsHG extends Locale {
     this.modifyPlayerCountNonZero = 'El recuento debe ser un número distinto de cero.';
     this.modifyPlayerUnableToFindWeapon = 'Incapaz de encontrar el arma.';
     // {0} is name of player modified, {1} is number of weapons player now has,
-    // {2} is name of the weapon the player has.
+    // {2} is name of the consumable the player has.
     this.modifyPlayerNowHas = '{0} ahora tiene {1} {2}';
     // {0} is name of player modified, {1} is number of weapons player will
-    // have, {2} is name of the weapon the player will have.
+    // have, {2} is name of the consumable the player will have.
     this.modifyPlayerWillHave = '{0} tendrá {1} {2}';
 
     this.noGameInProgress = 'No hay juego en progreso.';

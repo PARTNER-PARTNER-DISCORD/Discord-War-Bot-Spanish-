@@ -4548,7 +4548,7 @@ function HG() {
     if (name.length > 100) return false;
     hg.getGame(id).currentGame.customName = name;
     hg.getGame(id).currentGame.name =
-        name || 'Hungry Games de' + (self.client.guilds.resolve(id).name);
+        name || 'Hungry Games de ' + (self.client.guilds.resolve(id).name);
     return true;
   };
 
@@ -4576,7 +4576,7 @@ function HG() {
     if (self.renameGame(id, msg.text.trim())) {
       reply(
           msg, 'renameGameSuccess', 'fillOne',
-          msg.text.trim() || self.client.guilds.resolve(id).name);
+          msg.text.trim() || 'Hungry Games de ' + self.client.guilds.resolve(id).name);
     } else {
       reply(msg, 'renameGameFail');
     }
