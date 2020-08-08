@@ -44,7 +44,7 @@ class StatGroup {
     }
 
     // Ensure SQL connection is established.
-    common.connectSQL();
+    //common.connectSQL();
 
     /**
      * @description The ID of this current bot.
