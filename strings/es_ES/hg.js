@@ -74,14 +74,14 @@ class EsEsHG extends Locale {
     this.resetActions = '¡Restablece TODAS las acciones!';
     this.resetReact = '¡Restablece mensaje de reacción!';
     this.resetHelp =
-        'Por favor, especifique qué datos restablecer.\nall {elimina todos los datos para' +
-        'este servidor},\nevents {elimina todos los eventos personalizados},\ncurrent {elimina todos ' +
-        'los datos sobre el juego actual},\noptions {restablece todas las opciones a los valores ' +
-        'predeterminados},\nteams {borra todos los equipos y crea nuevos},\n' +
-        'users {elimina datos sobre dónde colocar a los usuarios al crear un nuevo ' +
-        'juego},\nnpcs {elimina todos los NPCS}.\nstats {elimina todas las estadísticas y ' +
-        'grupos}.\nactions {restablece todas las acciones a la configuración predeterminada}.\nreact ' +
-        '{cancela el comando hg react}.';
+        'Por favor, especifique qué datos restablecer.\nall (elimina todos los datos para ' +
+        'este servidor),\nevents (elimina todos los eventos personalizados),\ncurrent (elimina todos ' +
+        'los datos sobre el juego actual),\noptions (restablece todas las opciones a los valores ' +
+        'predeterminados),\nteams (borra todos los equipos y crea nuevos),\n' +
+        'users (elimina datos sobre dónde colocar a los usuarios al crear un nuevo ' +
+        'juego),\nnpcs (elimina todos los NPCS).\nstats (elimina todas las estadísticas y ' +
+        'grupos).\nactions (restablece todas las acciones a la configuración predeterminada).\nreact ' +
+        '(cancela el comando hg react).';
     this.startedTitle = '¡Juego iniciado!';
     // {} is replaced with command prefix.
     this.gameStartNextDayInfo = '"{}next" para el dia siguiente.';

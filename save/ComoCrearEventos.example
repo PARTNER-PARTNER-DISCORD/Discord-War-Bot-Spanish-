@@ -7,7 +7,6 @@
 {
 	{
 	"id":"id__arma",
-	"message":"Mensaje de arma",
 	"custom":true,
 	"creator":"user_ID",
 	"type":"weapon",
@@ -21,23 +20,42 @@
 # id__arma => {timestamp}-{código}
 	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
 	## código para que puedas identificar el arma del evento
+# user_ID => ID de Discord del usuario que ha creado el evento
+# nombre_consumibles => Nombre de lo que consume el arma. (Las pistolas comsumen balas, los arcos consumen flechas, ...). Si no hay consumibles se pone el mismo nombre que el arma. (La madera consume madera, las granadas consumen granadas, ...).
+# nombre_arma => nombre del arma
+# eventos_con_armas => VER EVENTOS CON ARMAS
 
 ############################### EVENTOS CON ARMAS ###############################
 
 		{
 			"id":"id_evento_arma",
-			"message":"acción_ecutable",
+			//"message":"acción_ejecutable",
 			"custom":true,
 			"creator":"user_ID",
 			//action":acción_realizada_por_atacantes,
 			"victim":{información_victimas},
-			"attacker":{nformación_atacantes},
+			"attacker":{información_atacantes},
 			//"battle":true,
 			"consumes":numero_cosumido
 		},
 
+# id_evento_arma => identifica el evento en concreto
+# acción_ejecutable => narra lo que ha sucedido
+# user_ID => ID de Discord del usuario que ha creado el evento
+# información_victimas => VER
+# información_atacantes => VER
 # acción_realizada_por_atacantes => solamente tienes que poner la acción que hicieron (mata[A|n] a, hiere[A|n] a,...)
+# "battle":true, => añadir si esto oculle en una batalla
 # numero_cosumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V".
+// Parámetros opcionales
+
+############################### VARIABLES ###############################
+
+# {attacker} Atacante[A|s]
+# {victim} Victima[V|s]
+# {weapon} Arma
+# {consumable} Consumible[C|s]
+# {owner} Propietario del arma
 
 {
   "bloodbath": [

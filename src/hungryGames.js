@@ -410,6 +410,7 @@ function HG() {
     };
     const subCmds = [
       new self.command.SingleCommand('help', help),
+	  new self.command.SingleCommand('ping', commandPing);
       new self.command.SingleCommand('makemewin', commandMakeMeWin),
       new self.command.SingleCommand('makemelose', commandMakeMeLose),
       new self.command.SingleCommand(
@@ -750,6 +751,113 @@ function HG() {
     return strings.get(
         str, self.bot.getLocale && self.bot.getLocale(gId), ...rep);
   };
+
+  /**
+   * Previous ping values and their associated timestamps. Stores up to the
+   * previous {@link oldestPing}  worth of pings since a reboot.
+   *
+   * @private
+   * @type {Array.<{time: number, delta: number}>}
+   * @default
+   */
+  let pingHistory = [];
+  fs.readFile('./save/pingHistory.json', (err, data) => {
+    if (err) return;
+    try {
+      pingHistory = JSON.parse(data);
+    } catch (err) {
+      self.error('No se pudo analizar pingHistory.json');
+      console.error(err);
+    }
+  });
+
+  /**
+   * Oldest ping value to store.
+   *
+   * @private
+   * @type {number}
+   * @default 24 hours
+   */
+  const oldestPing = 24 * 60 * 60 * 1000;
+
+  /**
+   * Reply to user with my ping to the Discord servers.
+   *
+   * @private
+   * @type {commandHandler}
+   * @param {Discord~Message} msg Message that triggered command.
+   * @listens Command#ping
+   */
+  function commandPing(msg) {
+    const graph = [];
+    if (pingHistory.length > 0) {
+      const cols = 40;
+      const rows = 10;
+      const td = oldestPing / cols;
+      const now = Date.now();
+      let index = pingHistory.length - 1;
+      const values = [];
+      let max = 500;
+      let min = 0;
+      for (let c = 0; c < cols; c++) {
+        let total = 0;
+        let num = 0;
+        for (index; index >= 0 && now - pingHistory[index].time < td * (c + 1);
+          index--) {
+          total += pingHistory[index].delta * 1;
+          num++;
+        }
+        total /= num || 1;
+        values.push(total);
+        max = Math.max(max, total);
+        if (total != 0) min = Math.min(min, total);
+      }
+      max *= 1.1;
+      min *= 0.9;
+      const step = (max - min) / rows;
+      for (let r = 0; r <= rows; r++) {
+        graph[r] = [];
+        for (let c = cols - 1; c >= 0; c--) {
+          if (r == rows) {
+            graph[r].push('_');
+            continue;
+          }
+          const inRange = min + step * (rows - r - 1) <= values[c] &&
+              min + step * (rows - r) > values[c];
+          let char = ' ';
+          if (inRange) {
+            if (min + step * (rows - r - 0.5) <= values[c]) {
+              char = '-';
+            } else {
+              char = '_';
+            }
+          }
+          graph[r].push(char);
+        }
+        graph[r].push('|');
+        if (r == 0 || r == rows - 1 || r == Math.floor(rows / 2)) {
+          graph[r].push(Math.round(step * (rows - r) + min));
+        }
+        graph[r] = graph[r].join('');
+      }
+      /* const dfmt = 'mmm-dd HH:MM Z';
+      graph[rows] = '    ' + dateFormat(pingHistory[0].time, dfmt) +
+          '       --->       ' +
+          dateFormat(pingHistory[pingHistory.length - 1].time, dfmt); */
+    }
+
+    const finalGraph = 'Últimas 24 horas ```' + graph.join('\n') + '```';
+    if (self.client.ping) {
+      self.common.reply(
+          msg, 'Mi ping es ' + Math.round(self.client.ping * 10) / 10 + 'ms',
+          finalGraph);
+    } else {
+      self.common.reply(
+          msg,
+          'Mi ping actual' + Math.round(self.client.ws.ping * 10) / 10 + 'ms',
+          finalGraph);
+    }
+  }
 
   /**
    * Tell a user their chances of winning have not increased.

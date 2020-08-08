@@ -61,7 +61,7 @@
 			"id":"07weapon0001",
 			"message":"¡{victim} le roba una granada a {attacker}!",
 			"creator":"124733888177111041",
-			"victim":{"count":1,"outcome":"nothing","weapon":{"id":"124733888177111041/1565752347503-weapon0001","count":1}},
+			"victim":{"count":1,"outcome":"nothing","weapon":{"name":"granada","count":1}},
 			"attacker":{"count":1,"outcome":"nothing"},
 			"consumes":1
 		},
