@@ -4,6 +4,7 @@ const fs = require('fs');
 const Jimp = require('jimp');
 const http = require('http');
 const https = require('https');
+const mathjs = require('mathjs');
 const crypto = require('crypto');
 const FuzzySearch = require('fuzzy-search');
 const MessageMaker = require('./lib/MessageMaker.js');
@@ -11,7 +12,8 @@ require('./subModule.js').extend(HG);  // Extends the SubModule class.
 
 delete require.cache[require.resolve('./locale/Strings.js')];
 const Strings = require('./locale/Strings.js');
-
+const math = mathjs.create(mathjs.all, {matrix: 'Array'});
+ 
 /**
  * @classdesc Hunger Games simulator subModule.
  * @class
@@ -411,7 +413,6 @@ function HG() {
     const subCmds = [
       new self.command.SingleCommand('help', help),
 	  new self.command.SingleCommand('ping', commandPing),
-	  new self.command.SingleCommand('graph', commandGraph),
       new self.command.SingleCommand('makemewin', commandMakeMeWin),
       new self.command.SingleCommand('makemelose', commandMakeMeLose),
       new self.command.SingleCommand(
@@ -858,123 +859,6 @@ function HG() {
           'Mi ping actual ' + Math.round(self.client.ws.ping * 10) / 10 + 'ms',
           finalGraph);
     }
-  }
-  /**
-   * Graph a given equation by plugging in values for X and creating an image
-   * based off values.
-   *
-   * @private
-   * @type {commandHandler}
-   * @param {Discord~Message} msg Message that triggered command.
-   * @listens Command#graph
-   */
-  function commandGraph(msg) {
-    const graphSize = 200;
-    const dotSize = 2;
-    let xVal;
-    let yVal;
-    let ypVal;
-    let domainMin;
-    let domainMax;
-    let rangeMin;
-    let rangeMax;
-    const cmd = msg.text;
-    let expression = cmd.replace(/\[.*\]|\n/gm, '');
-    try {
-      const expr = math.compile(expression);
-      const domainTemp = cmd.match(/\[([^,]*),([^\]]*)\]/m);
-      const rangeTemp = cmd.match(/\[[^\]]*\][^[]*\[([^,]*),([^\]]*)\]/m);
-      if (domainTemp !== null && domainTemp.length == 3) {
-        domainMin = math.evaluate(domainTemp[1]);
-        domainMax = math.evaluate(domainTemp[2]);
-      } else {
-        domainMin = -10;
-        domainMax = 10;
-      }
-      if (rangeTemp !== null && rangeTemp.length == 3) {
-        rangeMin = math.evaluate(rangeTemp[1]);
-        rangeMax = math.evaluate(rangeTemp[2]);
-      }
-      xVal = math.range(
-          domainMin, domainMax, (domainMax - domainMin) / graphSize / dotSize);
-      yVal = xVal.map((x) => expr.evaluate({x: x}));
-      try {
-        let formula = expression;
-        if (formula.indexOf('=') > -1) {
-          const split = formula.split('=');
-          formula = split[1] + ' - (' + split[0] + ')';
-        }
-        const exprSlope = math.derivative(formula, 'x');
-        ypVal = xVal.map((x) => exprSlope.evaluate({x: x}));
-      } catch (err) {
-        // console.error(err);
-        msg.channel.send('Failed to derive given equation. ' + err.message);
-        return;
-      }
-    } catch (err) {
-      self.common.reply(msg, err.message);
-      return;
-    }
-    const finalImage = new Jimp(graphSize, graphSize, 0xFFFFFFFF);
-    let minY = 0;
-    let maxY = 0;
-    if (typeof rangeMin === 'undefined') {
-      yVal.forEach((obj) => {
-        if (minY > obj) minY = obj;
-        if (maxY < obj) maxY = obj;
-      });
-      minY += minY * 0.05;
-      maxY += maxY * 0.05;
-    } else {
-      minY = rangeMin;
-      maxY = rangeMax;
-    }
-    const zeroY = Math.round(-minY / (maxY - minY) * graphSize);
-    const zeroX = Math.round(-domainMin / (domainMax - domainMin) * graphSize);
-    finalImage.blit(new Jimp(dotSize, graphSize, 0xDDDDDDFF), zeroX, 0);
-    finalImage.blit(
-        new Jimp(graphSize, dotSize, 0xDDDDDDFF), 0, graphSize - zeroY);
-
-    let lastSlope;
-    const turningPoints = [];
-    for (let i = 0; i < xVal.length; i++) {
-      const y =
-          graphSize - Math.round((yVal[i] - minY) / (maxY - minY) * graphSize);
-      if (y >= graphSize || y < 0) continue;
-      let myColor = 0x000000FF;
-      let mySize = dotSize;
-      if ((lastSlope < 0 && ypVal[i] >= 0) ||
-          (lastSlope > 0 && ypVal[i] <= 0)) {
-        myColor = 0xFF0000FF;
-        turningPoints.push({x: xVal[i], y: yVal[i]});
-        mySize = dotSize * 2;
-      }
-      lastSlope = ypVal[i];
-      finalImage.blit(
-          new Jimp(mySize, mySize, myColor), i / xVal.length * graphSize, y);
-    }
-    const expMatch = expression.match(/^\s?[yY]\s*=(.*)/);
-    if (!expMatch) {
-      expression = 'y = ' + simplify(expression);
-    } else {
-      expression = 'y = ' + simplify(expMatch[1]);
-    }
-    finalImage.getBuffer(Jimp.MIME_PNG, (err, out) => {
-      const embed = new self.Discord.MessageEmbed();
-      embed.setTitle('Graph of ' + expression);
-      embed.setDescription(
-          'Plot Domain: [' + domainMin + ', ' + domainMax + ']\nPlot Range: [' +
-          minY + ', ' + maxY + ']');
-      embed.attachFiles([new self.Discord.MessageAttachment(out, 'graph.png')]);
-      embed.setColor([255, 255, 255]);
-      if (turningPoints.length > 0) {
-        embed.addField(
-            'Approximate Turning Points',
-            turningPoints.map((obj) => `(${obj.x}, ${obj.y})`).join('\n'),
-            false);
-      }
-      msg.channel.send(embed);
-    });
   }
   
   /**
