@@ -4,6 +4,7 @@ save/reboot.json
 save/reboot-*.json
 *.log
 auth.js
+subModules.js
 
 save/guilds/*
 save/users/*
