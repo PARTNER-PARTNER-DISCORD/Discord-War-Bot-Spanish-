@@ -410,7 +410,7 @@ function HG() {
     };
     const subCmds = [
       new self.command.SingleCommand('help', help),
-	  new self.command.SingleCommand('ping', commandPing);
+	  new self.command.SingleCommand('ping', commandPing),
       new self.command.SingleCommand('makemewin', commandMakeMeWin),
       new self.command.SingleCommand('makemelose', commandMakeMeLose),
       new self.command.SingleCommand(
