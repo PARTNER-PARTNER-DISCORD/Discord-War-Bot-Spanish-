@@ -309,8 +309,8 @@ function Common() {
       if (msg.author) {
         msg.author
             .send(
-                'I was unable to send a message in #' + msg.channel.name +
-                ' because I do not have permission to send messages there.')
+                'No pude enviar un mensaje en <#' + msg.channel.id +
+                '> porque no tengo permiso para enviar mensajes allí.')
             .catch(() => {});
       }
       return new Promise((resolve, reject) => reject(new Error('No Perms')));

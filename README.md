@@ -90,7 +90,7 @@ This tutorial uses the Discord.js sharding system, which may become deprecated i
     - A token for the bot that you are trying to run from [Discord](https://discordapp.com/developers/applications/) is required.
     - DO NOT give this token to anybody. Keep it private. The token allows anyone to be your bot.
 7) Configure SpikeyBot
-    - Create `auth.js` in the `SpikeyBot-Discord/` directory with a line that says `exports.release = 'BOT_TOKEN';`, where `BOT_TOKEN` is the bot token from Discord.
+    - Create `auth.js` in the `SpikeyBot-Discord/` directory with a line that says `exports.release = 'BOT_TOKEN';`, where `BOT_TOKEN` is the bot token from [Discord](https://discordapp.com/developers/applications/).
     - Modify `./subModules.json` `"release"` section to have the subModules you want.
     - If you wish to have access to developer commands that normally only SpikeyRobot has access to, replace the `spikeyId` in `./src/common.js` with your account ID.
 8) Run SpikeyBot
@@ -99,7 +99,7 @@ This tutorial uses the Discord.js sharding system, which may become deprecated i
     - All website related subModules will not work, and related errors can be suppressed by removing all subModules that start with `./web/` from `./subModules.json`.
     - If you are **not** running with `--shards` and wish to use the Hungry Games submodule, you must run node with `--experimental-worker`.
 9) Invite your BOT
-	- `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=808709334` Replace CLIENT_ID with the BOT that you will find in [Discord](https://discordapp.com/developers/applications/).
+	- `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=808709334` Replace `CLIENT_ID` with the BOT that you will find in [Discord](https://discordapp.com/developers/applications/).
 
 Hungry Games requires a MariaDB server to be available for storage of all events. If this database is not setup properly, HG may run into problems, and is not tested.  
 MariaDB table descriptions available in [./docs/describe.txt](./docs/describe.txt).  

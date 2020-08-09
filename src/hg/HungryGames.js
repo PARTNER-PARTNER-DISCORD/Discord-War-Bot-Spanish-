@@ -249,7 +249,7 @@ class HungryGames {
       self.getAllPlayers(members, [], false, [], false, [], (res) => {
         self._games[guild.id] = new HungryGames.GuildGame(
             self._parent.client.user.id, guild.id, opts,
-            `$Hungry Games de {guild.name}`, res);
+            `Hungry Games de ${guild.name}`, res);
         cb(self._games[guild.id]);
         self._parent._fire('create', guild.id);
       });
@@ -286,7 +286,7 @@ class HungryGames {
         return;
       }
       const name = (game.currentGame && game.currentGame.name) ||
-          (`$Hungry Games de {guild.name}`);
+          (`Hungry Games de ${guild.name}`);
       const teams = game.currentGame && game.currentGame.teams;
 
       const self = this;
