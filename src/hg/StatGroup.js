@@ -178,42 +178,42 @@ class StatGroup {
           done(err);
         }
       });
-    } else {
-      const toSend = global.sqlCon.format(
-          'SELECT * FROM HGStats WHERE ' +
-              'botId=? AND guildId=? AND groupId=? AND userId=?',
-          [this.bot, this.guild, this.id, uId]);
-      global.sqlCon.query(toSend, (err, rows) => {
-        if (err) {
-          done(err);
-          return;
-        }
-        if (!rows || rows.length == 0) {
-          // Fallback to legacy filesytem.
-          fs.readFile(`${this._dir}${uId}.json`, (err, data) => {
-            if (err) {
-              if (err.code === 'ENOENT') {
-                data = '{}';
-              } else {
-                done(err);
-                return;
-              }
-            }
-            try {
-              const parsed = JSON.parse(data);
-              parsed.id = uId;
-              done(null, Stats.from(parsed));
-            } catch (err) {
-              done(err);
-            }
-          });
-        } else {
-          const data = rows[0] || {};
-          data.id = uId;
-          done(null, Stats.from(data));
-        }
-      });
-    }
+    } //else {
+      // const toSend = global.sqlCon.format(
+          // 'SELECT * FROM HGStats WHERE ' +
+              // 'botId=? AND guildId=? AND groupId=? AND userId=?',
+          // [this.bot, this.guild, this.id, uId]);
+      // global.sqlCon.query(toSend, (err, rows) => {
+        // if (err) {
+          // done(err);
+          // return;
+        // }
+        // if (!rows || rows.length == 0) {
+          // // Fallback to legacy filesytem.
+          // fs.readFile(`${this._dir}${uId}.json`, (err, data) => {
+            // if (err) {
+              // if (err.code === 'ENOENT') {
+                // data = '{}';
+              // } else {
+                // done(err);
+                // return;
+              // }
+            // }
+            // try {
+              // const parsed = JSON.parse(data);
+              // parsed.id = uId;
+              // done(null, Stats.from(parsed));
+            // } catch (err) {
+              // done(err);
+            // }
+          // });
+        // } else {
+          // const data = rows[0] || {};
+          // data.id = uId;
+          // done(null, Stats.from(data));
+        // }
+      // });
+    //}
   }
 
   /**
