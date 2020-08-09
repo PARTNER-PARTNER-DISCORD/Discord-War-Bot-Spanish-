@@ -111,7 +111,7 @@ class Battle extends HungryGames.Event {
             .map(
                 (obj, index) => '`' +
                     (useNicknames ? (obj.nickname || obj.name) : obj.name) +
-                    '`: ' + Math.max((maxHealth - userHealth[index]), 0) + ' `💗`')
+                    ': ' + Math.max((maxHealth - userHealth[index]), 0) + ' 💗`')
             .sort()
             .join(', ');
     finalEvent.attacks.push(
@@ -192,7 +192,7 @@ class Battle extends HungryGames.Event {
                 const prePost = health === 0 ? '~~' : '';
                 return prePost + '`' +
                     (useNicknames ? (obj.nickname || obj.name) : obj.name) +
-                    '`: ' + health + ' `💗`' + prePost;
+                    ': ' + health + ' 💗`' + prePost;
               })
               .sort()
               .join(', ');
