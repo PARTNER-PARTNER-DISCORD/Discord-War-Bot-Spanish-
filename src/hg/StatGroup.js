@@ -582,12 +582,12 @@ class StatGroup {
       }
     };
     resetQueue();
-    const toSend = global.sqlCon.format(
-        'DELETE FROM HGStats WHERE botId=? AND guildId=? AND groupID=?;',
-        [this.bot, this.guild, this.id]);
-    global.sqlCon.query(toSend, (err) => {
-      if (err) console.error(err);
-    });
+    // const toSend = global.sqlCon.format(
+        // 'DELETE FROM HGStats WHERE botId=? AND guildId=? AND groupID=?;',
+        // [this.bot, this.guild, this.id]);
+    // global.sqlCon.query(toSend, (err) => {
+      // if (err) console.error(err);
+    // });
     rimraf(this._dir, (err) => {
       if (err) console.error(err);
       resetQueue();
