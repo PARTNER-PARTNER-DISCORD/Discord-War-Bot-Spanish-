@@ -98,6 +98,8 @@ This tutorial uses the Discord.js sharding system, which may become deprecated i
     - Errors about `gApiCredentials.json` missing can be suppressed by removing `./tts.js` and `./chatbot.js` from `./subModules.json` since these require special authentication from Google's API. (https://console.cloud.google.com/)
     - All website related subModules will not work, and related errors can be suppressed by removing all subModules that start with `./web/` from `./subModules.json`.
     - If you are **not** running with `--shards` and wish to use the Hungry Games submodule, you must run node with `--experimental-worker`.
+9) Invite your BOT
+	- `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=808709334` Replace CLIENT_ID with the BOT that you will find in [Discord](https://discordapp.com/developers/applications/).
 
 Hungry Games requires a MariaDB server to be available for storage of all events. If this database is not setup properly, HG may run into problems, and is not tested.  
 MariaDB table descriptions available in [./docs/describe.txt](./docs/describe.txt).  
