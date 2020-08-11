@@ -773,8 +773,7 @@ function SpikeyBot() {
         try {
           mainModules[i].begin(Discord, client, command, common, self);
         } catch (err) {
-          common.error(
-              'Failed to initialize MainModule: ' + mainModuleNames[i]);
+          self.error('Failed to initialize MainModule: ' + mainModuleNames[i]);
           console.log(err);
           if (logChannel) {
             // logChannel.send('Failed to initialize ' + mainModuleNames[i]);
