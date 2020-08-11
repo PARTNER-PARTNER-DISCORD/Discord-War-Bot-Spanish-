@@ -1,0 +1,85 @@
+{
+	"id":"124733888177111041/1565752347503-weapon0001",
+	"creator":"124733888177111041",
+	"type":"weapon",
+	"consumable":"granada[C|s]",
+	"name":"granada",
+	"outcomes":[
+		{
+			"id":"01weapon0001",
+			"message":"{attacker} hace[A|n] explotar a {victim} con [Cuna |]granada[C|s] de {owner}.",
+			"creator":"124733888177111041",
+			"action":"hace[A|n] explotar a",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
+			"consumes":1
+		},
+		{
+			"id":"02weapon0001",
+			"message":"{attacker} hiere[A|n] a {victim} con [Cuna |]granada[C|s] de {owner}.",
+			"creator":"124733888177111041",
+			"action":"hiere[A|n] a",
+			"victim":{"count":-1,"outcome":"wounded"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":1
+		},
+		{
+			"id":"03weapon0001",
+			"message":"{attacker} mata[A|n] a {victim} con [Cuna |]granada[C|s] de {owner}.",
+			"creator":"124733888177111041",
+			"action":"mata[A|n] a",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
+			"consumes":1
+		},
+		{
+			"id":"04weapon0001",
+			"message":"{attacker} intenta[A|n] matar a {victim} con [Cuna |]granada[C|s] de {owner}, pero no consiguen hacerle nada.",
+			"creator":"124733888177111041",
+			"action":"intenta[A|n] matar a",
+			"victim":{"count":-1,"outcome":"nothing"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":1
+		},
+		{
+			"id":"05weapon0001",
+			"message":"{attacker} pone una granada en la capucha de {victim} y huye.",
+			"creator":"124733888177111041",
+			"victim":{"count":1,"outcome":"dies"},
+			"attacker":{"count":1,"outcome":"nothing","killer":true},
+			"consumes":1
+		},
+		{
+			"id":"06weapon0001",
+			"message":"{attacker} lanza[A|n] [Cuna |]granada[C|s] a {víctima} matándolo[V|s].",
+			"creator":"124733888177111041",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
+			"consumes":1
+		},
+		{
+			"id":"07weapon0001",
+			"message":"¡{victim} le roba una granada a {attacker}!",
+			"creator":"124733888177111041",
+			"victim":{"count":1,"outcome":"nothing","weapon":{"name":"granada","count":1}},
+			"attacker":{"count":1,"outcome":"nothing"},
+			"consumes":1
+		},
+		{
+			"id":"08weapon0001",
+			"message":"¡{attacker} le mete[A|n] una granada en la boca de {victim}, y luego tira[A|n] del pasador!",
+			"creator":"124733888177111041",
+			"victim":{"count":1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
+			"consumes":1
+		},
+		{
+			"id":"09weapon0001",
+			"message":"¡{attacker} explota[A|n] al estar manipulando [Cuna |]granada[C|s] de {owner}!",
+			"creator":"124733888177111041",
+			"victim":{"count":0,"outcome":"nothing"},
+			"attacker":{"count":-1,"outcome":"dies"},
+			"consumes":1
+		}
+	]
+}

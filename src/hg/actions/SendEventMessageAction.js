@@ -22,7 +22,7 @@ class SendEventMessageAction extends ChannelAction {
       const evt = events[index];
       if (!evt) {
         hg._parent.error(
-            'Attempted to print event beyond end of list. ' + index + '/' +
+            'Intenté imprimir el evento más allá del final de la lista. ' + index + '/' +
             events.length + ' (' + game.id + ')');
         game.clearIntervals();
         game.currentGame.isPaused = true;
@@ -40,7 +40,7 @@ class SendEventMessageAction extends ChannelAction {
           if (!game.options.disableOutput) {
             channel.send(message[0], embed).catch((err) => {
               hg._parent.error(
-                  'Failed to send battle event message without image: ' +
+                  'Error al enviar el mensaje del evento de batalla sin imagen: ' +
                   channel.id);
               console.error(err);
             });
@@ -94,7 +94,7 @@ class SendEventMessageAction extends ChannelAction {
                 if (!game.options.disableOutput) {
                   channel.send(message[0], embed).catch((err) => {
                     hg._parent.error(
-                        'Failed to send battle event message with image: ' +
+                        'Error al enviar el mensaje del evento de batalla con la imagen: ' +
                         channel.id);
                     console.error(err);
                   });
@@ -137,7 +137,7 @@ class SendEventMessageAction extends ChannelAction {
                     (evt.subMessage || ''))
                 .catch((err) => {
                   hg._parent.error(
-                      'Failed to send message without image: ' + channel.id);
+                      'Error al enviar mensaje sin imagen: ' + channel.id);
                   console.error(err);
                 });
           }
@@ -203,7 +203,7 @@ class SendEventMessageAction extends ChannelAction {
                 if (!game.options.disableOutput) {
                   channel.send(evt.mentionString, embed).catch((err) => {
                     hg._parent.error(
-                        'Failed to send message with image: ' + channel.id);
+                        'Error al enviar mensaje con imagen: ' + channel.id);
                     console.error(err);
                   });
                 }
@@ -228,7 +228,7 @@ class SendEventMessageAction extends ChannelAction {
                   };
                 }(outcome, evt.icons.length - i - 1, evt.icons[i].settings))
                 .catch(function(err) {
-                  hg._parent.error('Failed to read image');
+                  hg._parent.error('Error al leer la imagen');
                   console.log(err);
                   responses++;
                 });

@@ -19,7 +19,7 @@ class SendPlayerRankMessageAction extends ChannelAction {
       const current = game.currentGame;
       const rankEmbed = new hg._parent.Discord.MessageEmbed();
       rankEmbed.setColor([255, 0, 255]);
-      rankEmbed.setTitle('Final Ranks (kills)');
+      rankEmbed.setTitle('Ranking final (asesinatos)');
       const rankList =
           current.includedUsers.sort((a, b) => a.rank - b.rank).map((obj) => {
             let shortName;
@@ -60,7 +60,7 @@ class SendPlayerRankMessageAction extends ChannelAction {
       }
       if (!game.options.disableOutput) {
         channel.send(rankEmbed).catch((err) => {
-          hg._parent.error(`Failed to send ranks message: ${channel.id}`);
+          hg._parent.error(`Error al enviar mensaje del ranking: ${channel.id}`);
           console.error(err);
         });
       }

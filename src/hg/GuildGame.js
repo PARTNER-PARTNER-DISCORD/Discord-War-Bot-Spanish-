@@ -329,8 +329,8 @@ class GuildGame {
           if (typeof p !== 'string' && typeof p !== 'number') {
             corruptTeam = true;
             console.error(
-                '(PreTeamForm) Player in team is invalid: ' + typeof p +
-                ' in team ' + obj.id + ' guild: ' + this.id + ' players: ' +
+                '(PreTeamForm) El jugador en equipo no es válido: ' + typeof p +
+                ' en el equipo ' + obj.id + ' guild: ' + this.id + ' jugadores: ' +
                 JSON.stringify(obj.players));
           }
         });
@@ -382,7 +382,7 @@ class GuildGame {
       this.currentGame.teams = [];
       for (let i = 0; i < numTeams; i++) {
         this.currentGame.teams[i] = new HungryGames.Team(
-            i, `Team ${i + 1}`,
+            i, `Equipo ${i + 1}`,
             this.currentGame.includedUsers
                 .slice(i * teamSize, i * teamSize + teamSize)
                 .map((obj) => obj.id));
@@ -396,16 +396,15 @@ class GuildGame {
         if (typeof p !== 'string' && typeof p !== 'number') {
           corruptTeam = true;
           console.error(
-              '(PostTeamForm) Player in team is invalid: ' + typeof p +
-              ' in team ' + obj.id + ' guild: ' + this.id + ' players: ' +
+              '(PostTeamForm) El jugador en equipo no es válido: ' + typeof p +
+              ' en el equipo ' + obj.id + ' guild: ' + this.id + ' jugadores: ' +
               JSON.stringify(obj.players));
         }
       });
     });
 
     if (corruptTeam) {
-      return 'Teams appeared to be corrupted, teams may have been ' +
-          'rearranged.\nIf you have more information, please report this bug.';
+      return 'Los equipos parecían estar dañados, los equipos pueden haber sido reorganizados.\nSi tiene más información, informe este error.';
     }
     return null;
   }
@@ -450,15 +449,15 @@ class GuildGame {
    */
   createInterval(cb) {
     if (cb && typeof cb !== 'function') {
-      throw new Error('Callback must be a function');
+      throw new Error('La devolución de llamada debe ser una función');
     } else if (
       typeof cb !== 'function' &&
         typeof this._stateUpdateCallback !== 'function') {
-      throw new Error('Callback must be a function');
+      throw new Error('La devolución de llamada debe ser una función');
     }
     if (this._dayEventInterval) {
       throw new Error(
-          'Attempted to register second listener for existing interval.');
+          'Intentó registrar un segundo oyente para el intervalo existente.');
     }
     this.currentGame.isPaused = false;
     this._autoStep = true;
@@ -476,7 +475,7 @@ class GuildGame {
    */
   setStateUpdateCallback(cb) {
     if (typeof cb !== 'function') {
-      throw new Error('Callback must be a function');
+      throw new Error('La devolución de llamada debe ser una función');
     }
     this._stateUpdateCallback = cb;
   }
@@ -833,7 +832,7 @@ class GuildGame {
           if (!player.weapons[w]) continue;
           const existing = customWeapons[w] || defaultEvents[w];
           if (!existing) {
-            console.error('Unable to find weapon:', w, 'in guild', game.id);
+            console.error('Incapaz de encontrar el arma:', w, 'en guild', game.id);
             continue;
           }
           weapons[w] = new HungryGames.WeaponEvent(
@@ -899,7 +898,7 @@ class GuildGame {
           const pick = HungryGames.NormalEvent.from(
               eventPool[Math.floor(eventPool.length * Math.random())]);
 
-          text = pick.message = pick.message.replace(/\{owner\}/g, 'their');
+          text = pick.message = pick.message.replace(/\{owner\}/g, 'él');
           evt = pick.finalize(game, [player]);
         }
       }
@@ -913,9 +912,14 @@ class GuildGame {
       if (!evt) {
         const name = weapons[weapon].name;
         text = text.replace(
-            /\{weapon\}/g, Math.abs(diff) === 1 ? `their ${name}` : `${name}s`);
-        text = text.replace(
+            /\{weapon\}/g, `${name}`);
+		text = text.replace(
             /\[W([^|]*)\|([^\]]*)\]/g, (Math.abs(diff) == 1 ? '$1' : '$2'));
+		const consum = weapons[weapon].consumable;
+        text = text.replace(
+            /\{consumable\}/g, `${consum}`);
+		text = text.replace(
+            /\[C([^|]*)\|([^\]]*)\]/g, (Math.abs(diff) == 1 ? '$1' : '$2'));
         evt = HungryGames.NormalEvent.finalize(
             text, [player], 0, 1, 'nothing', 'nothing', game);
       }
@@ -943,7 +947,9 @@ class GuildGame {
           vW.count = diff;
         }
       }
-
+	  const consum = weapons[weapon].consumable;
+	  const txconsum = consum.replace(
+            /\[C([^|]*)\|([^\]]*)\]/g, (Math.abs(count) == 1 ? '$1' : '$2'));
       if (game.currentGame.day.state > 1) {
         if (count <= 0) {
           count = 0;
@@ -968,11 +974,11 @@ class GuildGame {
         } else { */
         game.currentGame.day.events.push(evt);
         // }
-        cb('modifyPlayerNowHas', player.name, count, name);
+        cb('modifyPlayerNowHas', player.name, count, txconsum);
         return;
       } else {
         game.currentGame.nextDay.events.push(evt);
-        cb('modifyPlayerWillHave', player.name, count, name);
+        cb('modifyPlayerWillHave', player.name, count, txconsum);
         return;
       }
     });

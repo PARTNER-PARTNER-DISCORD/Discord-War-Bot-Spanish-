@@ -28,7 +28,7 @@ class Action {
    */
   constructor(handler, delay = 0) {
     if (typeof handler !== 'function') {
-      throw new TypeError('Handler is not a function.');
+      throw new TypeError('El controlador no es una función.');
     }
     /**
      * @description The unique ID for this action. Probably globally unique,
@@ -111,7 +111,7 @@ class Action {
     id;
     obj;
     client;
-    throw new Error('Create function not overridden.');
+    throw new Error('La función de creación no se anula.');
   }
 
   /**
@@ -139,7 +139,7 @@ class Action {
   static from(client, id, obj) {
     if (typeof obj.className !== 'string' ||
         obj.className.length === 0) {
-      console.error(obj.className, 'is not an Action name');
+      console.error(obj.className, 'no es un nombre de acción');
       return null;
     }
     const action = Action[obj.className];
@@ -151,7 +151,7 @@ class Action {
         console.error(err);
       }
       if (!out) {
-        console.error('Action.js: Unable to create', obj.className, id, obj);
+        console.error('Action.js: Incapaz de crear', obj.className, id, obj);
         return null;
       }
       if (typeof obj.delay === 'number') {
@@ -161,7 +161,7 @@ class Action {
         out.id = obj.id;
       }
     } else {
-      console.error(obj.className, 'is not an Action');
+      console.error(obj.className, 'no es una acción');
       return null;
     }
     return out;
@@ -221,124 +221,122 @@ Action.triggerMeta = {
   gameStart: {
     order: 10,
     types: ['member', 'channel'],
-    description: 'Prior to game starting.',
+    description: 'Antes del inicio del juego.',
   },
   dayStart: {
     order: 20,
     types: ['member', 'channel'],
-    description: 'Prior to day starting.',
+    description: 'Antes de que comience el día.',
   },
   eventInstant: {
     order: 30,
     types: ['member', 'channel'],
-    description: 'Moment the event occurs.',
+    description: 'Momento que ocurre el evento.',
   },
   eventPlayerDeath: {
     order: 31,
     types: ['member'],
-    description: 'Players who died during the event.',
+    description: 'Jugadores que murieron durante el evento.',
   },
   eventPlayerRevive: {
     order: 31,
     types: ['member'],
-    description: 'Players who were revived during the event.',
+    description: 'Jugadores que fueron revividos durante el evento.',
   },
   eventPlayerWound: {
     order: 31,
     types: ['member'],
-    description: 'Players who were wounded during the event.',
+    description: 'Jugadores que resultaron heridos durante el evento.',
   },
   eventPlayerHealed: {
     order: 31,
     types: ['member'],
-    description: 'Players who were healed during the event.',
+    description: 'Jugadores que fueron curados durante el evento.',
   },
   eventPlayerKilled: {
     order: 31,
     types: ['member'],
-    description: 'Players who killed another player during the event.',
+    description: 'Jugadores que mataron a otro jugador durante el evento.',
   },
   eventPlayerGainWeapon: {
     order: 31,
     types: ['member'],
-    description: 'Players who gained a weapon during the event.',
+    description: 'Jugadores que obtuvieron un arma durante el evento.',
   },
   eventPlayerLoseWeapon: {
     order: 31,
     types: ['member'],
-    description: 'Players who lost a weapon during the event.',
+    description: 'Jugadores que perdieron un arma durante el evento.',
   },
   eventPlayerUseWeapon: {
     order: 31,
     types: ['member'],
-    description: 'Players who used a weapon during the event, ' +
-        'and neither gained nor lost consumables.',
+    description: 'Jugadores que usaron un arma durante el evento, y no ganaron ni perdieron consumibles.',
   },
   eventPlayerUnAffected: {
     order: 31,
     types: ['member'],
-    description: 'Players whose state did not change during the event, ' +
-        'but took part in the event.',
+    description: 'Jugadores cuyo estado no cambió durante el evento, pero participó en el evento.',
   },
   eventPlayerAffected: {
     order: 31,
     types: ['member'],
-    description: 'All players in the event.',
+    description: 'Todos los jugadores en el evento.',
   },
   dayEnd: {
     order: 40,
     types: ['member', 'channel'],
-    description: 'After the day has ended.',
+    description: 'Después de que el día haya terminado.',
   },
   dayPlayerDead: {
     order: 41,
     types: ['member'],
-    description: 'After day has ended, for all players that are dead.',
+    description: 'Después de que el día haya terminado, para todos los jugadores que estén muertos.',
   },
   dayPlayerAlive: {
     order: 41,
     types: ['member'],
-    description: 'After day has ended, for all players that are alive.',
+    description: 'Después de que el día haya terminado, para todos los jugadores que estén vivos.',
   },
   dayPlayerWounded: {
     order: 41,
     types: ['member'],
-    description: 'After day has ended, for all players that are wounded.',
+    description: 'Después del día ha terminado, para todos los jugadores que están heridos.',
   },
   gameEnd: {
     order: 50,
     types: ['member', 'channel'],
-    description: 'After game has ended.',
+    description: 'Después de que el juego haya terminado.',
   },
   gameAbort: {
     order: 50,
     types: ['member', 'channel'],
-    description: 'If game is ended early with command.',
+    description: 'Si el juego termina temprano con el comando.',
   },
   gamePlayerDead: {
     order: 51,
     types: ['member', 'channel'],
-    description: 'After game ended, for all players that are dead.',
+    description: 'Después del juego terminó, para todos los jugadores que están muertos.',
   },
   gamePlayerAlive: {
     order: 51,
     types: ['member', 'channel'],
-    description: 'After game ended, for all players that are alive.',
+    description: 'Una vez finalizado el juego, para todos los jugadores que estén vivos.',
   },
   gamePlayerWounded: {
     order: 51,
     types: ['member', 'channel'],
-    description: 'After game ended, for all players that are wounded.',
+    description: 'Después del juego terminó, para todos los jugadores que están heridos.',
   },
   gamePlayerWin: {
     order: 52,
     types: ['member'],
-    description: 'After game ended, for all players that won.',
+    description: 'Después del juego terminó, para todos los jugadores que ganaron.',
   },
   gamePlayerLose: {
     order: 52,
     types: ['member'],
-    description: 'After game ended, for all players that lost.',
+    description: 'Después del juego terminó, para todos los jugadores que perdieron.',
   },
 };
 
