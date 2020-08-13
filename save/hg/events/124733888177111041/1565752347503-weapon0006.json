@@ -78,7 +78,7 @@
 		{
 			"message":"¡{victim} se saca de la pierna la flecha que le disparó {attacker}, y se la guarda!",
 			"attacker":{"count":"1","outcome":"nothing"},
-			"victim":{"count":"1","outcome":"wounded","weapon":{"name":"arco","count":1}},
+			"victim":{"count":"1","outcome":"wounded","weapon":{"id":"124733888177111041/1565752347503-weapon0006","count":1}},
 			"consumes":1,
 			"id":"11weapon0006"
 		}
