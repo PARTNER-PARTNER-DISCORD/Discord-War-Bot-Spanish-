@@ -46,7 +46,7 @@
 # información_atacantes => VER
 # acción_realizada_por_atacantes => solamente tienes que poner la acción que hicieron (mata[A|n] a, hiere[A|n] a,...)
 # "battle":true, => añadir si esto oculle en una batalla
-# numero_cosumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V".
+# numero_cosumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V". Para varios se le puede poner un número delante de "A"/"V", es decir, "2A"/"2V", "3A"/"3V", ...
 // Parámetros opcionales
 
 ############################### VARIABLES ###############################
@@ -56,6 +56,26 @@
 # {weapon} Arma
 # {consumable} Consumible[C|s]
 # {owner} Propietario del arma
+
+# Armas:
+	## granada
+	## explosivo
+	## alcohol
+	## tirachinas
+	## pistola
+	## arco
+	## cuchillo
+	## machete
+	## cuchilloarrojadizo
+	## pala
+	## maza
+	## espada
+	## hacha
+	## cepillodedientes
+	## cuerda
+	## veneno
+	## lanza
+	## madera
 
 {
   "bloodbath": [
