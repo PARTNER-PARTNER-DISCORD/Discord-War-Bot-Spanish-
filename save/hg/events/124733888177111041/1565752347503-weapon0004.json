@@ -43,7 +43,7 @@
 		{
 			"message":"¡{victim} le roba el tirachinas a {attacker}!",
 			"attacker":{"count":"1","outcome":"nothing"},
-			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"name":"tirachinas"}},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347503-weapon0004"}},
 			"consumes":1,
 			"id":"06weapon0004"
 		},
