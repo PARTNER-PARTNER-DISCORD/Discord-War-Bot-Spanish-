@@ -7,6 +7,7 @@
 	"outcomes":[
 		{
 			"action":"dispara[A|n] a",
+			"message":"{attacker} dispara[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
 			"attacker":{"count":"-1","outcome":"nothing","killer":true},
 			"victim":{"count":"-1","outcome":"dies"},
 			"consumes":0,
@@ -14,6 +15,7 @@
 		},
 		{
 			"action":"hiere[A|n] a",
+			"message":"{attacker} hiere[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
 			"attacker":{"count":"-1","outcome":"nothing"},
 			"victim":{"count":"-1","outcome":"wounded"},
 			"consumes":0,
@@ -21,6 +23,7 @@
 		},
 		{
 			"action":"mata[A|n] a",
+			"message":"{attacker} mata[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
 			"attacker":{"count":"-1","outcome":"nothing","killer":true},
 			"victim":{"count":"-1","outcome":"dies"},
 			"consumes":0,
@@ -49,6 +52,7 @@
 		},
 		{
 			"action":"intenta[A|n] matar a",
+			"message":"{attacker} intenta[A|n] matar a {victim} con [Cel|los] tirachinas de {owner}",
 			"attacker":{"count":"-1","outcome":"nothing"},
 			"victim":{"count":"-1","outcome":"nothing"},
 			"consumes":0,

@@ -1,0 +1,7 @@
+{
+	"message":"{attacker} golpea la cabeza de {victim} con una piedra más veces de lo necesario.",
+	"attacker":{"count":"1","outcome":"nothing","killer":true},
+	"victim":{"count":"1","outcome":"dies"},
+	"id":"124733888177111041/1565752347509-bloodbath0041",
+	"creator":"124733888177111041"
+}

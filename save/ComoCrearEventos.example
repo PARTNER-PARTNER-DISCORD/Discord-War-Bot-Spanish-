@@ -1,6 +1,21 @@
+############################### BAÑOS DE SANGRE ###############################
 
+{
+	"message":"acción_ejecutable",
+	"attacker":{información_atacantes},
+	"victim":{información_victimas},
+	"id":"id_baño",
+	"custom":true,
+	"creator":"user_ID"
+}
 
-
+# acción_ejecutable => narra lo que ha sucedido
+# información_atacantes => VER
+# información_victimas => VER
+# id__baño => custom/{timestamp}-{código}
+	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
+	## código para que puedas identificar el arma del evento
+# user_ID => ID de Discord del usuario que ha creado el evento
 
 ############################### ARMAS ###############################
 
@@ -17,7 +32,7 @@
 	]
 }
 
-# id__arma => {timestamp}-{código}
+# id__arma => custom/{timestamp}-{código}
 	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
 	## código para que puedas identificar el arma del evento
 # user_ID => ID de Discord del usuario que ha creado el evento
@@ -29,7 +44,7 @@
 
 		{
 			"id":"id_evento_arma",
-			//"message":"acción_ejecutable",
+			"message":"acción_ejecutable",
 			"custom":true,
 			"creator":"user_ID",
 			//action":acción_realizada_por_atacantes,
@@ -53,9 +68,10 @@
 
 # {attacker} Atacante[A|s]
 # {victim} Victima[V|s]
-# {weapon} Arma
+# {weapon} Arma[W|s]
 # {consumable} Consumible[C|s]
 # {owner} Propietario del arma
+# {dead} Muerto[D|s]
 
 # Armas:
 	## granada

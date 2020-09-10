@@ -1,0 +1,7 @@
+{
+	"message":"{victim}, {attacker} start fighting, and only {victim} survives.",
+	"attacker":{"count":"-2","outcome":"dies"},
+	"victim":{"count":"1","outcome":"nothing","killer":true},
+	"id":"124733888177111041/1565752347509-bloodbath0060",
+	"creator":"124733888177111041"
+}

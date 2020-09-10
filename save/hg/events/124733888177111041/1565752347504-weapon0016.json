@@ -4,5 +4,49 @@
 	"type":"weapon",
 	"creator":"124733888177111041",
 	"consumable":"frasco[C|s] de veneno",
-	"outcomes":[{"action":"poison[As|]","attacker":{"count":"-1","outcome":"thrives","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":"V","id":"1bcqdzg"},{"message":"{attacker} poison[As|] {victim}'s food, killing them.","attacker":{"count":"-1","outcome":"thrives","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":"V","id":"6n74jb"},{"message":"{attacker} poisons {victim}'s water while they sleep.","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":"V","id":"1hbi9gg"},{"message":"{victim} steal[Vs|] [Aa |]vial[A|s] of poison from {attacker}!","attacker":{"count":"1","outcome":"nothing"},"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0016"}},"consumes":1,"id":"1d6ku78"},{"message":"{attacker} ponder[As|] who to kill with {owner} vial of poison.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":0,"id":"8sp9cg"},{"message":"{attacker} didn't wash their hands after touching {owner} poison and dies.","attacker":{"count":"1","outcome":"dies"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"19za47i"}]
+	"outcomes":[
+		{
+			"action":"envenena[A|n] a",
+			"message":"{attacker} envenena[A|n] a {victim}",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"01weapon0016"
+		},
+		{
+			"message":"{attacker} envenena[A|n] la comida de {victim}, matándolos.",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"02weapon0016"
+		},
+		{
+			"message":"{attacker} envenena[A|n] el agua de {victim} mientras duerme[V|n].",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"03weapon0016"
+		},
+		{
+			"message":"¡{victim} roba un frasco de veneno a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0016"}},
+			"consumes":1,
+			"id":"04weapon0016"
+		},
+		{
+			"message":"{attacker} reflexiona[A|n] sobre a quién matar con [Cun |]frasco[C|s] de veneno de {owner}.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":0,
+			"id":"05weapon0016"
+		},
+		{
+			"message":"{attacker} no se lavó las manos después de tocar el veneno de {owner} y muere.",
+			"attacker":{"count":"1","outcome":"dies"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"06weapon0016"
+		}
+	]
 }
