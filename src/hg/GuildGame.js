@@ -948,7 +948,7 @@ class GuildGame {
         }
       }
 	  const consum = weapons[weapon].consumable;
-	  txconsum = consum.replace(
+	  const txconsum = consum.replace(
             /\[C([^|]*)\|([^\]]*)\]/g, (Math.abs(count) == 1 ? '$1' : '$2'));
       if (game.currentGame.day.state > 1) {
         if (count <= 0) {

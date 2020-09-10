@@ -128,7 +128,7 @@
         },
         {
           "command": "rename",
-          "description": "Cambia el nombre del juego a tu propio nombre personalizado. El valor predeterminado es \"{SERVER NAME}'s Hungry Games\". El nombre personalizado debe tener 100 caracteres o menos.",
+          "description": "Cambia el nombre del juego a tu propio nombre personalizado. El valor predeterminado es \"Hungry Games de {SERVER NAME}\". El nombre personalizado debe tener 100 caracteres o menos.",
           "aliases": "rename, name",
           "validOnlyInGuild": true,
           "examples": [

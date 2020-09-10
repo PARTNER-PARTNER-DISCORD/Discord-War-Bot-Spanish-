@@ -1,0 +1,86 @@
+{
+	"name":"arco",
+	"id":"124733888177111041/1565752347503-weapon0006",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"consumable":"flecha[C|s]",
+	"outcomes":[
+		{
+			"action":"dispara[A|n] a",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"01weapon0006"
+		},
+		{
+			"action":"hiere[A|n] a",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":"V",
+			"id":"02weapon0006"
+		},
+		{
+			"action":"mata[A|n] a",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"03weapon0006"
+		},
+		{
+			"message":"{attacker} dispara[A|n] a {victim} en la[V|s] pierna[V|s] con el arco de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":"V",
+			"id":"04weapon0006"
+		},
+		{
+			"message":"{attacker} dispara una flecha a la cabeza de {victim}.",
+			"attacker":{"count":"1","outcome":"nothing","killer":true},
+			"victim":{"count":"1","outcome":"dies"},
+			"consumes":1,
+			"id":"05weapon0006"
+		},
+		{
+			"message":"Se caen todas las flechas del carcaj de {attacker}, y {attacker} no se ha dado cuenta.",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":100,
+			"id":"06weapon0006"
+		},
+		{
+			"message":"{attacker} dispara una flecha a la cara de {victim} y ve como {victim} se ha quedado con los ojos abiertos.",
+			"attacker":{"count":"1","outcome":"nothing","killer":true},
+			"victim":{"count":"1","outcome":"dies"},
+			"consumes":1,
+			"id":"07weapon0006"
+		},
+		{
+			"message":"{attacker} comienza[A|n] a disparar flechas a {victim}, y lo[V|s] mata[A|n].",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":3,
+			"id":"08weapon0006"
+		},
+		{
+			"message":"{attacker} comienza[A|n] a disparar flechas a {victim}, pero solo logra[A|n] herirlo[V|s].",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":3,
+			"id":"09weapon0006"
+		},
+		{
+			"action":"intenta[A|n] matar a",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"nothing"},
+			"consumes":"V",
+			"id":"10weapon0006"
+		},
+		{
+			"message":"¡{victim} se saca de la pierna la flecha que le disparó {attacker}, y se la guarda!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"wounded","weapon":{"id":"124733888177111041/1565752347503-weapon0006","count":1}},
+			"consumes":1,
+			"id":"11weapon0006"
+		}
+	]
+}

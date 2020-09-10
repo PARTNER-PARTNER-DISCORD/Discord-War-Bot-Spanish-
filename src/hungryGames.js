@@ -4,6 +4,7 @@ const fs = require('fs');
 const Jimp = require('jimp');
 const http = require('http');
 const https = require('https');
+const mathjs = require('mathjs');
 const crypto = require('crypto');
 const FuzzySearch = require('fuzzy-search');
 const MessageMaker = require('./lib/MessageMaker.js');
@@ -11,7 +12,8 @@ require('./subModule.js').extend(HG);  // Extends the SubModule class.
 
 delete require.cache[require.resolve('./locale/Strings.js')];
 const Strings = require('./locale/Strings.js');
-
+const math = mathjs.create(mathjs.all, {matrix: 'Array'});
+ 
 /**
  * @classdesc Hunger Games simulator subModule.
  * @class
@@ -410,6 +412,7 @@ function HG() {
     };
     const subCmds = [
       new self.command.SingleCommand('help', help),
+	  new self.command.SingleCommand('ping', commandPing),
       new self.command.SingleCommand('makemewin', commandMakeMeWin),
       new self.command.SingleCommand('makemelose', commandMakeMeLose),
       new self.command.SingleCommand(
@@ -751,6 +754,25 @@ function HG() {
         str, self.bot.getLocale && self.bot.getLocale(gId), ...rep);
   };
 
+  /**
+   * Reply to user with my ping to the Discord servers.
+   *
+   * @private
+   * @type {commandHandler}
+   * @param {Discord~Message} msg Message that triggered command.
+   * @listens Command#ping
+   */
+  function commandPing(msg) {
+    if (self.client.ping) {
+      self.common.reply(
+          msg, 'Mi ping es', Math.round(self.client.ping * 10) / 10 + 'ms');
+    } else {
+      self.common.reply(
+          msg,
+          'Mi ping actual', Math.round(self.client.ws.ping * 10) / 10 + 'ms');
+    }
+  }
+  
   /**
    * Tell a user their chances of winning have not increased.
    *
@@ -2634,7 +2656,8 @@ function HG() {
 
     const embed = new self.Discord.MessageEmbed();
     embed.setTitle(strings.get('optionListTitle', msg.locale));
-    embed.setFooter('pageNumbers', msg.locale, (page + 1), (bodyFields.length));
+    embed.setFooter(
+        strings.get('pageNumbers', msg.locale, page + 1, bodyFields.length));
     embed.setDescription('```js\n' + bodyFields[page].join('\n\n') + '```');
     embed.addField(
         strings.get('optionListSimpleExampleTitle', msg.locale),
@@ -4548,7 +4571,7 @@ function HG() {
     if (name.length > 100) return false;
     hg.getGame(id).currentGame.customName = name;
     hg.getGame(id).currentGame.name =
-        name || 'Hungry Games de' + (self.client.guilds.resolve(id).name);
+        name || 'Hungry Games de ' + (self.client.guilds.resolve(id).name);
     return true;
   };
 
@@ -4576,7 +4599,7 @@ function HG() {
     if (self.renameGame(id, msg.text.trim())) {
       reply(
           msg, 'renameGameSuccess', 'fillOne',
-          msg.text.trim() || self.client.guilds.resolve(id).name);
+          msg.text.trim() || 'Hungry Games de ' + self.client.guilds.resolve(id).name);
     } else {
       reply(msg, 'renameGameFail');
     }

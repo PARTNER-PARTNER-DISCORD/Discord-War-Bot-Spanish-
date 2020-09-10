@@ -568,6 +568,9 @@ function SpikeyBot() {
   const client = new Discord.Client({
     disabledEvents: disabledEvents,
     presence: defaultPresence,
+    messageCacheLifetime: 24 * 60 * 60,
+    messageSweepInterval: 60 * 60,
+    messageCacheSize: 50,
   });
 
   /**
@@ -645,7 +648,7 @@ function SpikeyBot() {
    * @default 2 Minutes
    * @type {number}
    */
-  const saveFrequency = 2 * 60 * 1000;
+  const saveFrequency = 60 * 60 * 1000;
 
   /**
    * Cache of all loaded guild's command prefixes. Populated asyncronously after
@@ -770,7 +773,8 @@ function SpikeyBot() {
         try {
           mainModules[i].begin(Discord, client, command, common, self);
         } catch (err) {
-          self.error('Failed to initialize MainModule: ' + mainModuleNames[i]);
+          common.error(
+              'Failed to initialize MainModule: ' + mainModuleNames[i]);
           console.log(err);
           if (logChannel) {
             // logChannel.send('Failed to initialize ' + mainModuleNames[i]);

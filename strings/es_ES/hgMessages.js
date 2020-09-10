@@ -120,7 +120,7 @@ class EsEsHGMessages extends Locale {
       '¡Me estoy quedando dormido aquí! ¡Ve a hacer algo!',
     ];
     this.slaughter = [
-      '¡Oh, las humanidades! ¡La sangre está en todas partes!',
+      '¡Oh, los humanos! ¡La sangre está en todas partes!',
       '¡La matanza! Voy a tener que limpiar eso, ¿no?',
       '¿Meterse con los mejores y morir como el resto?', 
 	  '¿Crees en el destino?',

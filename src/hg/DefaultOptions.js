@@ -325,7 +325,7 @@ class DefaultOptions {
         'Incluye a los jugadores vivos en las actualizaciones de estado. En lugar de solo jugadores heridos o muertos.',
         'messages');
     this._customEventWeight = new NumberOption(
-        2, 'El peso relativo de los eventos personalizados. 2 significa que los eventos personalizados tienen el doble de probabilidades de ser elegidos.',
+        1.1, 'El peso relativo de los eventos personalizados. `2` significa que los eventos personalizados tienen el doble de probabilidades de ser elegidos.',
         'probabilities', {min: 0, max: 1000});
     this._anonForceOutcome = new BooleanOption(
         false, 'Los resultados forzados utilizarán eventos existentes en lugar de decir "Los creadores del juego" lo hicieron.',

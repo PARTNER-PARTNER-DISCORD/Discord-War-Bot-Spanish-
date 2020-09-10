@@ -249,7 +249,7 @@ class HungryGames {
       self.getAllPlayers(members, [], false, [], false, [], (res) => {
         self._games[guild.id] = new HungryGames.GuildGame(
             self._parent.client.user.id, guild.id, opts,
-            `$Hungry Games de {guild.name}`, res);
+            `Hungry Games de ${guild.name}`, res);
         cb(self._games[guild.id]);
         self._parent._fire('create', guild.id);
       });
@@ -286,7 +286,7 @@ class HungryGames {
         return;
       }
       const name = (game.currentGame && game.currentGame.name) ||
-          (`$Hungry Games de {guild.name}`);
+          (`Hungry Games de ${guild.name}`);
       const teams = game.currentGame && game.currentGame.teams;
 
       const self = this;
@@ -639,7 +639,7 @@ class HungryGames {
         return;
       }
       if (typeof value !== typeof action[key]) {
-        cb('Mal valor');
+        cb('Valor erroneo');
         return;
       }
       action[key] = value;
@@ -726,18 +726,18 @@ class HungryGames {
         return;
       }
 
-      const toSend = global.sqlCon.format(
-          'INSERT INTO HGEvents (Id, CreatorId, DateCreated, Privacy, ' +
-              'EventType) VALUES (?, ?, FROM_UNIXTIME(?), "unlisted", ?)',
-          [evt.id, evt.creator, now / 1000, evt.type]);
-      global.sqlCon.query(toSend, (err) => {
-        if (err) {
-          console.error(err);
-          cb('SQL_FAILED');
-          return;
-        }
-        cb(null, evt);
-      });
+      // const toSend = global.sqlCon.format(
+          // 'INSERT INTO HGEvents (Id, CreatorId, DateCreated, Privacy, ' +
+              // 'EventType) VALUES (?, ?, FROM_UNIXTIME(?), "unlisted", ?)',
+          // [evt.id, evt.creator, now / 1000, evt.type]);
+      // global.sqlCon.query(toSend, (err) => {
+        // if (err) {
+          // console.error(err);
+          // cb('SQL_FAILED');
+          // return;
+        // }
+        // cb(null, evt);
+      // });
     });
     return evt.id;
   }
@@ -765,63 +765,63 @@ class HungryGames {
       id = match[1];
       sub = match[2];
     }
-    const toSend =
-        global.sqlCon.format('SELECT * FROM HGEvents WHERE id=?', [id]);
-    global.sqlCon.query(toSend, (err, rows) => {
-      if (err) {
-        console.error(err);
-        cb('SQL_FAILED');
-        return;
-      }
-      if (!rows || !rows[0] || !rows[0].CreatorId) {
-        cb('BAD_ID');
-        return;
-      }
-      if (rows[0].CreatorId != user) {
-        cb('BAD_USER');
-        return;
-      }
-      if (sub) {
-        if (!this._defaultEventStore) {
-          cb('NOT_READY');
-          return;
-        }
-        this._defaultEventStore.fetch(id, null, (err, evt) => {
-          if (err) {
-            cb(err);
-            return;
-          }
-          const index = evt.outcomes.findIndex((el) => el.id === sub);
-          if (index === -1) {
-            cb('BAD_SUB_ID');
-            return;
-          }
-          evt.outcomes.splice(index, 1);
-          this.replaceEvent(user, evt, cb);
-        });
-      } else {
-        const toSend =
-            global.sqlCon.format('DELETE FROM HGEvents WHERE id=?', [id]);
-        global.sqlCon.query(toSend, (err, rows) => {
-          if (err) {
-            console.error(err);
-            cb('SQL_FAILED');
-            return;
-          } else if (!rows.affectedRows) {
-            console.error('FAILED to delete event row', id);
-          }
-          const filename = `${HungryGames.EventContainer.eventDir}${id}.json`;
-          this._parent.common.unlink(filename, (err) => {
-            if (err) {
-              console.error(err);
-              cb('UNLINK_FAILED');
-              return;
-            }
-            cb(null);
-          });
-        });
-      }
-    });
+    // const toSend =
+        // global.sqlCon.format('SELECT * FROM HGEvents WHERE id=?', [id]);
+    // global.sqlCon.query(toSend, (err, rows) => {
+      // if (err) {
+        // console.error(err);
+        // cb('SQL_FAILED');
+        // return;
+      // }
+      // if (!rows || !rows[0] || !rows[0].CreatorId) {
+        // cb('BAD_ID');
+        // return;
+      // }
+      // if (rows[0].CreatorId != user) {
+        // cb('BAD_USER');
+        // return;
+      // }
+      // if (sub) {
+        // if (!this._defaultEventStore) {
+          // cb('NOT_READY');
+          // return;
+        // }
+        // this._defaultEventStore.fetch(id, null, (err, evt) => {
+          // if (err) {
+            // cb(err);
+            // return;
+          // }
+          // const index = evt.outcomes.findIndex((el) => el.id === sub);
+          // if (index === -1) {
+            // cb('BAD_SUB_ID');
+            // return;
+          // }
+          // evt.outcomes.splice(index, 1);
+          // this.replaceEvent(user, evt, cb);
+        // });
+      // } else {
+        // const toSend =
+            // global.sqlCon.format('DELETE FROM HGEvents WHERE id=?', [id]);
+        // global.sqlCon.query(toSend, (err, rows) => {
+          // if (err) {
+            // console.error(err);
+            // cb('SQL_FAILED');
+            // return;
+          // } else if (!rows.affectedRows) {
+            // console.error('FAILED to delete event row', id);
+          // }
+          // const filename = `${HungryGames.EventContainer.eventDir}${id}.json`;
+          // this._parent.common.unlink(filename, (err) => {
+            // if (err) {
+              // console.error(err);
+              // cb('UNLINK_FAILED');
+              // return;
+            // }
+            // cb(null);
+          // });
+        // });
+      // }
+    // });
   }
 
   /**
@@ -867,39 +867,39 @@ class HungryGames {
       return;
     }
 
-    const toSend = global.sqlCon.format(
-        'SELECT * FROM HGEvents WHERE id=? LIMIT 1', [evt.id]);
-    global.sqlCon.query(toSend, (err, rows) => {
-      if (err) {
-        console.error(err);
-        cb('SQL_FAILED');
-        return;
-      }
-      if (!rows || !rows[0] || !rows[0].CreatorId) {
-        cb('BAD_ID');
-        return;
-      }
-      if (rows[0].CreatorId != user) {
-        cb('BAD_USER');
-        return;
-      }
-      const toSend = global.sqlCon.format(
-          'UPDATE HGEvents SET DateModified=FROM_UNIXTIME(?) WHERE id=?',
-          [Date.now() / 1000, evt.id]);
-      global.sqlCon.query(toSend, (err) => {
-        if (err) console.error(err);
-      });
+    // const toSend = global.sqlCon.format(
+        // 'SELECT * FROM HGEvents WHERE id=? LIMIT 1', [evt.id]);
+    // global.sqlCon.query(toSend, (err, rows) => {
+      // if (err) {
+        // console.error(err);
+        // cb('SQL_FAILED');
+        // return;
+      // }
+      // if (!rows || !rows[0] || !rows[0].CreatorId) {
+        // cb('BAD_ID');
+        // return;
+      // }
+      // if (rows[0].CreatorId != user) {
+        // cb('BAD_USER');
+        // return;
+      // }
+      // const toSend = global.sqlCon.format(
+          // 'UPDATE HGEvents SET DateModified=FROM_UNIXTIME(?) WHERE id=?',
+          // [Date.now() / 1000, evt.id]);
+      // global.sqlCon.query(toSend, (err) => {
+        // if (err) console.error(err);
+      // });
 
-      const str = JSON.stringify(evt);
-      this._parent.common.mkAndWrite(filename, newDir, str, (err) => {
-        if (err) {
-          console.error(err);
-          cb('WRITE_FAILED');
-          return;
-        }
-        cb(null);
-      });
-    });
+      // const str = JSON.stringify(evt);
+      // this._parent.common.mkAndWrite(filename, newDir, str, (err) => {
+        // if (err) {
+          // console.error(err);
+          // cb('WRITE_FAILED');
+          // return;
+        // }
+        // cb(null);
+      // });
+    // });
   }
 
   /**
@@ -909,17 +909,17 @@ class HungryGames {
    * @param {basicCB} [cb] Callback once completed. First parameter is optional
    * error string, second is otherwise an array if database rows.
    */
-  fetchUserEvents(user, cb) {
-    const toSend = global.sqlCon.format(
-        'SELECT * FROM HGEvents WHERE CreatorId=?', [user]);
-    global.sqlCon.query(toSend, (err, files) => {
-      if (err) {
-        cb('SQL_FAILED');
-      } else {
-        cb(null, files);
-      }
-    });
-  }
+  // fetchUserEvents(user, cb) {
+    // const toSend = global.sqlCon.format(
+        // 'SELECT * FROM HGEvents WHERE CreatorId=?', [user]);
+    // global.sqlCon.query(toSend, (err, files) => {
+      // if (err) {
+        // cb('SQL_FAILED');
+      // } else {
+        // cb(null, files);
+      // }
+    // });
+  // }
 
   /**
    * @description Returns a guild's game data. Returns cached version if that
