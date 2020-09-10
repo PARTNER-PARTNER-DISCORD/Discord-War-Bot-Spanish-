@@ -86,7 +86,7 @@ function Command() {
       const filename = dir + commandSettingsFile;
 
       if (opt == 'async') {
-       self.common.mkAndWrite(filename, dir, data, (err) => {
+        self.common.mkAndWrite(filename, dir, data, (err) => {
           if (err) {
             self.error(`Failed to write command settings to file: ${filename}`);
             console.error(err);
@@ -1548,7 +1548,7 @@ function Command() {
               }
               msg_.edit('`Confirmed`');
               delete userSettings[msg.guild.id][cmd.getFullName()];
-			  userSettings[msg.guild.id]._updated = true;
+              userSettings[msg.guild.id]._updated = true;
               self.common.reply(
                   msg,
                   'Settings for `' + cmd.getFullName() + '` have been reset.');
@@ -1582,7 +1582,7 @@ function Command() {
               msg_.edit('`Confirmed`');
               cmd.forEach((el) => {
                 delete userSettings[msg.guild.id][el.getFullName()];
-				userSettings[msg.guild.id]._updated = true;
+                userSettings[msg.guild.id]._updated = true;
                 self.fire('settingsReset', msg.guild.id, el.getFullName());
               });
               self.common.reply(msg, 'Settings for have been reset.', nameList);

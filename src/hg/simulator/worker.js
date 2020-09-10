@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Campbell Crowley. All rights reserved.
+// Copyright 2018-2020 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const {workerData, parentPort} = require('worker_threads');
 const HungryGames = require('../HungryGames.js');
@@ -16,9 +16,10 @@ class Worker {
    *   messages: object.<string>,
    *   events: HungryGames~EventContainer
    * }} sim Simulation data.
-   * @param {boolean} [retry=true] Whether to try again if there is an error.
+   * @param {number} [retries=2] Number of remaining times to retry in the event
+   *     of an error.
    */
-  constructor(sim, retry = true) {
+  constructor(sim, retries = 2) {
     sim.game.currentGame.prevDay = sim.game.currentGame.day;
     sim.game.currentGame.day =
         HungryGames.Day.from(sim.game.currentGame.nextDay);
@@ -55,7 +56,7 @@ class Worker {
     // Wait for all custom events to be fetched.
     sim.game.customEventStore.waitForReady(() => {
       sim.events.waitForReady(() => {
-        this.simulate(sim, retry);
+        this._simulate(sim, retries);
       });
     });
   }
@@ -63,9 +64,10 @@ class Worker {
    * @description Run the simulation.
    * @private
    * @param {{game: objcet, messages: object.<string>}} sim Simulation data.
-   * @param {boolean} retry Whether to try again if there is an error.
+   * @param {number} retries Number of remaining times to retry in the event of
+   *     an error.
    */
-  simulate(sim, retry) {
+  _simulate(sim, retries) {
     const id = sim.game.id;
 
     let startingAlive = 0;
@@ -321,20 +323,22 @@ class Worker {
               userEventPool.length + ' eventos. Sin arma, evento de arena: ' +
               (doArenaEvent ? arenaEvent.message : 'No') + ', Día: ' +
               sim.game.currentGame.day.num + ' Guild: ' + id + ' Reintentando: ' +
-              retry);
+              retries > 0);
           sim.game.currentGame.day.state = 0;
 
-          if (retry) {
-            new Worker(sim, false);
+          if (retries > 0) {
+            // new Worker(sim, retries - 1);
+            this._simulate(sim, retries - 1);
             return;
           }
 
           this.cb({
-            reply: '¡Uy! No pude encontrar un evento válido para los jugadores restantes.\nEsto generalmente se debe a que hay demasiados eventos deshabilitados.\nSi crees que esto es un error, habla con SpikeyRobot#0001',
+            reply: '¡Uy! No pude encontrar un evento válido para los jugadores restantes.\nEsto generalmente se debe a que hay demasiados eventos deshabilitados.\nSi crees que esto es un error, repórtalo en mis Servidor de Discord',
             reply2: 'Inténtelo de nuevo con `{prefix}next`.\n(No se pudo encontrar un evento válido para \'' +
                 (doArenaEvent ? arenaEvent.message : 'player events') +
                 '\' adecuado para ' + userPool.length + ' jugadores restantes.)',
             reason: 'Bad Configuration',
+            game: sim.game,
           });
           return;
         }
