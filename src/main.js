@@ -1581,7 +1581,11 @@ function Main() {
                     (vanity ? `Vanity: discord.gg/${vanity}\n` : '')) ||
               '*None*',
           true);
-      if (guild.shard) embed.setFooter(`Shard #${guild.shard.id}`);
+      if (guild.shard) {
+        embed.setFooter(`Shard #${guild.shard.id} / ${self.bot.fqdn}`);
+      } else {
+        embed.setFooter(`${self.bot.fqdn}`);
+      }
       msg.channel.send(`<@${msg.author.id}>`, embed);
     } else {
       self.common.reply(
@@ -2830,13 +2834,15 @@ function Main() {
     out.numGuilds = self.client.guilds.cache.size;
 
     let iTime = Date.now();
-    self.client.guilds.cache.forEach((g) => {
-      out.numLargestGuild = Math.max(g.memberCount, out.numLargestGuild);
-      out.numMembers += g.memberCount;
-      out.numEmojis += g.emojis.cache.size;
-      if (g.verified) out.numVerified++;
-      if (g.partnered) out.numPartnered++;
-    });
+    if (self.client.guilds) {
+      self.client.guilds.cache.forEach((g) => {
+        out.numLargestGuild = Math.max(g.memberCount, out.numLargestGuild);
+        out.numMembers += g.memberCount;
+        out.numEmojis += g.emojis && g.emojis.cache.size || 0;
+        // if (g.verified) out.numVerified++;
+        // if (g.partnered) out.numPartnered++;
+      });
+    }
     const guildDelta = Date.now() - iTime;
 
     iTime = Date.now();
