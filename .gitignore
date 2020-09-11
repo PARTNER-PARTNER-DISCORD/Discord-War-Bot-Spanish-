@@ -25,3 +25,5 @@ config/shardMasterConfig.js
 config/shard_*_config.json
 
 gApiCredentials*.json
+
+.vscode/
