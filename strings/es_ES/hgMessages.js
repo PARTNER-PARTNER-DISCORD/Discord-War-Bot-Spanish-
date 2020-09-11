@@ -47,7 +47,7 @@ class EsEsHGMessages extends Locale {
       'La sangre viene...',
       '¿Quién quiere sangre?',
       'He preparado un baño para ti. ¡Un baño de sangre!',
-      'La suciedad se empapará de sangre.',
+      'La tierra se empapará de sangre.',
       'Este es sólo el comienzo...',
       'Cuidado, se derramará sangre.',
       'Este juego no tendrá dioses ni reyes. Solo personas normales y corrientes.',
