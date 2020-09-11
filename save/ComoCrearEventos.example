@@ -1,6 +1,40 @@
+############################### ACCIONES DE JUGADORES ###############################
 
+{
+	"message":"acción_ejecutable",
+	"attacker":{información_atacantes},
+	"victim":{información_victimas},
+	"id":"id_acción",
+	"custom":true,
+	"creator":"user_ID"
+}
 
+# acción_ejecutable => narra lo que ha sucedido
+# información_atacantes => VER VARIABLES
+# información_victimas => VER VARIABLES
+# id__acción => custom/{timestamp}-{código}
+	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
+	## código para que puedas identificar el evento
+# user_ID => ID de Discord del usuario que ha creado el evento
 
+############################### BAÑOS DE SANGRE ###############################
+
+{
+	"message":"acción_ejecutable",
+	"attacker":{información_atacantes},
+	"victim":{información_victimas},
+	"id":"id_baño",
+	"custom":true,
+	"creator":"user_ID"
+}
+
+# acción_ejecutable => narra lo que ha sucedido
+# información_atacantes => VER VARIABLES
+# información_victimas => VER VARIABLES
+# id__baño => custom/{timestamp}-{código}
+	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
+	## código para que puedas identificar el evento
+# user_ID => ID de Discord del usuario que ha creado el evento
 
 ############################### ARMAS ###############################
 
@@ -17,11 +51,11 @@
 	]
 }
 
-# id__arma => {timestamp}-{código}
+# id__arma => custom/{timestamp}-{código}
 	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
 	## código para que puedas identificar el arma del evento
 # user_ID => ID de Discord del usuario que ha creado el evento
-# nombre_consumibles => Nombre de lo que consume el arma. (Las pistolas comsumen balas, los arcos consumen flechas, ...). Si no hay consumibles se pone el mismo nombre que el arma. (La madera consume madera, las granadas consumen granadas, ...).
+# nombre_consumibles => Nombre de lo que consume el arma. (Las pistolas consumen balas, los arcos consumen flechas, ...). Si no hay consumibles se pone el mismo nombre que el arma. (La madera consume madera, las granadas consumen granadas, ...).
 # nombre_arma => nombre del arma
 # eventos_con_armas => VER EVENTOS CON ARMAS
 
@@ -29,33 +63,46 @@
 
 		{
 			"id":"id_evento_arma",
-			//"message":"acción_ejecutable",
+			"message":"acción_ejecutable",
 			"custom":true,
 			"creator":"user_ID",
 			//action":acción_realizada_por_atacantes,
 			"victim":{información_victimas},
 			"attacker":{información_atacantes},
 			//"battle":true,
-			"consumes":numero_cosumido
+			"consumes":numero_consumido
 		},
 
 # id_evento_arma => identifica el evento en concreto
 # acción_ejecutable => narra lo que ha sucedido
 # user_ID => ID de Discord del usuario que ha creado el evento
-# información_victimas => VER
-# información_atacantes => VER
+# información_victimas => VER VARIABLES
+# información_atacantes => VER VARIABLES
 # acción_realizada_por_atacantes => solamente tienes que poner la acción que hicieron (mata[A|n] a, hiere[A|n] a,...)
-# "battle":true, => añadir si esto oculle en una batalla
-# numero_cosumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V". Para varios se le puede poner un número delante de "A"/"V", es decir, "2A"/"2V", "3A"/"3V", ...
+# "battle":true, => añadir si esto ocurre en una batalla
+# numero_consumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V". Para varios se le puede poner un número delante de "A"/"V", es decir, "2A"/"2V", "3A"/"3V", ...
 // Parámetros opcionales
 
 ############################### VARIABLES ###############################
 
 # {attacker} Atacante[A|s]
 # {victim} Victima[V|s]
-# {weapon} Arma
+# {weapon} Arma[W|s]
 # {consumable} Consumible[C|s]
 # {owner} Propietario del arma
+# {dead} Muerto[D|s]
+
+# información_victimas / información_victimas :u
+  ## "count":"número" => Número de participantes en el evento. Si el número es negativo, se trata del número mínimo de participantes.
+  ## "outcome":"opción" => Que les sucede a los participantes terminado el evento.
+    ### "nothing" - No les ocurrió nada.
+		### "dies" - Murieron.
+		### "thrives" - Se curaron
+		### "revived" - Revivieron
+		### "wounded" - Se hirieron
+  ## "weapon": { "id": "id_arma", "count": consumibles }
+    ### id_arma => ID del arma ganada en el evento.
+    ### consumibles => Número de consumibles obtenidos en el evento.
 
 # Armas:
 	## granada
@@ -91,8 +138,8 @@
 	// Parámetros de message:
 		// {attacker} - Atacante[A|s]
 		// {victim} - Victima[V|s]
-	// Parámetros de attaker/victim:
-		// "count": "*", - Sustituya * por el numero de atacantes/victimas que quiera para la acción. Si no hay atacantes/victimas, establezcalo en 0. Si se pone un número negativo, se trata del número minimo de atacantes/victimas que hay en la acción.
+	// Parámetros de attacker/victim:
+		// "count": "*", - Sustituya * por el numero de atacantes/victimas que quiera para la acción. Si no hay atacantes/victimas, establézcalo en 0. Si se pone un número negativo, se trata del número mínimo de atacantes/victimas que hay en la acción.
 		// "outcome": "nothing", - Estado del atacante/victima al terminar la acción.
 			// "nothing" - No le ocurrió nada.
 			// "dies" - Murió.

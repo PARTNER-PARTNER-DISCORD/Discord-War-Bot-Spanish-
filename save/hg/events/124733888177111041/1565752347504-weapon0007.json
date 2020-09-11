@@ -4,5 +4,72 @@
 	"type":"weapon",
 	"creator":"124733888177111041",
 	"consumable":"cuchillo[C|s]",
-	"outcomes":[{"message":"{attacker} break[As|] {owner} knife.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"f8xeop"},{"action":"stab[As|]","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"z5y12i"},{"action":"slice[As|] the throat[V|s] of","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"hjom2b"},{"action":"slice[As|] the arm[V|s] of","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"-1","outcome":"wounded"},"consumes":0,"id":"1n8c9jo"},{"message":"{attacker} leave[As|] {owner} kni[Vfe|ves] in {victim}'s back[V|s].","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":"V","id":"1hvqrkq"},{"message":"{attacker} sharpen[As|] {owner} knife.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":0,"id":"r2onld"},{"message":"{attacker} pin[As|] {victim} to the ground, then slowly push {owner} knife into their heart while listening to them scream.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"1q47916"},{"message":"{victim} steal[Vs|] [Aa |]kni[Afe|ves] from {attacker}!","attacker":{"count":"1","outcome":"nothing"},"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0007"}},"consumes":1,"id":"qbaos3"},{"message":"{attacker} get[As|] {victim} infected with {owner} knife, but doesn't kill them.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"-1","outcome":"wounded"},"consumes":0,"id":"10r1a6x"}]
+	"outcomes":[
+		{
+			"message":"{attacker} rompe[A|n] [Cel|los] cuchillo[C|s] de {owner}.",
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"victim":{"count":0,"outcome":"nothing"},
+			"consumes":1,
+			"id":"01weapon0007"
+		},
+		{
+			"action":"apuñala[A|n] a",
+			"message":"{attacker} apuñala[A|n] a {victim} con [Cun |]cuchillo[C|s] de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"02weapon0007"
+		},
+		{
+			"action":"degolla[A|n] a",
+			"message":"{attacker} degolla[A|n] a {victim} con [Cun |]cuchillo[C|s] de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0007"
+		},
+		{
+			"action":"le hace[A|n] un corte en el brazo a",
+			"message":"{attacker} le hace[A|n] un corte en el brazo a {victim} con [Cun |]cuchillo[C|s] de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"04weapon0007"
+		},
+		{
+			"message":"{attacker} dej[Aó|aron] [Cel| ]cuchillo[C|s] de {owner} clavado[C|s] en la espalda de {victim}.",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"05weapon0007"
+		},
+		{
+			"message":"{attacker} afila [Cel|los] cuchillo[C|s] de {owner}.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":0,
+			"id":"06weapon0007"
+		},
+		{
+			"message":"{attacker} tira[A|n] a {victim} al suelo, luego le[V|s] clava[A|n] lentamente [Cel|los] cuchillo[C|s] de {owner} en el corazón mientras los escucha gritar.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"07weapon0007"
+		},
+		{
+			"message":"¡{victim} le roba un cuchillo a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0007"}},
+			"consumes":1,
+			"id":"08weapon0007"
+		},
+		{
+			"message":"{attacker} infecta[A|n] a {victim} con [Cel|los] cuchillo[C|s] de {owner}, pero no lo[A|s] mata[A|n].",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"09weapon0007"
+		}
+	]
 }

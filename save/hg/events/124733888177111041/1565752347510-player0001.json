@@ -1,0 +1,7 @@
+{
+    "message":"{attacker} coge una espada de un alijo de suministros.",
+    "attacker":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0012"}},
+    "victim":{"count":"0","outcome":"nothing"},
+    "id":"124733888177111041/1565752347510-player0001",
+    "creator":"124733888177111041"
+}

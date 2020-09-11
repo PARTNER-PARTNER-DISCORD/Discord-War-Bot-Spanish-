@@ -1,0 +1,7 @@
+{
+	"message":"{victim} comienza a cantar el himno nacional, por lo que {attacker} le da un cabezazo.",
+	"attacker":{"count":"1","outcome":"nothing"},
+	"victim":{"count":"1","outcome":"wounded"},
+	"id":"124733888177111041/1565752347509-bloodbath0032",
+	"creator":"124733888177111041"
+}

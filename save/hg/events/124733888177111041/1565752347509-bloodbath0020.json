@@ -1,0 +1,7 @@
+{
+	"message":"{attacker} y {victim} forcejean para conseguir una maza, finalmente {attacker} se la consigue llevar.",
+	"attacker":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0011"}},
+	"victim":{"count":"1","outcome":"nothing"},
+	"id":"124733888177111041/1565752347509-bloodbath0020",
+	"creator":"124733888177111041"
+}
