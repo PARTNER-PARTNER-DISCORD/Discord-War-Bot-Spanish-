@@ -56,7 +56,7 @@ class EsEsHGMessages extends Locale {
       'El baño de sangre ha terminado.',
       'Ahora, el juego ha comenzado.',
       'Se ha derramado sangre.',
-      'El día acaba de comenzar.',
+      'Los juegos solamente acaban de comenzar.',
       'El baño de sangre puede haber terminado, ¡pero los juegos apenas han comenzado!',
       'El final del baño de sangre solo marca un nuevo comienzo.',
       'El final todavía no está a la vista.',
@@ -123,11 +123,11 @@ class EsEsHGMessages extends Locale {
       '¡Oh, los humanos! ¡La sangre está en todas partes!',
       '¡La matanza! Voy a tener que limpiar eso, ¿no?',
       '¿Meterse con los mejores y morir como el resto?', 
-	  '¿Crees en el destino?',
+	    '¿Crees en el destino?',
       'Reportado por hacks.', 
-	  'Se lo merecían. Probablemente.',
+	    'Se lo merecían. Probablemente.',
       '¿¡¿Quién más quiere un poco?!?', 
-	  '¡Hay más de dónde vino eso!',
+	    '¡Hay más de dónde vino eso!',
       'Bueno, eso sucedió...',
     ];
     this.teamRemaining = [
