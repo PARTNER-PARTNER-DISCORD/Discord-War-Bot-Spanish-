@@ -33,10 +33,10 @@ class EsEsHGMessages extends Locale {
       '{alive} han sobrevivido para ver el final del día {day}.',
       '{alive} han sobrevivido al día {day}.',
       'El día {day} fue amable con solo {alive} supervivientes.',
-      'El día {day} pone su sol en los {alive} supervivientes.',
+      'Llega el ocaso del día {day} para los {alive} supervivientes.',
       'Solamente {alive} ven el final del día {day}.',
       '{alive} sobrevivieron a los eventos del día {day}.',
-      'El sol del día {day} se ha puesto sobre los {alive} restantes.',
+      'El ocaso del día {day} se ha puesto para los {alive} restantes.',
     ];
     this.gameStart = ['¡Que empiecen los juegos!'];
     this.gameEnd = ['_unused'];

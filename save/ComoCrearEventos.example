@@ -6,6 +6,7 @@
 	"victim":{información_victimas},
 	"id":"id_acción",
 	"custom":true,
+  //"_reference":"referencia",
 	"creator":"user_ID"
 }
 
@@ -15,7 +16,9 @@
 # id__acción => custom/{timestamp}-{código}
 	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
 	## código para que puedas identificar el evento
+# referencia => La referencia de la que hace el evento
 # user_ID => ID de Discord del usuario que ha creado el evento
+// Parámetros opcionales
 
 ############################### BAÑOS DE SANGRE ###############################
 
@@ -25,6 +28,7 @@
 	"victim":{información_victimas},
 	"id":"id_baño",
 	"custom":true,
+  //"_reference":"referencia",
 	"creator":"user_ID"
 }
 
@@ -34,7 +38,9 @@
 # id__baño => custom/{timestamp}-{código}
 	## timestamp de cuando se creó el evento, lo puedes obtener en https://www.epochconverter.com/ (en milisegundos)
 	## código para que puedas identificar el evento
+# referencia => La referencia de la que hace el evento
 # user_ID => ID de Discord del usuario que ha creado el evento
+// Parámetros opcionales
 
 ############################### ARMAS ###############################
 
@@ -70,6 +76,7 @@
 			"victim":{información_victimas},
 			"attacker":{información_atacantes},
 			//"battle":true,
+      //"_reference":"referencia",
 			"consumes":numero_consumido
 		},
 
@@ -80,6 +87,7 @@
 # información_atacantes => VER VARIABLES
 # acción_realizada_por_atacantes => solamente tienes que poner la acción que hicieron (mata[A|n] a, hiere[A|n] a,...)
 # "battle":true, => añadir si esto ocurre en una batalla
+# referencia => La referencia de la que hace el evento
 # numero_consumido => numero de consumibles utilizados en la acción. Si quieres que se consuma uno por atacante/victima solamente hay que poner "A"/"V". Para varios se le puede poner un número delante de "A"/"V", es decir, "2A"/"2V", "3A"/"3V", ...
 // Parámetros opcionales
 
