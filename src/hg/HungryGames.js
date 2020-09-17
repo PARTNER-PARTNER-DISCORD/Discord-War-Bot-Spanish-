@@ -1123,7 +1123,7 @@ class HungryGames {
    * @default 20000
    */
   static get largeServerCount() {
-    return 20000;
+    return 500000;
   }
 }
 

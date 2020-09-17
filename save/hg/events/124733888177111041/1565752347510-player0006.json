@@ -1,0 +1,7 @@
+{
+    "message":"{attacker} encuentra[A|n] una mochila llena de explosivos.",
+    "attacker":{"count":"-1","outcome":"nothing","weapon":{"count":3,"id":"124733888177111041/1565752347503-weapon0002"}},
+    "victim":{"count":"0","outcome":"nothing"},
+    "id":"124733888177111041/1565752347510-player0006",
+    "creator":"124733888177111041"
+}
