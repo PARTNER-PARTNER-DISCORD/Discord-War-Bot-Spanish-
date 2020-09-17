@@ -1,6 +1,6 @@
 {
   "name": "spikeybot-discord",
-  "version": "1.18.1",
+  "version": "1.18.2",
   "description": "SpikeyBot",
   "homepage": "https://www.spikeybot.com/",
   "bugs": {
@@ -47,23 +47,23 @@
     }
   ],
   "devDependencies": {
-    "@types/node": "^14.6.0",
+    "@types/node": "^14.10.1",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "acorn": "^7.4.0",
     "chai": "^4.2.0",
-    "eslint": "^7.7.0",
+    "eslint": "^7.9.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-jsdoc": "^30.3.0",
+    "eslint-plugin-jsdoc": "^30.5.1",
     "ink-docstrap": "^1.3.2",
     "jsdoc": "^3.6.5",
-    "mocha": "^8.1.2",
+    "mocha": "^8.1.3",
     "typescript": "^3.9.7"
   },
   "scripts": {
     "check": "tsc",
     "purge": "rm -rf save/guilds/ save/users/ save/pingHistory.json save/reboot*.json save/rigged-counter.txt webClients.json",
-    "install": "dos2unix .hooks/install-hooks.sh && bash .hooks/install-hooks.sh",
+    "install": ".hooks/install-hooks.sh",
     "lint": "eslint --no-ignore $(find ./ -iname '*.js' -not -path './node_modules/*' -not -path './docs/*' -not -path './dist/*' -not -path './.git/*' -not -path './src/web/HTTPS-Proxy/*' -printf '%p ')",
     "lint:fix": "eslint --fix --no-ignore $(find ./ -iname '*.js' -not -path './node_modules/*' -not -path './docs/*' -not -path './dist/*' -not -path './.git/*' -not -path './src/web/HTTPS-Proxy/*' -printf '%p ')",
     "lintandtest": "npm run lint && npm run test",
