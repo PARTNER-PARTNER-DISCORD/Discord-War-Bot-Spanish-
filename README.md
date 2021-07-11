@@ -1,3 +1,9 @@
+[![Estado](https://travis-ci.org/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-.svg?branch=master)](https://travis-ci.com/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-)
+[![Versión](https://img.shields.io/github/package-json/v/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-.svg)](https://github.com/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-)
+[![Dependencias](https://david-dm.org/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-.svg)](https://david-dm.org/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-)
+[![Último Commit](https://img.shields.io/github/last-commit/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-.svg)](https://github.com/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-)
+
+
 [![SpikeyBot.com Status](https://img.shields.io/uptimerobot/status/m781846555-8613c83984f05f6c963656da.svg?label=SpikeyBot.com)](https://status.spikeybot.com)
 [![Server Count](https://img.shields.io/badge/endpoint.svg?url=https://www.spikeybot.com/stats/shield)](https://www.spikeybot.com)
 [![Discord Support Server](https://discordapp.com/api/guilds/420045052690169856/embed.png)](https://discord.gg/ZbKfYSQ)
@@ -80,22 +86,22 @@ This tutorial uses the Discord.js sharding system, which may become deprecated i
 2) Install [NodeJS](https://nodejs.org/)
     - The bot is currently running on NodeJS [v12.18.3](https://nodejs.org/dist/v12.18.3/). Other versions may work, but are untested.
 3) Download source code
-    - Clone this repository `git clone https://github.com/CampbellCrowley/SpikeyBot-Discord.git` or click the green download button in GitHub.
+    - Clone this repository `git clone https://github.com/PARTNER-PARTNER-DISCORD/Discord-War-Bot-Spanish-.git` or click the green download button in GitHub.
 4) Install system dependencies
     - `sudo apt install make libtool autoconf g++ ffmpeg` are required for the default installation.
 5) Install dependencies via NPM
     - Current version of NPM used is `v6.14.8`, but almost any version should be fine.
-    - In the `SpikeyBot-Discord` directory, run `npm install`.
+    - In the `Discord-War-Bot-Spanish-` directory, run `npm install`.
 6) Get a bot token from Discord
     - A token for the bot that you are trying to run from [Discord](https://discordapp.com/developers/applications/) is required.
     - DO NOT give this token to anybody. Keep it private. The token allows anyone to be your bot.
 7) Configure SpikeyBot
-    - Create `auth.js` in the `SpikeyBot-Discord/` directory with a line that says `exports.release = 'BOT_TOKEN';`, where `BOT_TOKEN` is the bot token from [Discord](https://discordapp.com/developers/applications/).
+    - Create `auth.js` in the `Discord-War-Bot-Spanish-/` directory with a line that says `exports.release = 'BOT_TOKEN';`, where `BOT_TOKEN` is the bot token from [Discord](https://discordapp.com/developers/applications/).
     - See `./auth.js.example` for an example of what a complete file will look like.
     - Modify `./subModules.json` `"release"` section to have the subModules you want.
     - If you wish to have access to developer commands that normally only SpikeyRobot has access to, replace the `spikeyId` in `./src/common.js` with your account ID.
 8) Run SpikeyBot
-    - Run `node src/SpikeyBot.js` in `SpikeyBot-Discord/` (working directory must be the project root).
+    - Run `node src/SpikeyBot.js` in `Discord-War-Bot-Spanish-/` (working directory must be the project root).
     - Errors about `gApiCredentials.json` missing can be suppressed by removing `./tts.js` and `./chatbot.js` from `./subModules.json` since these require special authentication from Google's API. (https://console.cloud.google.com/)
     - All website related subModules will not work, and related errors can be suppressed by removing all subModules that start with `./web/` from `./subModules.json`.
     - If you are **not** running with `--shards` and wish to use the Hungry Games submodule, you must run node with `--experimental-worker`.
