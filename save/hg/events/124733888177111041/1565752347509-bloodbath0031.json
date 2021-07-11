@@ -1,0 +1,7 @@
+{
+	"message":"{attacker} tiene[A|n] divido[A|s] sus suministros en partes, los va[A|n] racionando.",
+	"attacker":{"count":"-2","outcome":"thrives"},
+	"victim":{"count":"0","outcome":"nothing"},
+	"id":"124733888177111041/1565752347509-bloodbath0031",
+	"creator":"124733888177111041"
+}

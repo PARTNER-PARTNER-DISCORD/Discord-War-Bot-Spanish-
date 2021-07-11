@@ -12,8 +12,8 @@
 	// Parámetros de message:
 		// {attacker} - Atacante[A|s]
 		// {victim} - Victima[V|s]
-	// Parámetros de attaker/victim:
-		// "count": "*", - Sustituya * por el numero de atacantes/victimas que quiera para la acción. Si no hay atacantes/victimas, establezcalo en 0. Si se pone un número negativo, se trata del número minimo de atacantes/victimas que hay en la acción.
+	// Parámetros de attacker/victim:
+		// "count": "*", - Sustituya * por el numero de atacantes/victimas que quiera para la acción. Si no hay atacantes/victimas, establezcalo en 0. Si se pone un número negativo, se trata del número mínimo de atacantes/victimas que hay en la acción.
 		// "outcome": "nothing", - Estado del atacante/victima al terminar la acción.
 			// "nothing" - No le ocurrió nada.
 			// "dies" - Murió.

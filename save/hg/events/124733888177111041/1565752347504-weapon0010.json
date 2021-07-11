@@ -4,5 +4,71 @@
 	"id":"124733888177111041/1565752347504-weapon0010",
 	"type":"weapon",
 	"creator":"124733888177111041",
-	"outcomes":[{"message":"{attacker} whack[As|] {victim} to death with {owner} shovel!","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"9zmf11"},{"message":"{attacker} stab[As|] {victim} to death with {owner} shovel!","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"gwdt8f"},{"action":"kill[As|]","attacker":{"count":"-1","outcome":"thrives","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"qr60qp"},{"action":"wound[As|]","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"-1","outcome":"wounded"},"consumes":0,"id":"ql2kil"},{"message":"{attacker} bur[Aies|y] {victim} near the water with {victim}'s head[V|s] above the ground, drowning them once the tide comes in.","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"14kgo2k"},{"message":"{attacker} dig[As|] [Da |]grave[D|s] for {dead} with {owner} shovel.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":0,"id":"hra0do"},{"message":"{attacker} break[As|] {owner} shovel while digging [Da |]grave[D|s] for {dead}.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"nliqhi"},{"message":"{victim} steal[Vs|] [Aa |]shovel[A|s] from {attacker}!","attacker":{"count":"1","outcome":"nothing"},"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0010"}},"consumes":1,"id":"x3zyph"},{"message":"{attacker} break[As|] {owner} shovel while digging a hole.","attacker":{"count":"-1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"w02lrm"}]
+	"outcomes":[
+		{
+			"message":"¡{attacker} le[V|s] da[A|n] golpes a {victim} hasta matarlo[V|s] con la[C|s] pala[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0010"
+		},
+		{
+			"message":"¡{attacker} le[V|s] rompe[A|n] el cráneo a {victim} con la[C|s] pala[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"02weapon0010"
+		},
+		{
+			"message":"{attacker} mata[A|n] a {victim} con la[C|s] pala[C|s] de {owner}",
+			"action":"mata[A|n] a",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0010"
+		},
+		{
+			"message":"{attacker} hiere[A|n] a {victim} con la[C|s] pala[C|s] de {owner}",
+			"action":"hiere[A|n] a",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"04weapon0010"
+		},
+		{
+			"message":"{attacker} entierra[A|n] a {victim} cerca del agua con la cabeza por fuera para ahogarlo[V|s] una vez que sube la marea.",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"05weapon0010"
+		},
+		{
+			"message":"{attacker} cava [Duna |]tumba[D|s] para {dead} on la[C|s] pala[C|s] de {owner}.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":0,
+			"id":"06weapon0010"
+		},
+		{
+			"message":"{attacker} rompe[A|n] la[C|s] pala[C|s] de {owner} mientras cava [Duna |]tumba[D|s] para {dead}.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"07weapon0010"
+		},
+		{
+			"message":"{victim} le roba una pala a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0010"}},
+			"consumes":1,
+			"id":"08weapon0010"
+		},
+		{
+			"message":"{attacker} rompe[A|n] la[C|s] pala[C|s] de {owner} mientras cava[A|n] un hoyo.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"09weapon0010"
+		}
+	]
 }

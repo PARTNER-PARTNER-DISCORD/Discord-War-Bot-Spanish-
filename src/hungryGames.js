@@ -2080,7 +2080,7 @@ function HG() {
     const large = self.client.guilds.resolve(id).memberCount >=
         HungryGames.largeServerCount;
     if (large && typeof users === 'string') {
-      cb('Too many members');
+      cb('Demasiados jugadores');
       return;
     }
     switch (users) {

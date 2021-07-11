@@ -33,10 +33,10 @@ class EsEsHGMessages extends Locale {
       '{alive} han sobrevivido para ver el final del día {day}.',
       '{alive} han sobrevivido al día {day}.',
       'El día {day} fue amable con solo {alive} supervivientes.',
-      'El día {day} pone su sol en los {alive} supervivientes.',
+      'Llega el ocaso del día {day} para los {alive} supervivientes.',
       'Solamente {alive} ven el final del día {day}.',
       '{alive} sobrevivieron a los eventos del día {day}.',
-      'El sol del día {day} se ha puesto sobre los {alive} restantes.',
+      'El ocaso del día {day} se ha puesto para los {alive} restantes.',
     ];
     this.gameStart = ['¡Que empiecen los juegos!'];
     this.gameEnd = ['_unused'];
@@ -47,7 +47,7 @@ class EsEsHGMessages extends Locale {
       'La sangre viene...',
       '¿Quién quiere sangre?',
       'He preparado un baño para ti. ¡Un baño de sangre!',
-      'La suciedad se empapará de sangre.',
+      'La tierra se empapará de sangre.',
       'Este es sólo el comienzo...',
       'Cuidado, se derramará sangre.',
       'Este juego no tendrá dioses ni reyes. Solo personas normales y corrientes.',
@@ -56,7 +56,7 @@ class EsEsHGMessages extends Locale {
       'El baño de sangre ha terminado.',
       'Ahora, el juego ha comenzado.',
       'Se ha derramado sangre.',
-      'El día acaba de comenzar.',
+      'Los juegos solamente acaban de comenzar.',
       'El baño de sangre puede haber terminado, ¡pero los juegos apenas han comenzado!',
       'El final del baño de sangre solo marca un nuevo comienzo.',
       'El final todavía no está a la vista.',
@@ -123,11 +123,11 @@ class EsEsHGMessages extends Locale {
       '¡Oh, los humanos! ¡La sangre está en todas partes!',
       '¡La matanza! Voy a tener que limpiar eso, ¿no?',
       '¿Meterse con los mejores y morir como el resto?', 
-	  '¿Crees en el destino?',
+	    '¿Crees en el destino?',
       'Reportado por hacks.', 
-	  'Se lo merecían. Probablemente.',
+	    'Se lo merecían. Probablemente.',
       '¿¡¿Quién más quiere un poco?!?', 
-	  '¡Hay más de dónde vino eso!',
+	    '¡Hay más de dónde vino eso!',
       'Bueno, eso sucedió...',
     ];
     this.teamRemaining = [

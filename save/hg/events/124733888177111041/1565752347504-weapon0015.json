@@ -4,5 +4,48 @@
 	"id":"124733888177111041/1565752347504-weapon0015",
 	"type":"weapon",
 	"creator":"124733888177111041",
-	"outcomes":[{"message":"{attacker} strangle[As|] {victim} to death with {owner} rope!","attacker":{"count":"-1","outcome":"thrives","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"1no9np2"},{"message":"{attacker} makes a noose with {owner} rope, and kills themself.","attacker":{"count":"1","outcome":"dies"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"1wia19v"},{"message":"{attacker} trip[As|] {victim} with {owner} rope, and kill[As|] them while they're on the ground.","attacker":{"count":"-1","outcome":"thrives","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":0,"id":"1jwd0qm"},{"message":"{attacker} bind[As|] {victim}'s arms and legs with {owner} rope, then make[As|] them walk the plank.","attacker":{"count":"-1","outcome":"nothing","killer":true},"victim":{"count":"-1","outcome":"dies"},"consumes":"V","id":"10p68oi"},{"message":"{victim} steal[Vs|] [Aa |]rope[A|s] from {attacker}!","attacker":{"count":"1","outcome":"nothing"},"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0015"}},"consumes":1,"id":"162nw9h"},{"message":"{attacker} cut[As|] {owner} rope too short, and it becomes unusable.","attacker":{"count":"1","outcome":"nothing"},"victim":{"count":"0","outcome":"nothing"},"consumes":1,"id":"17fe6ci"}]
+	"outcomes":[
+		{
+			"message":"{attacker} estrangula[A|n] a {victim} con [Cuna |]cuerda[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0015"
+		},
+		{
+			"message":"{attacker} coge la cuerda de {owner} y se suicida con ella.",
+			"attacker":{"count":"1","outcome":"dies"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"02weapon0015"
+		},
+		{
+			"message":"{attacker} hace[A|n] trompezar a {victim} con [Cuna |]cuerda[C|s] de {owner} y lo[V|s] mata[A|n] mientras está[A|n] en el suelo.",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0015"
+		},
+		{
+			"message":"{attacker} ata[A|n] los brazos y piernas de {victim} con [Cuna |]cuerda[C|s] de {owner}, luego los hace caminar sobre la tabla.",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"04weapon0015"
+		},
+		{
+			"message":"¡{victim} le roba una cuerda a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0015"}},
+			"consumes":1,
+			"id":"05weapon0015"
+		},
+		{
+			"message":"{attacker} corta la cuerda de {owner} y al ser más pequeña se vuelve inutilizable.",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"06weapon0015"
+		}
+	]
 }

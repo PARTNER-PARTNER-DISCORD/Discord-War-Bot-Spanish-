@@ -1,0 +1,7 @@
+{
+	"message":"{attacker} encuentra un arco, flechas y un carcaj, y logra matar a {victim}.",
+	"attacker":{"count":"1","outcome":"nothing","killer":true,"weapon":{"count":2,"id":"124733888177111041/1565752347503-weapon0006"}},
+	"victim":{"count":"-1","outcome":"dies"},
+	"id":"124733888177111041/1565752347509-bloodbath0018",
+	"creator":"124733888177111041"
+}

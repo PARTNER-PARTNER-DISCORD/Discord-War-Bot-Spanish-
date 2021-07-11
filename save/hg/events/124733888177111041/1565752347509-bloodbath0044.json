@@ -1,0 +1,7 @@
+{
+	"message":"{attacker} decapita[A|n] a {victim} con una[A|s] espada[A|s] que se encontraba[A|n] cerca.",
+	"attacker":{"count":"-1","outcome":"nothing","killer":true,"weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0012"}},
+	"victim":{"count":"-1","outcome":"dies"},
+	"id":"124733888177111041/1565752347509-bloodbath0044",
+	"creator":"124733888177111041"
+}
