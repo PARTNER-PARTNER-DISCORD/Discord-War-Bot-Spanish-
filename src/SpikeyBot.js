@@ -104,7 +104,7 @@ function SpikeyBot() {
    * @type {string}
    * @constant
    */
-  this.fqdn = childProcess.execSync('hostname -f').toString().trim();
+  try{this.fqdn = childProcess.execSync('hostname -f').toString().trim();}catch{this.fqdn = childProcess.execSync('hostname').toString().trim();}
 
   /**
    * Timestamp at which this process was started.
