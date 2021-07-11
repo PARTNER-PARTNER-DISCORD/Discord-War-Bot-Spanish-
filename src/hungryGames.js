@@ -3893,11 +3893,11 @@ function HG() {
 			const hasPatron =
 				game.currentGame.includedUsers.find((el) => el.settings.isPatron);
 		}
-		if (!hasPatron) {
-		  msg.author.send(
-			  'Si te gusta SpikeyBot, considera apoyarlo en Patreon:\n' +
-			  '<https://www.patreon.com/campbellcrowley>');
-		}
+		// if (!hasPatron) {
+		//   msg.author.send(
+		// 	  'Si te gusta SpikeyBot, considera apoyarlo en Patreon:\n' +
+		// 	  '<https://www.patreon.com/campbellcrowley>');
+		// }
   }
 
   /**
