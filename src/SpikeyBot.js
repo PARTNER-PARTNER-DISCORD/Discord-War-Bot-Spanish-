@@ -521,8 +521,8 @@ function SpikeyBot() {
   let defaultPresence = {
     status: 'online',
     activity: {
-      name: 'SpikeyBot.com',
-      type: 'WATCHING',
+      name: 'a los Hungry Games',
+      type: 'PLAYING',
     },
   };
   if (isDev) {
@@ -742,7 +742,7 @@ function SpikeyBot() {
       } else if (isBackup) {
         // updateGame('OFFLINE', 'PLAYING');
       } else {
-        updateGame('SpikeyBot.com');
+        updateGame('a los Hungry Games');
       }
     }
     let logChannel = client.channels.resolve(common.logChannel);

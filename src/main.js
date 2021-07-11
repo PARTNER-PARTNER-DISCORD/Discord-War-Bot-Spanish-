@@ -382,7 +382,7 @@ function Main() {
 
     self.common.readFile('./save/rigged-counter.txt', (err, file) => {
       if (err || isNaN(file * 1)) {
-        self.client.riggedCounter = 0;
+        self.client.riggedCounter = 1;
         console.log(err);
         return;
       }
@@ -480,10 +480,10 @@ function Main() {
        */
       self.client.updateRiggedCounter = function(newNum) {
         /* eslint-enable no-unused-vars */
-        if (newNum < this.riggedCounter) {
+        if (newNum < this.riggedCounter && !isNaN(this.riggedCounter * 1)) {
           this.shard.broadcastEval(
               'this.updateRiggedCounter(' + this.riggedCounter + ')');
-        } else {
+        } else if (!isNaN(newNum * 1)) {
           this.riggedCounter = newNum;
         }
       };
@@ -953,7 +953,7 @@ function Main() {
           } else { */
           self.client.riggedCounter++;
           if (!disabledRiggedCounter[msg.guild.id]) {
-            msg.channel.send('#' + self.client.riggedCounter).catch(() => {});
+            msg.channel.send(`#${self.client.riggedCounter}`).catch(() => {});
           }
           // }
           if (self.client.shard) {
@@ -2835,12 +2835,21 @@ function Main() {
 
     let iTime = Date.now();
     if (self.client.guilds) {
+      let verifFailed = false;
       self.client.guilds.cache.forEach((g) => {
         out.numLargestGuild = Math.max(g.memberCount, out.numLargestGuild);
         out.numMembers += g.memberCount;
         out.numEmojis += g.emojis && g.emojis.cache.size || 0;
-        // if (g.verified) out.numVerified++;
-        // if (g.partnered) out.numPartnered++;
+        try {
+          if (g.verified) out.numVerified++;
+          if (g.partnered) out.numPartnered++;
+        } catch (err) {
+          if (!verifFailed) {
+            self.common.error('Failed to fetch verified/partnered!');
+            console.error(err);
+            verifFailed = true;
+          }
+        }
       });
     }
     const guildDelta = Date.now() - iTime;

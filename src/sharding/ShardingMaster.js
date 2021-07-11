@@ -1274,6 +1274,28 @@ class ShardingMaster {
       done();
       console.log(dbg);
     }
+    
+    if (script.startsWith('this.runBotUpdate(')) this._runBotUpdate();
+  }
+
+  /**
+   * @description Fetch the latest bot version from GitHub.
+   * @private
+   */
+  _runBotUpdate() {
+    common.log(
+        `Triggered update: ${__dirname} <-- DIR | CWD -->${process.cwd()}`);
+    require('child_process').exec('npm run update', (err, stdout, stderr) => {
+      if (!err) {
+        if (stdout && stdout !== 'null') console.log('STDOUT:', stdout);
+        if (stderr && stderr !== 'null') console.error('STDERR:', stderr);
+      } else {
+        common.error('Failed to pull latest update.');
+        console.error(err);
+        if (stdout && stdout !== 'null') console.log('STDOUT:', stdout);
+        if (stderr && stderr !== 'null') console.error('STDERR:', stderr);
+      }
+    });
   }
 
   /**
@@ -1329,7 +1351,8 @@ class ShardingMaster {
    * @private
    * @param {Socket|number|ShardingMaster.ShardInfo} socket Socket.io socket to
    *     send file to, or shard info to find socket from.
-   * @param {string} filename Filename relative to project directory.
+   * @param {string|object.<string>} req Filename relative to project directory,
+   *     or object with both filename and last modified time.
    * @param {Function} cb Callback with optional error argument.
    */
   _sendSlaveFile(socket, filename, cb) {
@@ -1349,6 +1372,7 @@ class ShardingMaster {
       cb('Unknown Destination');
       return;
     }
+    const filename = req.filename || req;
     const file = path.resolve(`${botCWD}/${filename}`);
     if (typeof filename != 'string' || !file.startsWith(botCWD)) {
       common.error(
@@ -1356,8 +1380,9 @@ class ShardingMaster {
       cb('File path unacceptable');
       return;
     }
-    // Send original filename, as ShardingSlave expects the same format.
-    fs.readFile(filename, (err, data) => {
+    fs.stat(filename, (err, stats) => {
+      // Send original filename, as ShardingSlave expects the same format.
+      const res = {filename: filename, mtime: 1};
       if (err) {
         if (err.code === 'ENOENT') {
           socket.emit('writeFile', filename, null, (err) => {
@@ -1370,21 +1395,58 @@ class ShardingMaster {
             }
           });
         } else {
-          common.error(`Failed to read file for slave: ${file}`);
+          common.error(`Failed to stat file for slave: ${file}`);
           console.error(err);
-          cb('Failed to read');
+          cb('Failed to stat');
         }
-      } else {
-        socket.emit('writeFile', filename, data, (err) => {
+        return;
+      }
+
+      const mtime = stats.mtime.getTime();
+      res.mtime = mtime;
+
+      if (req.mtime && mtime < req.mtime) {
+        socket.emit('writeFile', res, null, (err) => {
           if (err) {
-            common.error(`Failed to write file on slave: ${file}`);
+            common.error(`Failed to process read ignore on slave: ${file}`);
             console.error(err);
-            cb('Failed to write');
+            cb('Failed to skip write on slave');
           } else {
             cb(null);
           }
         });
+        return;
       }
+      
+      fs.readFile(filename, (err, data) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            socket.emit('writeFile', res, null, (err) => {
+              if (err) {
+                common.error(`Failed to unlink file on slave: ${file}`);
+                console.error(err);
+                cb('Failed to write');
+              } else {
+                cb(null);
+              }
+            });
+          } else {
+            common.error(`Failed to read file for slave: ${file}`);
+            console.error(err);
+            cb('Failed to read');
+          }
+        } else {
+          socket.emit('writeFile', res, data, (err) => {
+            if (err) {
+              common.error(`Failed to write file on slave: ${file}`);
+              console.error(err);
+              cb('Failed to write');
+            } else {
+              cb(null);
+            }
+          });
+        }
+      });
     });
   }
 
