@@ -43,18 +43,16 @@ function ChatBot() {
   /** @inheritdoc */
   this.initialize = function() {
     self.command.on('chat', onChatMessage);
-    self.command.on(
-        new self.command.SingleCommand(
-            'togglechatbot', commandToggleChatBot,
-            new self.command.CommandSetting({
-              validOnlyInGuild: true,
-              defaultDisabled: true,
-              permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-                  self.Discord.Permissions.FLAGS.MANAGE_GUILD |
-                  self.Discord.Permissions.FLAGS.BAN_MEMBERS,
-            })));
+    self.command.on(new self.command.SingleCommand(
+        'togglechatbot', commandToggleChatBot, new self.command.CommandSetting({
+          validOnlyInGuild: true,
+          defaultDisabled: true,
+          permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+              self.Discord.PermissionsBitField.Flags.ManageGuild |
+              self.Discord.PermissionsBitField.Flags.BanMembers,
+        })));
 
-    self.client.on('message', onMessage);
+    self.client.on('messageCreate', onMessage);
 
     selfMentionRegex = new RegExp(`\\s*<@!?${self.client.user.id}>\\s*`);
 
@@ -86,7 +84,7 @@ function ChatBot() {
   this.shutdown = function() {
     self.command.deleteEvent('chat');
     self.command.deleteEvent('togglechatbot');
-    self.client.removeListener('message', onMessage);
+    self.client.removeListener('messageCreate', onMessage);
   };
   /**
    * @override
@@ -157,7 +155,7 @@ function ChatBot() {
               .replace(
                   new RegExp(
                       '\\s*@' + escapeRegExp(
-                          msg.guild.me.nickname ||
+                          msg.guild.members.me.nickname ||
                                     self.client.user.username) +
                           '\\s*',
                       'g'),
@@ -180,7 +178,8 @@ function ChatBot() {
     const perms =
         (msg.channel.permissionsFor &&
          msg.channel.permissionsFor(self.client.user));
-    if (perms && !perms.has(self.Discord.Permissions.FLAGS.SEND_MESSAGES)) {
+    if (perms &&
+        !perms.has(self.Discord.PermissionsBitField.Flags.SendMessages)) {
       return;
     }
     if (!msg.text || msg.text.length < 2) return;
@@ -212,7 +211,8 @@ function ChatBot() {
                 result.fulfillmentText.replace(/~thing/g, chosen);
           }
           if (result.fulfillmentText) {
-            msg.channel.send(result.fulfillmentText.replace(/\\n/g, '\n'))
+            msg.channel
+                .send({content: result.fulfillmentText.replace(/\\n/g, '\n')})
                 .catch((err) => {
                   self.error(
                       'Unable to reply to chat message: ' + msg.channel.id);
@@ -253,7 +253,8 @@ function ChatBot() {
               'Dialogflow response delay: ' + (Date.now() - startTime) + 'ms');
           self.error('Dialogflow failed request: ' + JSON.stringify(request));
           console.error('ERROR:', err);
-          msg.channel.send('Failed to contact DialogFlow: ' + err.details);
+          msg.channel.send(
+              {content: 'Failed to contact DialogFlow: ' + err.details});
         });
   }
 

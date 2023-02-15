@@ -1,4 +1,4 @@
-// Copyright 2019-2020 Campbell Crowley. All rights reserved.
+// Copyright 2019-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const SubModule = require('./subModule.js');
 
@@ -63,31 +63,28 @@ class Echo extends SubModule {
   /** @inheritdoc */
   initialize() {
     this.command.on(['say', 'echo'], this._commandSay);
-    this.command.on(
-        new this.command.SingleCommand(
-            ['become', 'self', 'be', 'character', 'impersonate'],
-            this._commandBecome, {
-              validOnlyInGuild: true,
-              defaultDisabled: true,
-              permissions: this.Discord.Permissions.FLAGS.MANAGE_MESSAGES |
-                  this.Discord.Permissions.FLAGS.MANAGE_WEBHOOKS |
-                  this.Discord.Permissions.FLAGS.MANAGE_GUILD,
-            }));
+    this.command.on(new this.command.SingleCommand(
+        ['become', 'self', 'be', 'character', 'impersonate'],
+        this._commandBecome, {
+          validOnlyInGuild: true,
+          defaultDisabled: true,
+          permissions: this.Discord.PermissionsBitField.Flags.ManageMessages |
+              this.Discord.PermissionsBitField.Flags.ManageWebhooks |
+              this.Discord.PermissionsBitField.Flags.ManageGuild,
+        }));
     this.command.on(
         new this.command.SingleCommand(
             ['who', 'whois'], this._commandWhoIs, {validOnlyInGuild: true}));
     this.command.on('whoami', this._commandWhoAmI);
-    this.command.on(
-        new this.command.SingleCommand(
-            ['resetcharacters', 'deletecharacters'],
-            this._commandResetCharacters, {
-              validOnlyInGuild: true,
-              defaultDisabled: true,
-              permissions: this.Discord.Permissions.FLAGS.MANAGE_MESSAGES |
-                  this.Discord.Permissions.FLAGS.MANAGE_WEBHOOKS |
-                  this.Discord.Permissions.FLAGS.MANAGE_GUILD,
-            }));
-    this.client.on('message', this._onMessage);
+    this.command.on(new this.command.SingleCommand(
+        ['resetcharacters', 'deletecharacters'], this._commandResetCharacters, {
+          validOnlyInGuild: true,
+          defaultDisabled: true,
+          permissions: this.Discord.PermissionsBitField.Flags.ManageMessages |
+              this.Discord.PermissionsBitField.Flags.ManageWebhooks |
+              this.Discord.PermissionsBitField.Flags.ManageGuild,
+        }));
+    this.client.on('messageCreate', this._onMessage);
 
     this.client.guilds.cache.forEach((g) => {
       this.common.readAndParse(
@@ -105,7 +102,7 @@ class Echo extends SubModule {
     this.command.removeListener('whoami');
     this.command.removeListener('whois');
     this.command.removeListener('resetcharacters');
-    this.client.removeListener('message', this._onMessage);
+    this.client.removeListener('messageCreate', this._onMessage);
   }
   /** @inheritdoc */
   save(opt) {
@@ -141,8 +138,8 @@ class Echo extends SubModule {
     if (!char) {
       return;
     }
-    if (!msg.channel.permissionsFor(msg.guild.me)
-        .has(this.Discord.Permissions.FLAGS.MANAGE_WEBHOOKS)) {
+    if (!msg.channel.permissionsFor(msg.guild.members.me)
+        .has(this.Discord.PermissionsBitField.Flags.ManageWebhooks)) {
       return;
     }
     msg.channel.fetchWebhooks()
@@ -158,8 +155,8 @@ class Echo extends SubModule {
             this.error('Failed to send webhook: ' + msg.channel.id);
             console.error(err);
           });
-          if (msg.channel.permissionsFor(msg.guild.me)
-              .has(this.Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+          if (msg.channel.permissionsFor(msg.guild.members.me)
+              .has(this.Discord.PermissionsBitField.Flags.ManageMessages)) {
             msg.delete().catch((err) => {
               this.error('Failed to delete message: ' + msg.channel.id);
               console.error(err);
@@ -186,7 +183,7 @@ class Echo extends SubModule {
   _commandSay(msg) {
     if (msg.delete) msg.delete().catch(() => {});
     const content = msg.text.trim();
-    msg.channel.send(content || '\u200B').catch((err) => {
+    msg.channel.send({content: content || '\u200B'}).catch((err) => {
       this.warn(
           'Failed to send message in channel: ' + msg.channel.id + ': ' +
           content);
@@ -198,9 +195,10 @@ class Echo extends SubModule {
     }
     this._prevUserSayCnt++;
     if (this._prevUserSayCnt % 3 === 0) {
-      msg.channel.send(
-          'Help! ' + this.common.mention(msg) +
-          ' is putting words into my mouth!');
+      msg.channel.send({
+        content: 'Help! ' + this.common.mention(msg) +
+            ' is putting words into my mouth!',
+      });
     }
   }
 
@@ -260,8 +258,8 @@ class Echo extends SubModule {
           .then((hooks) => {
             const hook = hooks.find((h) => h.owner.id == this.client.user.id);
             if (!hook) {
-              if (!channel.permissionsFor(msg.guild.me)
-                  .has(this.Discord.Permissions.FLAGS.MANAGE_WEBHOOKS)) {
+              if (!channel.permissionsFor(msg.guild.members.me)
+                  .has(this.Discord.PermissionsBitField.Flags.ManageWebhooks)) {
                 this.common.reply(
                     msg, 'Failed to create webhook',
                     'I need permission to manage webhooks.');
@@ -327,7 +325,7 @@ class Echo extends SubModule {
     let numDone = 0;
     const tag = `${user.tag} (${user.id})`;
     let num = 0;
-    const embed = new this.Discord.MessageEmbed();
+    const embed = new this.Discord.EmbedBuilder();
     const self = this;
 
     const send = function() {
@@ -344,7 +342,7 @@ class Echo extends SubModule {
       const name = `${user.username}${nick}${dates}${mutual}`;
       embed.setColor([255, 0, 255]);
       embed.setTitle(tag);
-      embed.setThumbnail(user.displayAvatarURL({size: 32, dynamic: true}));
+      embed.setThumbnail(user.displayAvatarURL({size: 32}));
       if (charList.length == 1) {
         embed.setDescription(`${name}\n**Character**: ${charList[0]}`);
       } else if (charList.length > 0) {
@@ -353,9 +351,8 @@ class Echo extends SubModule {
       } else {
         embed.setDescription(name);
       }
-      msg.channel.send(self.common.mention(msg), embed).catch(() => {
-        self.common.reply(msg, tag, name);
-      });
+      msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+          .catch(() => self.common.reply(msg, tag, name));
     };
 
     if (!member.joinedAt) {
@@ -369,12 +366,14 @@ class Echo extends SubModule {
     }
 
     if (this.client.shard) {
-      const toEval =
-        `this.guilds.cache.filter((g) => g.members.resolve('${user.id}')).size`;
-      this.client.shard.broadcastEval(toEval).then((res) => {
-        res.forEach((el) => num += el);
-        send();
-      });
+      this.client.shard
+          .broadcastEval(eval(
+              '((client) => client.guilds.cache.filter((g) => ' +
+              `g.members.resolve('${user.id}').size))`))
+          .then((res) => {
+            res.forEach((el) => num += el);
+            send();
+          });
     } else {
       this.client.guilds.cache.forEach((g) => {
         if (g.members.resolve(member.id)) num++;

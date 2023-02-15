@@ -1,4 +1,4 @@
-// Copyright 2019 Campbell Crowley. All rights reserved.
+// Copyright 2019-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const ChannelAction = require('./ChannelAction.js');
 
@@ -17,7 +17,7 @@ class SendDayStartMessageAction extends ChannelAction {
    */
   constructor() {
     super((hg, game, channel) => {
-      const embed = new hg._parent.Discord.MessageEmbed();
+      const embed = new hg._parent.Discord.EmbedBuilder();
       if (game.currentGame.day.num === 0) {
         embed.setTitle(hg.messages.get('bloodbathStart'));
       } else {
@@ -26,13 +26,14 @@ class SendDayStartMessageAction extends ChannelAction {
       }
       if (!game.autoPlay && game.currentGame.day.num < 2) {
         const prefix = hg._parent.bot.getPrefix(game.id);
-        embed.setFooter(
-            'Consejo: Usa "' + prefix + hg._parent.postPrefix +
-            'autoplay" para automatizar los juegos.');
+        embed.setFooter({
+          text: 'Consejo: Usa "' + prefix + hg._parent.postPrefix +
+              'autoplay" para automatizar los juegos.',
+        });
       }
       embed.setColor([255, 0, 255]);
       if (!game || !game.options.disableOutput) {
-        channel.send(embed).catch((err) => {
+        channel.send({embeds: [embed]}).catch((err) => {
           if (err.message === 'Missing Permissions' ||
               err.message === 'Missing Access' ||
               err.message === 'Unknown Channel') {

@@ -333,7 +333,7 @@ class Worker {
           }
 
           this.cb({
-            reply: '¡Uy! No pude encontrar un evento válido para los jugadores restantes.\nEsto generalmente se debe a que hay demasiados eventos deshabilitados.\nSi crees que esto es un error, repórtalo en mis Servidor de Discord',
+            reply: '¡Uy! No pude encontrar un evento válido para los jugadores restantes.\nEsto generalmente se debe a que hay demasiados eventos deshabilitados.\nSi crees que esto es un error, repórtalo en mis Servidor de Discord.',
             reply2: 'Inténtelo de nuevo con `{prefix}next`.\n(No se pudo encontrar un evento válido para \'' +
                 (doArenaEvent ? arenaEvent.message : 'player events') +
                 '\' adecuado para ' + userPool.length + ' jugadores restantes.)',

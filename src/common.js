@@ -1,6 +1,6 @@
-// Copyright 2018-2020 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
-const dateFormat = require('dateformat');
+const dateFormat = require('date-format');
 const Discord = require('discord.js');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -8,6 +8,11 @@ const sql = require('mysql');
 const auth = require('../auth.js');
 const path = require('path');
 const yj = require('yieldable-json');
+const crypto = require('crypto');
+
+const encencoding = 'base64';
+const hashCypher = 'md5';
+const filePass = Buffer.from(auth.filePass, 'base64');
 
 /**
  * Commonly required things. Helper functions and constants.
@@ -198,7 +203,7 @@ function Common() {
     }
     const formattedIP = self.getIPName(ip.replace('::ffff:', ''));
 
-    const date = dateFormat(new Date(), 'mm-dd HH:MM:ss');
+    const date = dateFormat('mm-dd hh:MM:ss', new Date());
     return `[${title}${date} ${formattedIP}]:`;
   };
 
@@ -299,32 +304,57 @@ function Common() {
       return null;
     }
     const trace = getTrace(0);
+    if (msg.editReply) {
+      // This is actually an interaction.
+      const res = {
+        content: '```\n' + text + '\n```' + (post || ''),
+        fetchReply: true,
+      };
+      let promise;
+      if (msg.deferred) {
+        promise = msg.editReply(res);
+      } else if (msg.replied) {
+        promise = msg.followUp(res);
+      } else {
+        promise = msg.reply(res);
+      }
+      return promise.catch((err) => {
+        self.error('Failed to send reply to channel: ' + msg.channel.id, trace);
+        console.error(err);
+      });
+    }
     const perms = msg.channel.permissionsFor && msg.client &&
         msg.channel.permissionsFor(msg.client.user);
-    if (perms && !perms.has('SEND_MESSAGES')) {
+    if (perms && !perms.has(Discord.PermissionsBitField.Flags.SendMessages)) {
       self.logDebug(
           'Failed to send reply to channel ' + msg.channel.id +
               ' due to lack of perms.',
           trace);
       if (msg.author) {
         msg.author
-            .send(
-                'No pude enviar un mensaje en <#' + msg.channel.id +
-                '> porque no tengo permiso para enviar mensajes allí.')
+            .send({
+              content: 'No pude enviar un mensaje en <#' +
+                  msg.channel.id +
+                  '> porque no tengo permiso para enviar mensajes allí.',
+            })
             .catch(() => {});
       }
       return new Promise((resolve, reject) => reject(new Error('No Perms')));
     }
-    if (self.isTest || (perms && !perms.has('EMBED_LINKS'))) {
+    if (self.isTest ||
+        (perms && !perms.has(Discord.PermissionsBitField.Flags.EmbedLinks))) {
       return msg.channel
-          .send(Common.mention(msg) + '\n```\n' + text + '\n```' + (post || ''))
+          .send({
+            content:
+                Common.mention(msg) + '\n```\n' + text + '\n```' + (post || ''),
+          })
           .catch((err) => {
             self.error(
                 'Failed to send reply to channel: ' + msg.channel.id, trace);
             throw err;
           });
     } else {
-      const embed = new Discord.MessageEmbed();
+      const embed = new Discord.EmbedBuilder();
       embed.setColor([255, 0, 255]);
       if (text.length <= 256) {
         embed.setTitle(text);
@@ -332,11 +362,13 @@ function Common() {
       } else {
         embed.setDescription(text + (post ? `\n${post}` : ''));
       }
-      return msg.channel.send(Common.mention(msg), embed).catch((err) => {
-        self.error(
-            'Failed to send embed reply to channel: ' + msg.channel.id, trace);
-        throw err;
-      });
+      return msg.channel.send({content: Common.mention(msg), embeds: [embed]})
+          .catch((err) => {
+            self.error(
+                'Failed to send embed reply to channel: ' + msg.channel.id,
+                trace);
+            throw err;
+          });
     }
   };
 
@@ -667,6 +699,24 @@ Common.prototype.avatarURL = 'https://kamino.spikeybot.com/';
  * @constant
  */
 Common.avatarURL = Common.prototype.avatarURL;
+/**
+ * Whether to use the encryption specified in auth.js to encrypt users'
+ *   avatars. Could make it more difficult to serve the images if enabled.
+ *
+ * @type {boolean}
+ * @constant
+ * @default
+ */
+Common.prototype.encryptAvatars = false;
+/**
+ * Whether to use the encryption specified in auth.js to encrypt users'
+ *   avatars. Could make it more difficult to serve the images if enabled.
+ *
+ * @type {boolean}
+ * @constant
+ * @default
+ */
+Common.encryptAvatars = Common.prototype.encryptAvatars;
 
 /**
  * The website path for more help and documentation.
@@ -794,8 +844,9 @@ Common.shardConfigRegex = Common.prototype.shardConfigRegex;
  * @param {string|object} data The data to write to the file.
  * @param {Function} [cb] Callback to fire on completion. Only parameter is
  * optional error.
+ * @param {boolean} encrypt Encrypt and append ".crypt" to filename if true
  */
-Common.mkAndWrite = function(filename, dir, data, cb) {
+Common.mkAndWrite = function(filename, dir, data, cb, encrypt = true) {
   if (!dir) dir = path.dirname(filename);
   mkdirp(dir)
       .then(() => {
@@ -803,27 +854,40 @@ Common.mkAndWrite = function(filename, dir, data, cb) {
           data = JSON.stringify(data);
         }
         const tmpfile = `${filename}.tmp`;
-        fs.writeFile(tmpfile, data, (err) => {
+        const destFile = (encrypt) ? `${filename}.crypt` : filename;
+
+        // Callback: After writing to tmp file, rename the tmp file to dest file
+        const afterWriteFile = (err) => {
           if (err) {
             if (this.error) this.error(`Failed to save file: ${tmpfile}`);
             console.error(err);
             if (typeof cb === 'function') cb(err);
             return;
           }
-          fs.rename(tmpfile, filename, (err) => {
+          fs.rename(tmpfile, destFile, (err) => {
             if (err) {
               if (this.error) {
                 this.error(
-                    `Failed to rename tmp file: ${tmpfile} --> ${filename}`);
+                    `Failed to rename tmp file: ${tmpfile} --> ${destFile}`);
               }
               console.error(err);
               if (typeof cb === 'function') cb(err);
               return;
             }
-            if (this.sendFile) this.sendFile(filename);
+            if (this.sendFile) this.sendFile(destFile);
             if (typeof cb === 'function') cb();
           });
-        });
+        };
+
+        if (encrypt) {
+          const iv = crypto.createHash(hashCypher).update(filename).digest();
+          const cipher = crypto.createCipheriv(auth.fileAlgo, filePass, iv);
+          let encdata = cipher.update(data, 'utf-8', encencoding);
+          encdata += cipher.final(encencoding);
+          fs.writeFile(tmpfile, encdata, afterWriteFile);
+        } else /* unencrypted: write directly to tmp file */ {
+          fs.writeFile(tmpfile, data, afterWriteFile);
+        }
       })
       .catch((err) => {
         if (err.code !== 'EEXIST') {
@@ -857,14 +921,19 @@ Common.mkAndWriteSync = function(filename, dir, data) {
   if (typeof data === 'object' && !Buffer.isBuffer(data)) {
     data = JSON.stringify(data);
   }
+  const encfile = `${filename}.crypt`;
+  const iv = crypto.createHash(hashCypher).update(filename).digest();
+  const cipher = crypto.createCipheriv(auth.fileAlgo, filePass, iv);
+  let encdata = cipher.update(data, 'utf-8', 'base64');
+  encdata += cipher.final('base64');
   try {
-    fs.writeFileSync(filename, data);
+    fs.writeFileSync(encfile, encdata);
   } catch (err) {
-    if (this.error) this.error(`Failed to save file: ${filename}`);
+    if (this.error) this.error(`Failed to save file: ${encfile}`);
     console.error(err);
     return;
   }
-  if (this.sendFile) this.sendFile(filename);
+  if (this.sendFile) this.sendFile(encfile);
 };
 Common.prototype.mkAndWriteSync = Common.mkAndWriteSync;
 
@@ -939,24 +1008,49 @@ Common.fileFetchDelay = 30000;
  * @param {string} filename The name of the file to read.
  * @param {Function} [cb] Callback once completed, with optional error
  *     parameter, and parameter of file contents from `fs.readFile`.
+ * @param {boolean} [encrypt=true] Enable encryption.
  */
-Common.readFile = function(filename, cb) {
+Common.readFile = function(filename, cb, encrypt = true) {
   if (!cb) throw new TypeError('readFile must have a callback function');
+  const encfile = encrypt ? `${filename}.crypt` : filename;
   const lastFetch = Common.fileFetchHist[filename] || 0;
+  const onread = (err, data) => {
+    if (err || !encrypt) {
+      if (encrypt) {
+        this.readFile(filename, cb, false);
+        return;
+      }
+      cb(err, data);
+      return;
+    }
+    let decdata = null;
+    try {
+      const iv = crypto.createHash(hashCypher).update(filename).digest();
+      const decipher = crypto.createDecipheriv(auth.fileAlgo, filePass, iv);
+      decdata = decipher.update(data.toString(), encencoding, 'utf-8');
+      decdata += decipher.final('utf-8');
+    } catch (err) {
+      if (this.error) this.error(`Failed to decrypt file ${encfile}`);
+      console.error(err);
+      cb(err, null);
+      return;
+    }
+    cb(err, decdata);
+  };
   if (this.getFile && Date.now() - lastFetch > Common.fileFetchDelay) {
-    this.getFile(filename, (err, res) => {
+    this.getFile(encfile, (err, res) => {
       if (err) {
-        if (this.error) this.error(`Failed to getFile ${filename}`);
+        if (this.error) this.error(`Failed to getFile ${encfile}`);
         console.error(err);
       } else if (res) {
         if (this.logDebug) this.logDebug(`getFile: ${res}`);
         else console.log(res);
       }
 
-      fs.readFile(filename, cb);
+      fs.readFile(encfile, onread);
     });
   } else {
-    fs.readFile(filename, cb);
+    fs.readFile(encfile, onread);
   }
 };
 Common.prototype.readFile = Common.readFile;

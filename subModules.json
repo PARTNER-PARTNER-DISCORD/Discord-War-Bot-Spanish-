@@ -59,10 +59,21 @@
     "./web/hg.js",
     "./images.js",
     "./memWatcher.js",
-    "./localeManager.js"
+    "./localeManager.js",
+    "./shutdown.js"
   ],
   "release": [
-    "./hungryGames.js"	
+    "./main.js",
+    "./hungryGames.js",
+    "./cmdScheduling.js",
+    "./echo.js",
+    "./roleColors.js",
+    "./botCommands.js",
+    "./web/hg.js",
+    "./web/settings.js",
+    "./memWatcher.js",
+    "./images.js",
+    "./dev.js"
   ],
   "FALLBACK": []
 }

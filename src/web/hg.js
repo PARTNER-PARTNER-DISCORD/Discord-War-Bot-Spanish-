@@ -1,4 +1,4 @@
-// Copyright 2019-2020 Campbell Crowley. All rights reserved.
+// Copyright 2019-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (web@campbellcrowley.com)
 const http = require('http');
 const socketIo = require('socket.io');
@@ -702,8 +702,12 @@ function HGWeb() {
     const m = g.members.resolve(userData.id);
 
     const perms = channel.permissionsFor(m);
-    if (!perms.has(self.Discord.Permissions.FLAGS.VIEW_CHANNEL)) return false;
-    if (!perms.has(self.Discord.Permissions.FLAGS.SEND_MESSAGES)) return false;
+    if (!perms.has(self.Discord.PermissionsBitField.Flags.ViewChannel)) {
+      return false;
+    }
+    if (!perms.has(self.Discord.PermissionsBitField.Flags.SendMessages)) {
+      return false;
+    }
     return true;
   }
 
@@ -756,7 +760,7 @@ function HGWeb() {
       premiumSinceTimestamp: m.premiumSinceTimestamp,
       user: {
         username: m.user.username,
-        avatarURL: m.user.displayAvatarURL({dynamic: true}),
+        avatarURL: m.user.displayAvatarURL(),
         id: m.user.id,
         bot: m.user.bot,
         // m.user.descriminator seems to be broken and always returns
@@ -901,9 +905,9 @@ function HGWeb() {
         });
       } else {
         guilds = self.client &&
-            self.client.guilds.cache
+            [...self.client.guilds.cache
                 .filter((obj) => obj.members.resolve(userData.id))
-                .array();
+                .values()];
       }
       const strippedGuilds = stripGuilds(guilds, userData);
       done(strippedGuilds);
@@ -950,7 +954,7 @@ function HGWeb() {
       newG.name = g.name;
       newG.id = g.id;
       newG.bot = self.client.user.id;
-      newG.ownerId = g.ownerID;
+      newG.ownerId = g.ownerId;
       newG.members = g.members.cache.map((m) => m.id);
       newG.defaultSettings = dOpts;
       newG.userSettings = uOpts;
@@ -960,12 +964,12 @@ function HGWeb() {
                   (c) => member &&
                       (userData.id == self.common.spikeyId ||
                        c.permissionsFor(member).has(
-                           self.Discord.Permissions.FLAGS.VIEW_CHANNEL)))
+                           self.Discord.PermissionsBitField.Flags.ViewChannel)))
               .map((c) => {
                 return {
                   id: c.id,
                   permissions: userData.id == self.common.spikeyId ?
-                      self.Discord.Permissions.ALL :
+                      self.Discord.PermissionsBitField.ALL :
                       c.permissionsFor(member).bitfield,
                 };
               });
@@ -1048,7 +1052,7 @@ function HGWeb() {
     const g = self.client && self.client.guilds.resolve(gId);
     if (!g) return;
 
-    const roles = g.roles.cache.array();
+    const roles = [...g.roles.cache.values()];
 
     if (typeof cb === 'function') {
       cb(null, roles);
@@ -1167,7 +1171,7 @@ function HGWeb() {
 
     if (!g.channels.resolve(game.outputChannel)
         .permissionsFor(m)
-        .has(self.Discord.Permissions.FLAGS.VIEW_CHANNEL)) {
+        .has(self.Discord.PermissionsBitField.Flags.ViewChannel)) {
       replyNoPerm(socket, 'fetchDay', gId);
       return;
     }
@@ -1220,7 +1224,7 @@ function HGWeb() {
 
     if (!g.channels.resolve(game.outputChannel)
         .permissionsFor(m)
-        .has(self.Discord.Permissions.FLAGS.VIEW_CHANNEL)) {
+        .has(self.Discord.PermissionsBitField.Flags.ViewChannel)) {
       replyNoPerm(socket, 'fetchNextDay', gId);
       return;
     }

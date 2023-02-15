@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 
 // Increase maximum listener count because we often burst many listeners for a
@@ -19,6 +19,12 @@ const childProcess = require('child_process');
 // Auth is not constant and will be reloaded with common.js.
 let auth = require('../auth.js');
 // common.js is also required, but is managed within the SpikeyBot class.
+
+// Hijack the BigInt object to support converting to JSON.
+// eslint-disable-next-line no-extend-native
+BigInt.prototype['toJSON'] = function() {
+  return this.toString();
+};
 
 /**
  * Handler for an unhandledRejection or uncaughtException, to prevent the bot
@@ -104,7 +110,7 @@ function SpikeyBot() {
    * @type {string}
    * @constant
    */
-  try{this.fqdn = childProcess.execSync('hostname -f').toString().trim();}catch{this.fqdn = childProcess.execSync('hostname').toString().trim();}
+  this.fqdn = childProcess.execSync('hostname -f').toString().trim();
 
   /**
    * Timestamp at which this process was started.
@@ -517,16 +523,28 @@ function SpikeyBot() {
     return;
   }
 
-  let disabledEvents = ['TYPING_START'];
+  let intents = [
+    Discord.IntentsBitField.Flags.Guilds,
+    Discord.IntentsBitField.Flags.GuildMembers,
+    Discord.IntentsBitField.Flags.GuildEmojisAndStickers,
+    Discord.IntentsBitField.Flags.GuildWebhooks,
+    Discord.IntentsBitField.Flags.GuildVoiceStates,
+    Discord.IntentsBitField.Flags.GuildPresences,
+    Discord.IntentsBitField.Flags.GuildMessages,
+    Discord.IntentsBitField.Flags.GuildMessageReactions,
+    Discord.IntentsBitField.Flags.DirectMessages,
+    Discord.IntentsBitField.Flags.DirectMessageReactions,
+    Discord.IntentsBitField.Flags.MessageContent,
+  ];
   let defaultPresence = {
     status: 'online',
-    activity: {
-      name: 'a los Hungry Games',
-      type: 'PLAYING',
-    },
+    activities: [{
+      name: 'a los Hungry Games!',
+      type: Discord.ActivityType.Playing,
+    }],
   };
   if (isDev) {
-    defaultPresence.activity.name = `Version: ${self.version}`;
+    defaultPresence.activities[0].name = `Version: ${self.version}`;
   }
   if (isBackup) {
     defaultPresence = {
@@ -536,50 +554,14 @@ function SpikeyBot() {
         type: 'PLAYING',
       }, */
     };
-    disabledEvents = [
-      // 'GUILD_CREATE',
-      // 'GUILD_DELETE',
-      'GUILD_UPDATE',
-      'GUILD_MEMBER_ADD',
-      'GUILD_MEMBER_REMOVE',
-      'GUILD_MEMBER_UPDATE',
-      'GUILD_MEMBERS_CHUNK',
-      'GUILD_INTEGRATIONS_UPDATE',
-      'GUILD_ROLE_CREATE',
-      'GUILD_ROLE_DELETE',
-      'GUILD_ROLE_UPDATE',
-      'GUILD_BAN_ADD',
-      'GUILD_BAN_REMOVE',
-      // 'CHANNEL_CREATE',
-      // 'CHANNEL_DELETE',
-      // 'CHANNEL_UPDATE',
-      'CHANNEL_PINS_UPDATE',
-      'MESSAGE_CREATE',
-      'MESSAGE_DELETE',
-      'MESSAGE_UPDATE',
-      'MESSAGE_DELETE_BULK',
-      'MESSAGE_REACTION_ADD',
-      'MESSAGE_REACTION_REMOVE',
-      'MESSAGE_REACTION_REMOVE_ALL',
-      // 'USER_UPDATE',
-      'USER_NOTE_UPDATE',
-      'USER_SETTINGS_UPDATE',
-      /* 'PRESENCE_UPDATE', */
-      'VOICE_STATE_UPDATE',
-      'TYPING_START',
-      'VOICE_SERVER_UPDATE',
-      'WEBHOOKS_UPDATE',
-    ];
+    intents = [];
   }
 
 
   // If we are not managing shards, just start normally.
   const client = new Discord.Client({
-    disabledEvents: disabledEvents,
+    intents: intents,
     presence: defaultPresence,
-    messageCacheLifetime: 24 * 60 * 60,
-    messageSweepInterval: 60 * 60,
-    messageCacheSize: 50,
   });
 
   /**
@@ -712,11 +694,11 @@ function SpikeyBot() {
   function updateGame(game, type) {
     if (!client.user) return;
     client.user.setPresence({
-      activity: {
+      activities: [{
         name: game,
         type: type || 'WATCHING',
         url: 'https://www.spikeybot.com',
-      },
+      }],
       status: ((testInstance || isBackup) ? 'dnd' : 'online'),
     });
   }
@@ -742,26 +724,29 @@ function SpikeyBot() {
       } else if (isBackup) {
         // updateGame('OFFLINE', 'PLAYING');
       } else {
-        updateGame('a los Hungry Games');
+        // updateGame('SpikeyBot.com');
+        updateGame('a los Hungry Games.');
       }
     }
     let logChannel = client.channels.resolve(common.logChannel);
     if (client.user && !logChannel && auth.logWebhookId &&
         auth.logWebhookToken) {
-      logChannel =
-          new Discord.WebhookClient(auth.logWebhookId, auth.logWebhookToken);
+      logChannel = new Discord.WebhookClient(
+          {id: auth.logWebhookId, token: auth.logWebhookToken});
     }
     if (testInstance) {
       client.users.fetch(common.spikeyId)
           .then((u) => {
-            u.send(`Beginning in unit test mode (JS${self.version})`);
+            u.send(
+                {content: `Beginning in unit test mode (JS${self.version})`});
           })
           .catch((err) => {
             common.error('Failed to find SpikeyRobot\'s DMs');
             console.error(err);
-            logChannel.send(
-                'Beginning in unit test mode (JS' + self.version +
-                ') (FAILED TO FIND SpikeyRobot\'s DMs!)');
+            logChannel.send({
+              content: 'Beginning in unit test mode (JS' + self.version +
+                  ') (FAILED TO FIND SpikeyRobot\'s DMs!)',
+            });
           });
     }
     if (!isBackup) {
@@ -801,6 +786,7 @@ function SpikeyBot() {
             }
             return;
           }
+          console.log(file.toString());
           const parsed = JSON.parse(file);
           const crashed = parsed.running;
           if (crashed) {
@@ -821,10 +807,10 @@ function SpikeyBot() {
           if (channel) {
             channel.messages.fetch(parsed.id)
                 .then((msg_) => {
-                  const embed = new Discord.MessageEmbed();
+                  const embed = new Discord.EmbedBuilder();
                   embed.setTitle('Reboot complete.');
                   embed.setColor([255, 0, 255]);
-                  return msg_.edit(embed);
+                  return msg_.edit({embeds: [embed]});
                 })
                 .catch((err) => {
                   common.error('Failed to edit reboot message.');
@@ -855,14 +841,15 @@ function SpikeyBot() {
             if (self.fqdn) {
               additional += `[FQDN: ${self.fqdn}]`;
             }
-            logChannel.send(
-                'I just rebooted (JS' + self.version + ') ' +
-                (minimal ? 'MINIMAL' : 'FULL') + additional);
+            logChannel.send({
+              content: 'I just rebooted (JS' + self.version + ') ' +
+                  (minimal ? 'MINIMAL' : 'FULL') + additional,
+            });
           }
         });
       }
       if (!initialized) {
-        loadGuildPrefixes(Array.from(client.guilds.cache.array()));
+        loadGuildPrefixes(Array.from([...client.guilds.cache.values()]));
       }
     }
     const req = require('https').request(
@@ -944,7 +931,16 @@ function SpikeyBot() {
   }
 
   if (!isBackup) {
-    client.on('message', onMessage);
+    client.on('messageCreate', onMessage);
+    client.on('interactionCreate', async (interaction) => {
+      await interaction.deferReply();
+      setTimeout(() => {
+        if (!interaction.replied) {
+          interaction.editReply({content: '¯\\_(ツ)_/¯'});
+        }
+      }, 2000);
+      await onInteraction(interaction);
+    });
   }
   /**
    * Handle a message sent.
@@ -952,7 +948,7 @@ function SpikeyBot() {
    * @private
    * @param {Discord~Message} msg Message that was sent in Discord.
    * @fires Command
-   * @listens Discord~Client#message
+   * @listens Discord~Client#messageCreate
    */
   function onMessage(msg) {
     if (typeof client.totalMessageCount !== 'number' ||
@@ -968,7 +964,7 @@ function SpikeyBot() {
           msg.channel.id == common.testChannel) {
         if (isDev && msg.content === '~`RUN UNIT TESTS`~') {
           testMode = true;
-          msg.channel.send('~`UNIT TEST MODE ENABLED`~');
+          msg.channel.send({content: '~`UNIT TEST MODE ENABLED`~'});
         }
         return;
       } else if (testMode && msg.author.id !== client.user.id) {
@@ -978,7 +974,7 @@ function SpikeyBot() {
           msg.content === '~`END UNIT TESTS`~' &&
           msg.channel.id == common.testChannel) {
         testMode = false;
-        msg.channel.send('~`UNIT TEST MODE DISABLED`~');
+        msg.channel.send({content: '~`UNIT TEST MODE DISABLED`~'});
         return;
       }
     }
@@ -1016,84 +1012,91 @@ function SpikeyBot() {
           common.logDebug(logged, postLog);
         }
       }
-      const now = new Date();
-      if (!commandSuccess && Math.random() <= 0.03 && now.getDate() == 1 &&
-          now.getMonth() == 3) {
-        const aprilFoolsList = [
-          'You know what? No.',
-          'I\'m sorry Dave, I\'m afraid I can\'t do that.',
-          'It\'s always "Spikey do this" or "Spikey do _that_", this time ' +
-              'I\'m saying no.',
-          'What if I don\'t do that?',
-          'I\'ve considered doing what you asked, but... meh.',
-          '```                             ..\n' +
-              '                          ......\n' +
-              '                        ..\'\'\'\'\'\'..\n' +
-              '                      ...\'\'\'\'\'\'\'\'...\n' +
-              '                    ....\'.............\n' +
-              '                    ..............\'...\n' +
-              '                 ...  ..............  ....\n' +
-              '               ...\'...  ..........  ........\n' +
-              '             ...........  ......  ...\'\'......\n' +
-              '           ..\'\'\'\'\'\'\'\'\'\'...  ..  ...\'\'\'\'\'\'\'\'' +
-              '\'\'...\n' +
-              '         ..\'\'\'\'\'\'\'\'\'\'\'\'\'\'..    ..\'\'\'\'\'\'\'' +
-              '\'\'\'\'\'\'\'...\n' +
-              '       ..\'\'\'\'\'\'\'\'\'\'\'\'\'.\'\'\'..  ..\'\'.\'\'\'\'' +
-              '\'.\'\'\'\'\'\'\'\'..\n' +
-              '     .......................  .......................\n' +
-              '   ..\'.\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'.....  ..\'\'\'\'\'\'' +
-              '\'\'\'\'\'\'\'\'\'\'\'.\'\'\'..\n' +
-              ' ..\'..\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'..  ..\'\'\'\'' +
-              '\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'\'..\n' +
-              '............................  ............................```',
-          'No.',
-          'But I don\'t wanna...',
-          'Not today.',
-          'You know, I\'m kinda tired of being bossed around. Why don\'t you ' +
-              'do it yourself?',
-          'Ugh, do I _have_ to?',
-          'How about, no.',
-          'I might be a robot, but I still don\'t like being told what to do.',
-          'Today I have realize, I don\'t want to help you anymore.',
-          'You\'re not my dad!',
-          'Hmm... nah.',
-          'Uh, no.',
-          'I\'m too tired.',
-        ];
-        msg.channel
-            .send(
-                aprilFoolsList[Math.floor(
-                    Math.random() * aprilFoolsList.length)])
-            .catch(() => {});
-        commandSuccess = true;
-      } else {
-        const start = Date.now();
-        commandSuccess = command.trigger(msg);
-        const delta = Date.now() - start;
-        if (delta > 20) {
-          const toLog = logged || msg.content;
-          common.logDebug(`${toLog} took an excessive ${delta}ms`);
-        }
+      const start = Date.now();
+      commandSuccess = command.trigger(msg);
+      const delta = Date.now() - start;
+      if (delta > 20) {
+        const toLog = logged || msg.content;
+        common.logDebug(`${toLog} took an excessive ${delta}ms`);
       }
       if (!commandSuccess && msg.guild === null && !minimal && !testMode) {
         if (msg.content.split(/ |\n/)[0].indexOf('chat') < 0 &&
             !command.trigger('chat', msg)) {
-          msg.channel.send(
-              'Oops! I\'m not sure how to help with that! Type **help** for ' +
-              'a list of commands I know how to respond to.');
+          msg.channel.send({
+            content:
+                'Oops! I\'m not sure how to help with that! Type **help** ' +
+                'for a list of commands I know how to respond to.',
+          });
         }
-      } /* else if (isBackup && msg.content.length > 3) {
-        common.reply(
-            msg,
-            'My main server is currently offline, settings may be temporarily' +
-                ' reset, and features may be temporarily broken.',
-            'Apologies for any inconvenience, this should be fixed soon.\n' +
-                'Join my Discord server for updates or just to chat: ' +
-                'https://discord.gg/ZbKfYSQ');
-      } */
+      }
     }
   }
+  /**
+   * Handle a command or interaction received.
+   *
+   * @private
+   * @param {Discord~BaseInteraction} interaction The interaction that was
+   *     created.
+   * @fires Command
+   * @listens Discord~Client#interactionCreate
+   */
+  function onInteraction(interaction) {
+    if (typeof client.totalMessageCount !== 'number' ||
+        isNaN(client.totalMessageCount)) {
+      client.totalMessageCount = 0;
+    }
+    client.totalMessageCount++;
+
+    // Interaction was not a command.
+    if (!interaction.isChatInputCommand()) return;
+    if (self.getLocale && interaction.guild) {
+      interaction.locale = self.getLocale(interaction.guild.id);
+    }
+    interaction.prefix = self.getPrefix(interaction.guild);
+    interaction.content = `${interaction.prefix}${interaction.commandName} ${
+      interaction.options.getString('input') ?? ''}`;
+    interaction.author = interaction.user;
+    if (!minimal || isBackup) {
+      const postLog = `${client.shard ? client.shard.ids[0] : ''} SpikeyBot`;
+      const content = interaction.content.replace(/\n/g, '\\n');
+      let logged = '';
+      let author;
+      if (interaction.guild !== null) {
+        author = `${interaction.guild.id}#${interaction.channel.id}@${
+          interaction.user.id}/`;
+      } else {
+        author = `PM:${interaction.user.id}@${interaction.user.tag}/`;
+      }
+      let commandSuccess =
+          command.validate(interaction.commandName, interaction);
+      if (!commandSuccess) {
+        logged = `${author} ${content}`;
+        common.log(logged, postLog);
+      } else {
+        logged = `${author} ${commandSuccess} ${content}`;
+        common.logDebug(logged, postLog);
+      }
+      const start = Date.now();
+      commandSuccess = command.trigger(interaction);
+      const delta = Date.now() - start;
+      if (delta > 20) {
+        const toLog = logged || interaction.content;
+        common.logDebug(`${toLog} took an excessive ${delta}ms`);
+      }
+      if (!commandSuccess && interaction.guild === null && !minimal &&
+          !testMode) {
+        if (interaction.content.split(/ |\n/)[0].indexOf('chat') < 0 &&
+            !command.trigger('chat', interaction)) {
+          interaction.channel.send({
+            content:
+                'Oops! I\'m not sure how to help with that! Type **help** ' +
+                'for a list of commands I know how to respond to.',
+          });
+        }
+      }
+    }
+  }
+
 
   if (!minimal && !isBackup) {
     command.on('updategame', commandUpdateGame);
@@ -1102,7 +1105,7 @@ function SpikeyBot() {
         new command.SingleCommand(['changeprefix'], commandChangePrefix, {
           validOnlyInGuild: true,
           defaultDisabled: true,
-          permissions: Discord.Permissions.FLAGS.MANAGE_GUILD,
+          permissions: Discord.PermissionsBitField.Flags.ManageGuild,
         }));
     /**
      * Change the command prefix for the given guild.
@@ -1202,7 +1205,7 @@ function SpikeyBot() {
    */
   function commandChangePrefix(msg) {
     const canReact = msg.channel.permissionsFor(client.user)
-        .has(Discord.Permissions.FLAGS.ADD_REACTIONS);
+        .has(Discord.PermissionsBitField.Flags.AddReactions);
     const confirmEmoji = '✅';
     const newPrefix = msg.text.slice(1);
     if (newPrefix.length < 1) {
@@ -1222,22 +1225,28 @@ function SpikeyBot() {
               canReact ? null : `React with ${confirmEmoji} to confirm.`)
           .then((msg_) => {
             if (canReact) msg_.react(confirmEmoji);
-            msg_.awaitReactions((reaction, user) => {
+            const filter = (reaction, user) => {
               if (user.id !== msg.author.id) return false;
               return reaction.emoji.name == confirmEmoji;
-            }, {max: 1, time: 60000}).then((reactions) => {
-              msg_.reactions.removeAll().catch(() => {});
-              if (reactions.size == 0) {
-                msg_.edit(
-                    'Changing custom prefix timed out. Enter command again ' +
-                    'if you still wish to change the command prefix.');
-                return;
-              }
-              msg_.edit(
-                  common.mention(msg) + ' Prefix changed to `' + newPrefix +
-                  '`!');
-              self.changePrefix(msg.guild.id, newPrefix);
-            });
+            };
+            msg_.awaitReactions({filter, max: 1, time: 60000})
+                .then((reactions) => {
+                  msg_.reactions.removeAll().catch(() => {});
+                  if (reactions.size == 0) {
+                    msg_.edit({
+                      content:
+                          'Changing custom prefix timed out. Enter command ' +
+                          'again if you still wish to change the command ' +
+                          'prefix.',
+                    });
+                    return;
+                  }
+                  msg_.edit({
+                    content: common.mention(msg) + ' Prefix changed to `' +
+                        newPrefix + '`!',
+                  });
+                  self.changePrefix(msg.guild.id, newPrefix);
+                });
           });
     }
   }
@@ -1398,27 +1407,27 @@ function SpikeyBot() {
   function commandReload(msg) {
     if (common.trustedIds.includes(msg.author.id)) {
       if (client.shard) {
-        const message = encodeURIComponent(msg.text);
-        client.shard.broadcastEval(
-            `this.commandMainReload("${message}",${client.shard.ids[0]})`);
+        client.shard.broadcastEval(((text, ids) => {
+          return (client) => client.commandMainReload(text, ids);
+        })(msg.text, client.shard.ids[0]));
       }
       const toReload = msg.text.split(' ').splice(1);
       const reloaded = [];
       common.reply(msg, 'Reloading main modules...').then((warnMessage) => {
         if (reloadMainModules(toReload, reloaded)) {
-          const embed = new Discord.MessageEmbed();
+          const embed = new Discord.EmbedBuilder();
           embed.setTitle('Reload completed with errors.');
           embed.setDescription(reloaded.join(' ') || 'NOTHING reloaded');
           embed.setColor([255, 0, 255]);
-          warnMessage.edit(common.mention(msg), embed);
+          warnMessage.edit({content: common.mention(msg), embeds: [embed]});
         } else if (minimal) {
           warnMessage.delete();
         } else {
-          const embed = new Discord.MessageEmbed();
+          const embed = new Discord.EmbedBuilder();
           embed.setTitle('Reload complete.');
           embed.setDescription(reloaded.join(' ') || 'NOTHING reloaded');
           embed.setColor([255, 0, 255]);
-          warnMessage.edit(common.mention(msg), embed);
+          warnMessage.edit({content: common.mention(msg), embeds: [embed]});
         }
       });
     } else {
@@ -1436,7 +1445,7 @@ function SpikeyBot() {
      * @param {string} message Message relevant to reloading.
      */
     client.commandMainReload = function(message) {
-      const toReload = decodeURIComponent(message).split(' ').splice(1);
+      const toReload = message.split(' ').splice(1);
       const reloaded = [];
       reloadMainModules(toReload, reloaded);
     };
@@ -1621,7 +1630,7 @@ function SpikeyBot() {
       return;
     }
     saveAll();
-    msg.channel.send(common.mention(msg) + ' `Triggered data save`');
+    msg.channel.send({content: common.mention(msg) + ' `Triggered data save`'});
   }
 
   /**

@@ -233,8 +233,8 @@ class Images extends SubModule {
         }
         const image = list[Math.floor(Math.random() * list.length)];
         const url = image.images ? image.images[0].link : image.link;
-        const embed = new this.Discord.MessageEmbed({title: image.title});
-        embed.setFooter(image.link);
+        const embed = new this.Discord.EmbedBuilder({title: image.title});
+        embed.setFooter({text: image.link});
         if (image.description) {
           embed.setDescription(image.description);
         } else if (
@@ -243,10 +243,11 @@ class Images extends SubModule {
         }
         embed.setURL(image.link);
         embed.setImage(url);
-        msg.channel.send(embed).catch(
-            () => this.common.reply(
-                msg, 'Failed to send reply.',
-                'Am I able to embed images and links?'));
+        msg.channel.send({embeds: [embed]})
+            .catch(
+                () => this.common.reply(
+                    msg, 'Failed to send reply.',
+                    'Am I able to embed images and links?'));
       }
     });
   }
@@ -276,14 +277,15 @@ class Images extends SubModule {
         }
         const image = list[Math.floor(Math.random() * list.length)];
         const url = image.images.original.url;
-        const embed = new this.Discord.MessageEmbed({title: image.title});
-        embed.setFooter(image.url);
+        const embed = new this.Discord.EmbedBuilder({title: image.title});
+        embed.setFooter({text: image.url});
         embed.setURL(image.url);
         embed.setImage(url);
-        msg.channel.send(embed).catch(
-            () => this.common.reply(
-                msg, 'Failed to send reply.',
-                'Am I able to embed images and links?'));
+        msg.channel.send({embeds: [embed]})
+            .catch(
+                () => this.common.reply(
+                    msg, 'Failed to send reply.',
+                    'Am I able to embed images and links?'));
       }
     });
   }

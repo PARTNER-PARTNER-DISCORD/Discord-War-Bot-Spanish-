@@ -29,14 +29,18 @@ class RunCommandAction extends ChannelAction {
                 hg._parent, this._author, game.id, channel.id, this._message));
         if (!res) {
           channel
-              .send(
-                  `<@${this._author}> RunCommandAction Error: ` +
-                  `Comando desconocido: ${this._message}`)
+              .send({
+                content: `<@${this._author}> RunCommandAction Error: ` +
+                    `Comando desconocido: ${this._message}`,
+              })
               .catch(() => {});
         }
       } catch (err) {
         channel
-            .send(`<@${this._author}> RunCommandAction Error: ${err.message}.`)
+            .send({
+              content:
+                  `<@${this._author}> RunCommandAction Failed: ${err.message}.`,
+            })
             .catch(() => {});
       }
     });

@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 require('./mainModule.js')(Command);  // Extends the MainModule class.
 
@@ -15,6 +15,9 @@ function Command() {
 
   /** @inheritdoc */
   this.initialize = function() {
+    /** REST API used for registering slash commands. */
+    self.rest =
+        new this.Discord.REST({version: '10'}).setToken(this.client.token);
     self.client.guilds.cache.forEach((g) => {
       const dir = self.common.guildSaveDir + g.id;
       const filename = dir + commandSettingsFile;
@@ -40,7 +43,7 @@ function Command() {
     const cmdSettings = new CommandSetting({
       validOnlyInGuild: true,
       defaultDisabled: true,
-      permissions: self.Discord.Permissions.FLAGS.MANAGE_GUILD,
+      permissions: self.Discord.PermissionsBitField.Flags.ManageGuild,
     });
     self.on(new SingleCommand(['disable'], commandDisable, cmdSettings));
     self.on(new SingleCommand(['enable'], commandEnable, cmdSettings));
@@ -140,6 +143,29 @@ function Command() {
    * @type {object.<SingleCommand>}
    */
   let cmds = {};
+
+  /**
+   * Register all commands currently loaded as slash commands to the Discord
+   * API.
+   *
+   * @public
+   * @returns {Promise} REST API request Promise.
+   */
+  this.registerSlashCommands = function() {
+    const names = self.getAllNames();
+    const commands = names.map(
+        (el) => new self.Discord.SlashCommandBuilder()
+            .setName(el)
+            .setDescription('A SpikeyBot command.')
+            .addStringOption(
+                (option) => option.setName('input').setDescription(
+                    'Remaining command arguments'))
+            .toJSON());
+    self.log(`Registering slash commands: ${commands.length}`);
+    return self.rest.put(
+        self.Discord.Routes.applicationCommands(self.client.user.id),
+        {body: commands});
+  };
 
   /**
    * @classdesc Object storing information about a single command, it's handler,
@@ -467,12 +493,12 @@ function Command() {
      * run this command. Same bitfield used by Discord~Permissions.
      *
      * @public
-     * @type {number}
+     * @type {bigint}
      * @default 0
      */
     this.permissions = opts.permissions;
-    if (typeof this.permissions !== 'number') {
-      this.permissions = 0;
+    if (typeof this.permissions !== 'bigint') {
+      this.permissions = BigInt(0);
     }
 
     /**
@@ -584,15 +610,16 @@ function Command() {
         // The command is disabled by default, but the GuildMember has a
         // required permission to run this command, or is Admin, or is guild
         // owner.
-        let perms = 0;
+        let perms = BigInt(0);
         if (msg.channel) {
           const permObj = msg.channel.permissionsFor(msg.member);
           if (permObj) perms = permObj.bitfield;
         } else if (msg.member) {
           perms = msg.member.permissions.bitfield;
         }
-        permOverride = (perms & self.Discord.Permissions.FLAGS.ADMINISTRATOR) ||
-            (msg.guild.ownerID === msg.author.id);
+        permOverride =
+            (perms & self.Discord.PermissionsBitField.Flags.Administrator) ||
+            (msg.guild.ownerId === msg.author.id);
         hasPerm = (perms & me.permissions) || permOverride;
         hasPerm = (hasPerm && true) || false;
       }
@@ -990,7 +1017,8 @@ function Command() {
                   suffix;
             } else if (commandValues.permissions) {
               return 'NoPerm:' +
-                  new self.Discord.Permissions(commandValues.permissions)
+                  new self.Discord
+                      .PermissionsBitField(commandValues.permissions)
                       .toArray()
                       .join(', ') +
                   suffix;
@@ -1011,7 +1039,8 @@ function Command() {
         return (isDisabled == 2 ? 'Disabled Individual' : 'Disabled') + suffix;
       } else if (bitfield) {
         return 'NoPerm:' +
-            new self.Discord.Permissions(bitfield).toArray().join(', ') +
+            new self.Discord.PermissionsBitField(bitfield).toArray().join(
+                ', ') +
             suffix;
       } else {
         return 'Disabled' + suffix;
@@ -1046,9 +1075,9 @@ function Command() {
       return;
     }
     const trimmedText =
-        msg.text.replace(self.Discord.MessageMentions.CHANNELS_PATTERN, '')
-            .replace(self.Discord.MessageMentions.USERS_PATTERN, '')
-            .replace(self.Discord.MessageMentions.ROLES_PATTERN, '')
+        msg.text.replace(self.Discord.MessageMentions.ChannelsPattern, '')
+            .replace(self.Discord.MessageMentions.UsersPattern, '')
+            .replace(self.Discord.MessageMentions.RolesPattern, '')
             .trim();
     const list = self.findAll(trimmedText, msg);
     if (!list.length) {
@@ -1101,9 +1130,10 @@ function Command() {
         disabledList.push('Default is now DISABLED');
         return;
       }
-      if (self.Discord.Permissions.FLAGS[el]) {
+      if (self.Discord.PermissionsBitField.Flags[el]) {
         settings.forEach((s) => {
-          s.permissions = s.permissions & (~self.Discord.Permissions.FLAGS[el]);
+          s.permissions =
+              s.permissions & (~self.Discord.PermissionsBitField.Flags[el]);
         });
         disabledList.push('Permission: ' + el);
         return;
@@ -1151,9 +1181,9 @@ function Command() {
       return;
     }
     const trimmedText =
-        msg.text.replace(self.Discord.MessageMentions.CHANNELS_PATTERN, '')
-            .replace(self.Discord.MessageMentions.USERS_PATTERN, '')
-            .replace(self.Discord.MessageMentions.ROLES_PATTERN, '')
+        msg.text.replace(self.Discord.MessageMentions.ChannelsPattern, '')
+            .replace(self.Discord.MessageMentions.UsersPattern, '')
+            .replace(self.Discord.MessageMentions.RolesPattern, '')
             .trim();
     const list = self.findAll(trimmedText, msg);
     if (!list.length) {
@@ -1205,9 +1235,9 @@ function Command() {
         enabledList.push('Default is now ENABLED');
         return;
       }
-      if (self.Discord.Permissions.FLAGS[el]) {
+      if (self.Discord.Permissions.Flags[el]) {
         settings.forEach((s) => {
-          s.permissions = s.permissions | self.Discord.Permissions.FLAGS[el];
+          s.permissions = s.permissions | self.Discord.Permissions.Flags[el];
         });
         enabledList.push('Permission: ' + el);
         return;
@@ -1361,7 +1391,7 @@ function Command() {
               ' by default';
           if (found.options.defaultDisabled && found.options.permissions) {
             output += ' and enabled with the following permissions:\n' +
-                new self.Discord.Permissions(found.options.permissions)
+                new self.Discord.PermissionsBitField(found.options.permissions)
                     .toArray()
                     .join(', ');
           }
@@ -1407,7 +1437,7 @@ function Command() {
         tmp.push('`' + el[0] + (el[1].isMuted ? '~' : '') + '` allowed with:');
         if (el[1].permissions) {
           tmp.push(
-              new self.Discord.Permissions(el[1].permissions)
+              new self.Discord.PermissionsBitField(el[1].permissions)
                   .toArray()
                   .join(', '));
         }
@@ -1473,21 +1503,22 @@ function Command() {
             msg, 'I wasn\'t able to fit all settings into a message.');
         return;
       }
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setColor([255, 0, 255]);
       embed.setTitle('Command Permissions');
       for (let i = 0; i < finalSplits.length; i++) {
-        embed.addField('\u200B', finalSplits[i], true);
+        embed.addFields([{name: '\u200B', value: finalSplits[i]}]);
       }
       embed.setDescription(
           'Reset values to default with ' + msg.prefix +
           'reset\nChange values with ' + msg.prefix + 'enable or ' +
           msg.prefix + 'disable');
-      embed.setFooter('~ denotes command is muted on error.');
-      msg.channel.send(self.common.mention(msg), embed).catch(() => {
-        self.common.reply(msg, 'Please specify a command to lookup.')
-            .catch(() => {});
-      });
+      embed.setFooter({text: '~ denotes command is muted on error.'});
+      msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+          .catch(() => {
+            self.common.reply(msg, 'Please specify a command to lookup.')
+                .catch(() => {});
+          });
     }
   }
   /**
@@ -1507,19 +1538,20 @@ function Command() {
                 ' settings for all commands on this server?')
           .then((msg_) => {
             msg_.react('✅');
-            msg_.awaitReactions((reaction, user) => {
-              return reaction.emoji.name === '✅' && user.id === msg.author.id;
-            }, {time: 30000, max: 1}).then((reactions) => {
-              if (reactions.size === 0) {
-                msg_.edit('`Timed out`');
-                return;
-              }
-              msg_.edit('`Confirmed`');
-              userSettings[msg.guild.id] = {_updated: true};
-              self.common.reply(
-                  msg, 'All settings for commands have been reset.');
-              self.fire('settingsReset', msg.guild.id);
-            });
+            const filter = (reaction, user) =>
+              reaction.emoji.name === '✅' && user.id === msg.author.id;
+            msg_.awaitReactions({filter, time: 30000, max: 1})
+                .then((reactions) => {
+                  if (reactions.size === 0) {
+                    msg_.edit({content: '`Timed out`'});
+                    return;
+                  }
+                  msg_.edit({content: '`Confirmed`'});
+                  userSettings[msg.guild.id] = {_updated: true};
+                  self.common.reply(
+                      msg, 'All settings for commands have been reset.');
+                  self.fire('settingsReset', msg.guild.id);
+                });
           });
     } else if (msg.text.indexOf('*') < 0) {
       msg.content = msg.text;
@@ -1538,22 +1570,23 @@ function Command() {
                   cmd.getFullName() + '`?')
           .then((msg_) => {
             msg_.react('✅');
-            msg_.awaitReactions((reaction, user) => {
-              return reaction.emoji.name === '✅' &&
-                      user.id === msg.author.id;
-            }, {time: 30000, max: 1}).then((reactions) => {
-              if (reactions.size === 0) {
-                msg_.edit('`Timed out`');
-                return;
-              }
-              msg_.edit('`Confirmed`');
-              delete userSettings[msg.guild.id][cmd.getFullName()];
-              userSettings[msg.guild.id]._updated = true;
-              self.common.reply(
-                  msg,
-                  'Settings for `' + cmd.getFullName() + '` have been reset.');
-              self.fire('settingsReset', msg.guild.id, cmd.getFullName());
-            });
+            const filter = (reaction, user) =>
+              reaction.emoji.name === '✅' && user.id === msg.author.id;
+            msg_.awaitReactions({filter, time: 30000, max: 1})
+                .then((reactions) => {
+                  if (reactions.size === 0) {
+                    msg_.edit({content: '`Timed out`'});
+                    return;
+                  }
+                  msg_.edit({content: '`Confirmed`'});
+                  delete userSettings[msg.guild.id][cmd.getFullName()];
+                  userSettings[msg.guild.id]._updated = true;
+                  self.common.reply(
+                      msg,
+                      'Settings for `' + cmd.getFullName() +
+                          '` have been reset.');
+                  self.fire('settingsReset', msg.guild.id, cmd.getFullName());
+                });
           });
     } else {
       const cmd = self.findAll(msg.text, msg);
@@ -1571,22 +1604,23 @@ function Command() {
               nameList)
           .then((msg_) => {
             msg_.react('✅');
-            msg_.awaitReactions((reaction, user) => {
-              return reaction.emoji.name === '✅' &&
-                      user.id === msg.author.id;
-            }, {time: 30000, max: 1}).then((reactions) => {
-              if (reactions.size === 0) {
-                msg_.edit('`Timed out`');
-                return;
-              }
-              msg_.edit('`Confirmed`');
-              cmd.forEach((el) => {
-                delete userSettings[msg.guild.id][el.getFullName()];
-                userSettings[msg.guild.id]._updated = true;
-                self.fire('settingsReset', msg.guild.id, el.getFullName());
-              });
-              self.common.reply(msg, 'Settings for have been reset.', nameList);
-            });
+            const filter = (reaction, user) =>
+              reaction.emoji.name === '✅' && user.id === msg.author.id;
+            msg_.awaitReactions({filter, time: 30000, max: 1})
+                .then((reactions) => {
+                  if (reactions.size === 0) {
+                    msg_.edit({content: '`Timed out`'});
+                    return;
+                  }
+                  msg_.edit({content: '`Confirmed`'});
+                  cmd.forEach((el) => {
+                    delete userSettings[msg.guild.id][el.getFullName()];
+                    userSettings[msg.guild.id]._updated = true;
+                    self.fire('settingsReset', msg.guild.id, el.getFullName());
+                  });
+                  self.common.reply(
+                      msg, 'Settings for have been reset.', nameList);
+                });
           });
     }
   }
@@ -1609,7 +1643,7 @@ function Command() {
    * @public
    *
    * @param {string} name The name of the event to listen for.
-   * @param {Function} handler THe handler that is currently registered to
+   * @param {Function} handler The handler that is currently registered to
    * listen on this event.
    */
   this.removeEventListener = function(name, handler) {

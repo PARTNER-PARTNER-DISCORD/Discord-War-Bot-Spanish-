@@ -47,9 +47,9 @@ class Twitch extends SubModule {
     const perms = {
       validOnlyInGuild: true,
       defaultDisabled: true,
-      permissions: this.Discord.Permissions.FLAGS.MANAGE_CHANNELS |
-          this.Discord.Permissions.FLAGS.MANAGE_MESSAGES |
-          this.Discord.Permissions.FLAGS.MANAGE_GUILD,
+      permissions: this.Discord.PermissionsBitField.Flags.ManageChannels |
+          this.Discord.PermissionsBitField.Flags.ManageMessages |
+          this.Discord.PermissionsBitField.Flags.ManageGuild,
     };
     this.command.on(
         new this.command.SingleCommand(['twitch'], this._commandTwitch, perms, [
@@ -83,16 +83,14 @@ class Twitch extends SubModule {
     // Attempt to re-subscribe to necessary alerts every 12 hours, prior to them
     // expiring.
     if (!this.client.shard || this.client.shard.ids[0] === 0) {
-      this.interval =
-          this.client.setInterval(this._resubCheck, 12 * 60 * 60 * 1000);
-      this.timeout =
-          this.client.setTimeout(this._resubCheck, 1 * 60 * 60 * 1000);
+      this.interval = setInterval(this._resubCheck, 12 * 60 * 60 * 1000);
+      this.timeout = setTimeout(this._resubCheck, 1 * 60 * 60 * 1000);
     }
   }
   /** @inheritdoc */
   shutdown() {
-    this.client.clearInterval(this.interval);
-    this.client.clearTimeout(this.timeout);
+    clearInterval(this.interval);
+    clearTimeout(this.timeout);
     this.command.removeListener('twitch');
     this.client.twitchWebhookHandler = undefined;
     this.client.removeListener('channelDelete', this._handleChannelDelete);
@@ -474,22 +472,22 @@ class Twitch extends SubModule {
     if (typeof data === 'string') data = JSON.parse(data);
     data = data.data[0];
     this._injectWebhookMetadata(data, (data) => {
-      const pF = this.Discord.Permissions.FLAGS;
+      const pF = this.Discord.PermissionsBitField.Flags;
       channels.forEach((cId) => {
         const chan = this.client.channels.resolve(cId);
         if (!chan) return;
-        const perms = chan.guild && !chan.permissionsFor(chan.guild.me);
-        if (perms && !perms.has(pF.SEND_MESSAGES)) {
+        const perms = chan.guild && !chan.permissionsFor(chan.guild.members.me);
+        if (perms && !perms.has(pF.SendMessages)) {
           return;
         }
         const locale = this.bot.getLocale &&
             this.bot.getLocale(chan.guild && chan.guild.id);
         const message = this._formatMessage(data, locale);
-        if (perms && !perms.has(pF.EMBED_LINKS)) {
+        if (perms && !perms.has(pF.EmbedLinks)) {
           const needEmbed = this._strings.get('noPermEmbed', locale);
-          chan.send('```' + message.title + '```\n' + needEmbed);
+          chan.send({content: '```' + message.title + '```\n' + needEmbed});
         } else {
-          chan.send(message);
+          chan.send({embeds: [message]});
         }
       });
     });
@@ -534,10 +532,10 @@ class Twitch extends SubModule {
    * @private
    * @param {object} data Webhook data from Twitch.
    * @param {string} [locale] Locale for formatting strings.
-   * @returns {Discord~MessageEmbed} Formatted embed message.
+   * @returns {Discord~EmbedBuilder} Formatted embed message.
    */
   _formatMessage(data, locale) {
-    const embed = new this.Discord.MessageEmbed();
+    const embed = new this.Discord.EmbedBuilder();
     embed.setTitle(
         this._strings.get('streamLiveTitle', locale, data.user_name));
     if (data.started_at) {
@@ -557,12 +555,11 @@ class Twitch extends SubModule {
     embed.setColor([145, 71, 255]);
     embed.setDescription(`${data.title}\n${url}`);
     if (data.game) {
-      embed.setFooter(data.game.name);
+      embed.setFooter({text: data.game.name});
       embed.setThumbnail(
           data.game.thumbnailUrl.replace(/\{width\}/g, 600)
               .replace(/\{height\}/g, 800));
     }
-    // embed.setFooter(`${data.viewer_count} viewers`);
     return embed;
   }
 

@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const fs = require('fs');
 const Jimp = require('jimp');
@@ -361,7 +361,7 @@ function HG() {
     const prefix = self.bot.getPrefix() + self.postPrefix;
     self.helpMessage = '`' + prefix + 'help` para ayuda sobre los Hungry Games.';
     // Format help message into rich embed.
-    const tmpHelp = new self.Discord.MessageEmbed();
+    const tmpHelp = new self.Discord.EmbedBuilder();
     tmpHelp.setTitle(helpObject.title);
     tmpHelp.setURL(
         self.common.webURL + '#' +
@@ -370,27 +370,28 @@ function HG() {
       const titleID =
           encodeURIComponent((self.postPrefix + obj.title).replace(/\s/g, '_'));
       const titleURL = `${self.common.webHelp}#${titleID} `;
-      tmpHelp.addField(
-          obj.title, titleURL + '```js\n' +
-              obj.rows
-                  .map((row) => {
-                    if (typeof row === 'string') {
-                      return prefix + row.replace(/\{prefix\}/g, prefix);
-                    } else if (typeof row === 'object') {
-                      return prefix +
-                          row.command.replace(/\{prefix\}/g, prefix) + ' // ' +
-                          row.description.replace(/\{prefix\}/g, prefix);
-                    }
-                  })
-                  .join('\n') +
-              '\n```',
-          true);
+      tmpHelp.addFields([{
+        name: obj.title,
+        value: titleURL + '```js\n' +
+            obj.rows
+                .map((row) => {
+                  if (typeof row === 'string') {
+                    return prefix + row.replace(/\{prefix\}/g, prefix);
+                  } else if (typeof row === 'object') {
+                    return prefix + row.command.replace(/\{prefix\}/g, prefix) +
+                        ' // ' + row.description.replace(/\{prefix\}/g, prefix);
+                  }
+                })
+                .join('\n') +
+            '\n```',
+      }]);
     });
-    tmpHelp.addField(
-        'Web Interface', '[Hungry Games Online Control](' + self.common.webURL +
-            'hg/)```Manage the Games without using commands!\n' +
-            self.common.webURL + 'hg/```',
-        true);
+    tmpHelp.addFields([{
+      name: 'Web Interface',
+      value: '[Hungry Games Online Control](' + self.common.webURL +
+          'hg/)```Manage the Games without using commands!\n' +
+          self.common.webURL + 'hg/```',
+    }]);
     self.helpMessage = tmpHelp;
   }
 
@@ -399,16 +400,16 @@ function HG() {
     const cmdOpts = {
       validOnlyInGuild: true,
       defaultDisabled: true,
-      permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-          self.Discord.Permissions.FLAGS.MANAGE_GUILD |
-          self.Discord.Permissions.FLAGS.MANAGE_CHANNELS,
+      permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+          self.Discord.PermissionsBitField.Flags.ManageGuild |
+          self.Discord.PermissionsBitField.Flags.ManageChannels,
     };
     const cmdOptsAnywhere = {
       validOnlyInGuild: false,
       defaultDisabled: true,
-      permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-          self.Discord.Permissions.FLAGS.MANAGE_GUILD |
-          self.Discord.Permissions.FLAGS.MANAGE_CHANNELS,
+      permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+          self.Discord.PermissionsBitField.Flags.ManageGuild |
+          self.Discord.PermissionsBitField.Flags.ManageChannels,
     };
     const subCmds = [
       new self.command.SingleCommand('help', help),
@@ -465,7 +466,7 @@ function HG() {
           (msg) => {
             if (self.common.trustedIds.includes(msg.author.id)) {
               self.save('async');
-              msg.channel.send('`Saving all data.`');
+              msg.channel.send({content: '`Saving all data.`'});
             }
           },
           cmdOpts),
@@ -914,7 +915,7 @@ function HG() {
           if (!err) return;
           self.error(`Error al almacenar en caché el avatar de NPC: ${filename}`);
           console.error(err);
-        });
+        }, self.common.encryptAvatars);
       });
       return url;
     });
@@ -1005,7 +1006,7 @@ function HG() {
       g.includedUsers = g.includedUsers.filter((u) => {
         const m = msg.guild.members.resolve(u);
         if (m && m.partial) m.fetch();
-        return m && !m.deleted;
+        return !!m;
       });
       if (msg.guild.memberCount >= HungryGames.largeServerCount) {
         g.excludedUsers = [];
@@ -1186,10 +1187,11 @@ function HG() {
     }
     const game = hg.getGame(finalId);
     if (game) {
-      const file = new self.Discord.MessageAttachment();
+      const file = new self.Discord.AttachmentBuilder();
       file.setFile(Buffer.from(JSON.stringify(game.serializable, null, 2)));
       file.setName(`HG-${finalId}.json`);
-      msg.channel.send(`Datos HG para el servidor ${finalId}`, file);
+      msg.channel.send(
+          {content: `Datos HG para el servidor ${finalId}`, files: [file]});
     } else {
       reply(msg, 'noGame', 'fillOne', finalId);
     }
@@ -1212,17 +1214,21 @@ function HG() {
       return;
     }
     const myPerms = msg.channel.permissionsFor(self.client.user.id);
-    if (!myPerms || !myPerms.has(self.Discord.Permissions.FLAGS.ATTACH_FILES)) {
+    if (!myPerms ||
+        !myPerms.has(self.Discord.PermissionsBitField.Flags.AttachFiles)) {
       reply(msg, 'startNoAttachFiles');
       if (!myPerms) {
         self.error(
-            'Failed to fetch perms for myself. ' + (msg.guild.me && true));
+            'Failed to fetch perms for myself. ' +
+            (msg.guild.members.me && true));
       }
       return;
-    } else if (!myPerms.has(self.Discord.Permissions.FLAGS.EMBED_LINKS)) {
+    } else if (!myPerms.has(
+        self.Discord.PermissionsBitField.Flags.EmbedLinks)) {
       reply(msg, 'startNoEmbedLinks');
       return;
-    } else if (!myPerms.has(self.Discord.Permissions.FLAGS.SEND_MESSAGES)) {
+    } else if (!myPerms.has(
+        self.Discord.PermissionsBitField.Flags.SendMessages)) {
       return;
     }
     if (game && game.reactMessage) {
@@ -1243,7 +1249,7 @@ function HG() {
      * @private
      */
     function loadingComplete() {
-      self.client.setTimeout(() => {
+      setTimeout(() => {
         self._fire('gameStarted', id);
         const game = hg.getGame(id);
         HungryGames.ActionManager.gameStart(hg, game);
@@ -1268,9 +1274,11 @@ function HG() {
       finalMessage.setTitle(hg.messages.get('gameStart', msg.locale));
 
       if (!g.autoPlay) {
-        finalMessage.setFooter(strings.get(
-            'gameStartNextDayInfo', msg.locale,
-            `${msg.prefix}${self.postPrefix}`));
+        finalMessage.setFooter({
+          text: strings.get(
+              'gameStartNextDayInfo', msg.locale,
+              `${msg.prefix}${self.postPrefix}`),
+        });
       }
 
       let mentions = self.common.mention(msg);
@@ -1278,13 +1286,14 @@ function HG() {
         mentions += '@everyone';
       }
 
-      msg.channel.send(mentions, finalMessage).catch((err) => {
-        reply(msg, 'startedTitle', 'startMessageRejected');
-        self.error(
-            'Error al enviar el mensaje de inicio del juego: ' + msg.channel.id + ' (Num: ' +
-            g.currentGame.includedUsers.length + ')');
-        console.error(err);
-      });
+      msg.channel.send({content: mentions, embeds: [finalMessage]})
+          .catch((err) => {
+            reply(msg, 'startedTitle', 'startMessageRejected');
+            self.error(
+                'Error al enviar el mensaje de inicio del juego: ' + msg.channel.id +
+                ' (Num: ' + g.currentGame.includedUsers.length + ')');
+            console.error(err);
+          });
       loadingComplete();
     });
     if (game && game.currentGame) game.currentGame.inProgress = true;
@@ -1369,7 +1378,8 @@ function HG() {
     }
     hg.getGame(id).autoPlay = false;
     if (msg && msg.channel) {
-      msg.channel.send(strings.get('pauseAuto', msg.locale, msg.author.id))
+      msg.channel
+          .send({content: strings.get('pauseAuto', msg.locale, msg.author.id)})
           .catch(() => {});
     }
   }
@@ -1410,7 +1420,10 @@ function HG() {
           return;
         }
         nextDay(msg, id);
-        msg.channel.send(strings.get('startAutoDay', msg.locale, msg.author.id))
+        msg.channel
+            .send({
+              content: strings.get('startAutoDay', msg.locale, msg.author.id),
+            })
             .catch(() => {});
       } else if (!game.currentGame.inProgress) {
         if (self.command.validate(`${msg.prefix}hg start`, msg)) {
@@ -1418,7 +1431,9 @@ function HG() {
           return;
         }
         msg.channel
-            .send(strings.get('startAutoGame', msg.locale, msg.author.id))
+            .send({
+              content: strings.get('startAutoGame', msg.locale, msg.author.id),
+            })
             .catch(() => {});
         startGame(msg, id);
       } else if (game.currentGame.isPaused) {
@@ -1426,7 +1441,9 @@ function HG() {
             msg, 'enableAutoTitle', 'resumeAutoInstructions',
             `${msg.prefix}${self.postPrefix}`);
       } else {
-        msg.channel.send(strings.get('enableAuto', msg.locale, msg.author.id))
+        msg.channel
+            .send(
+                {content: strings.get('enableAuto', msg.locale, msg.author.id)})
             .catch(() => {});
       }
     }
@@ -1524,17 +1541,18 @@ function HG() {
     }
     const myPerms = msg.channel.permissionsFor(self.client.user.id);
     if (!myPerms ||
-        (!myPerms.has(self.Discord.Permissions.FLAGS.ATTACH_FILES) &&
-         !myPerms.has(self.Discord.Permissions.FLAGS.ADMINISTRATOR))) {
+        (!myPerms.has(self.Discord.PermissionsBitField.Flags.AttachFiles) &&
+         !myPerms.has(self.Discord.PermissionsBitField.Flags.Administrator))) {
       reply(msg, 'nextDayPermImagesTitle', 'nextDayPermImagesBody');
       if (!myPerms) {
         self.error(
-            'No pude obtener permisos para mí. ' + (msg.guild.me && true));
+            'No pude obtener permisos para mí. ' +
+            (msg.guild.members.me && true));
       }
       return;
     } else if (
-      !myPerms.has(self.Discord.Permissions.FLAGS.EMBED_LINKS) &&
-        !myPerms.has(self.Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+      !myPerms.has(self.Discord.PermissionsBitField.Flags.EmbedLinks) &&
+        !myPerms.has(self.Discord.PermissionsBitField.Flags.Administrator)) {
       reply(msg, 'nextDayPermEmbedTitle', 'nextDayPermEmbedBody');
       return;
     }
@@ -1807,7 +1825,7 @@ function HG() {
         break;
     }
     if (!Array.isArray(users)) {
-      users = users.array();
+      users = [...users.values()];
     }
     const num = users.length + npcs.length;
     const numUsers = users.length;
@@ -2106,7 +2124,7 @@ function HG() {
         break;
     }
     if (!Array.isArray(users)) {
-      users = users.array();
+      users = [...users.values()];
     }
     const num = users.length + npcs.length;
     const numUsers = users.length;
@@ -2253,8 +2271,8 @@ function HG() {
         game.currentGame.includedUsers.push(
             new NPC(obj.name, obj.avatarURL, obj.id));
       } else {
-        const avatar =
-            (obj.displayAvatarURL && obj.displayAvatarURL({format: 'png'})) ||
+        const avatar = (obj.displayAvatarURL &&
+                        obj.displayAvatarURL({extension: 'png'})) ||
             obj.avatarURL;
         game.currentGame.includedUsers.push(
             new HungryGames.Player(obj.id, obj.username, avatar, obj.nickname));
@@ -2291,42 +2309,46 @@ function HG() {
         strings.get(
             'playerRefreshInfo', msg.locale,
             `${msg.prefix}${self.postPrefix}`));
-    msg.channel.send(self.common.mention(msg), finalMessage).catch((err) => {
-      reply(msg, 'messageRejected');
-      self.error('Error al enviar el mensaje de la lista de jugadores: ' + msg.channel.id);
-      console.error(err);
-    });
+    msg.channel
+        .send({content: self.common.mention(msg), embeds: [finalMessage]})
+        .catch((err) => {
+          reply(msg, 'messageRejected');
+          self.error(
+              'Error al enviar el mensaje de la lista de jugadores: ' + msg.channel.id);
+          console.error(err);
+        });
   }
 
   /**
-   * @description Create a {@link Discord~MessageEmbed} that lists all
+   * @description Create a {@link Discord~EmbedBuilder} that lists all
    * included and excluded players in the game.
    * @private
    * @param {HungryGames~GuildGame} game The game to format.
-   * @param {Discord~MessageEmbed} [finalMessage] Optional existing
+   * @param {Discord~EmbedBuilder} [finalMessage] Optional existing
    * embed to modify instead of creating a new one.
    * @param {?string} [locale=null] Language locale to format titles.
-   * @returns {Discord~MessageEmbed} The created message embed.
+   * @returns {Discord~EmbedBuilder} The created message embed.
    */
   function makePlayerListEmbed(game, finalMessage, locale = null) {
     if (!finalMessage) {
-      finalMessage = new self.Discord.MessageEmbed();
+      finalMessage = new self.Discord.EmbedBuilder();
       finalMessage.setTitle(strings.get('listPlayerTitle', locale));
       finalMessage.setColor(defaultColor);
     }
     if (!game || !game.currentGame || !game.currentGame.includedUsers) {
-      finalMessage.addField(
-          strings.get('listPlayerNoPlayersTitle', locale),
-          strings.get('listPlayerNoPlayersBody', locale));
+      finalMessage.addFields([{
+        name: strings.get('listPlayerNoPlayersTitle', locale),
+        value: strings.get('listPlayerNoPlayersBody', locale),
+      }]);
       return finalMessage;
     }
     const numUsers = game.currentGame.includedUsers.length;
     if (numUsers > 200) {
-      finalMessage.addField(
-          strings.get('listPlayerIncludedNum', locale, numUsers),
-          strings.get(
-              'listPlayerExcludedNum', locale, game.excludedUsers.length),
-          true);
+      finalMessage.addFields([{
+        name: strings.get('listPlayerIncludedNum', locale, numUsers),
+        value: strings.get(
+            'listPlayerExcludedNum', locale, game.excludedUsers.length),
+      }]);
       return finalMessage;
     }
     if (game.options.teamSize > 0) self.sortTeams(game);
@@ -2379,10 +2401,11 @@ function HG() {
 
     if (splitEmbeds) {
       game.currentGame.teams.reverse().forEach((el) => {
-        finalMessage.addField(
-            el.name || el.id,
-            statusList.splice(0, el.players.length).join('\n').slice(0, 1023),
-            true);
+        finalMessage.addFields([{
+          name: el.name || el.id,
+          value:
+              statusList.splice(0, el.players.length).join('\n').slice(0, 1023),
+        }]);
       });
     } else {
       const numCols =
@@ -2392,21 +2415,24 @@ function HG() {
         for (let i = 0; i < numCols - 1; i++) {
           const thisMessage =
               statusList.splice(0, quarterLength).join('\n').substring(0, 1024);
-          finalMessage.addField(
-              strings.get(
-                  'listPlayerIncludedNum', locale,
-                  `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
-              thisMessage, true);
-        }
-        finalMessage.addField(
-            strings.get(
+          finalMessage.addFields([{
+            name: strings.get(
                 'listPlayerIncludedNum', locale,
-                `${(numCols - 1) * quarterLength + 1}-${numUsers}`),
-            statusList.join('\n'), true);
+                `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
+            value: thisMessage,
+          }]);
+        }
+        finalMessage.addFields([{
+          name: strings.get(
+              'listPlayerIncludedNum', locale,
+              `${(numCols - 1) * quarterLength + 1}-${numUsers}`),
+          value: statusList.join('\n'),
+        }]);
       } else {
-        finalMessage.addField(
-            strings.get('listPlayerIncludedNum', locale, numUsers),
-            statusList.join('\n') || 'Nobody', false);
+        finalMessage.addFields([{
+          name: strings.get('listPlayerIncludedNum', locale, numUsers),
+          value: statusList.join('\n') || 'Nobody',
+        }]);
       }
     }
     if (game.excludedUsers.length > 0) {
@@ -2422,10 +2448,11 @@ function HG() {
           excludedList = trimmedList;
         }
       }
-      finalMessage.addField(
-          strings.get(
-              'listPlayerExcludedNum', locale, game.excludedUsers.length),
-          excludedList, false);
+      finalMessage.addFields([{
+        name: strings.get(
+            'listPlayerExcludedNum', locale, game.excludedUsers.length),
+        value: excludedList,
+      }]);
     }
     return finalMessage;
   }
@@ -2655,30 +2682,31 @@ function HG() {
     if (page < 0) page = 0;
     if (page >= bodyFields.length) page = bodyFields.length - 1;
 
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setTitle(strings.get('optionListTitle', msg.locale));
-    embed.setFooter(
-        strings.get('pageNumbers', msg.locale, page + 1, bodyFields.length));
+    embed.setFooter({
+      text: strings.get('pageNumbers', msg.locale, page + 1, bodyFields.length),
+    });
     embed.setDescription('```js\n' + bodyFields[page].join('\n\n') + '```');
-    embed.addField(
-        strings.get('optionListSimpleExampleTitle', msg.locale),
-        strings.get(
-            'optionListSimpleExampleBody', msg.locale,
-            `${msg.prefix}${self.postPrefix}`),
-        true);
-    embed.addField(
-        strings.get('optionListObjectExampleTitle', msg.locale),
-        strings.get(
-            'optionListObjectExampleBody', msg.locale,
-            `${msg.prefix}${self.postPrefix}`),
-        true);
+    embed.addFields([{
+      name: strings.get('optionListSimpleExampleTitle', msg.locale),
+      value: strings.get(
+          'optionListSimpleExampleBody', msg.locale,
+          `${msg.prefix}${self.postPrefix}`),
+    }]);
+    embed.addFields([{
+      name: strings.get('optionListObjectExampleTitle', msg.locale),
+      value: strings.get(
+          'optionListObjectExampleBody', msg.locale,
+          `${msg.prefix}${self.postPrefix}`),
+    }]);
 
     if (optionMessages[msg.id]) {
-      msg.edit(embed).then(() => {
+      msg.edit({embeds: [embed]}).then(() => {
         optChangeListener(msg, options, page);
       });
     } else {
-      msg.channel.send(embed).then((msg_) => {
+      msg.channel.send({embeds: [embed]}).then((msg_) => {
         msg_.origAuth = msg.author.id;
         msg_.prefix = self.bot.getPrefix(msg.guild);
         optChangeListener(msg_, options, page);
@@ -2699,27 +2727,29 @@ function HG() {
     optionMessages[msg_.id] = msg_;
     msg_.react(emoji.arrowLeft).then(() => msg_.react(emoji.arrowRight));
     newReact(maxReactAwaitTime);
-    msg_.awaitReactions((reaction, user) => {
+    const filter = (reaction, user) => {
       if (user.id != self.client.user.id) {
         reaction.users.remove(user).catch(() => {});
       }
       return (reaction.emoji.name == emoji.arrowRight ||
                   reaction.emoji.name == emoji.arrowLeft) &&
               user.id != self.client.user.id;
-    }, {max: 1, time: maxReactAwaitTime}).then((reactions) => {
-      if (reactions.size == 0) {
-        msg_.reactions.removeAll().catch(() => {});
-        delete optionMessages[msg_.id];
-        return;
-      }
-      const name = reactions.first().emoji.name;
-      if (name == emoji.arrowRight) {
-        msg_.optId++;
-      } else if (name == emoji.arrowLeft) {
-        msg_.optId--;
-      }
-      showOpts(msg_, options);
-    });
+    };
+    msg_.awaitReactions({filter, max: 1, time: maxReactAwaitTime})
+        .then((reactions) => {
+          if (reactions.size == 0) {
+            msg_.reactions.removeAll().catch(() => {});
+            delete optionMessages[msg_.id];
+            return;
+          }
+          const name = reactions.first().emoji.name;
+          if (name == emoji.arrowRight) {
+            msg_.optId++;
+          } else if (name == emoji.arrowLeft) {
+            msg_.optId--;
+          }
+          showOpts(msg_, options);
+        });
   }
 
   // Team Management //
@@ -2739,7 +2769,8 @@ function HG() {
     if (!hg.getGame(id) || !hg.getGame(id).currentGame) {
       const message = strings.get('teamEditNoGame', msg.locale);
       if (!silent) {
-        msg.channel.send(self.common.mention(msg) + ' `' + message + '`')
+        msg.channel
+            .send({content: self.common.mention(msg) + ' `' + message + '`'})
             .catch(console.error);
       }
       return message;
@@ -2751,7 +2782,8 @@ function HG() {
         default: {
           const message = strings.get('teamEditInProgress', msg.locale);
           if (!silent) {
-            msg.channel.send(self.common.mention(msg) + ' `' + message + '`');
+            msg.channel.send(
+                {content: self.common.mention(msg) + ' `' + message + '`'});
           }
           return message;
         }
@@ -3183,12 +3215,13 @@ function HG() {
       } else {
         reply(msg, 'legacyClaimed', res);
         const perms = msg.channel.permissionsFor(self.client.user);
-        if (perms.has(self.Discord.Permissions.FLAGS.SEND_MESSAGES) &&
-            perms.has(self.Discord.Permissions.FLAGS.ATTACH_FILES)) {
-          msg.channel.send(
-              strings.get('legacyBackup', msg.locale),
-              new self.Discord.MessageAttachment(
-                  Buffer.from(stringified), 'HGLegacyEventBackup.json'));
+        if (perms.has(self.Discord.PermissionsBitField.Flags.SendMessages) &&
+            perms.has(self.Discord.PermissionsBitField.Flags.AttachFiles)) {
+          msg.channel.send({
+            content: strings.get('legacyBackup', msg.locale),
+            files: [new self.Discord.AttachmentBuilder(
+                Buffer.from(stringified), {name: 'HGLegacyEventBackup.json'})],
+          });
         }
       }
     });
@@ -3339,21 +3372,22 @@ function HG() {
     const eNPCs = hg.getGame(id).excludedNPCs || [];
     if (specific) {
       specific = iNPCs.concat(eNPCs).find((el) => el.id == specific.id);
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('NPC Info');
       embed.setDescription(specific.name);
-      embed.setFooter(specific.id);
+      embed.setFooter({text: specific.id});
       embed.setThumbnail(specific.avatarURL);
-      msg.channel.send(self.common.mention(msg), embed).catch((err) => {
-        self.error('Error al enviar el mensaje de información del NPC: ' + msg.channel.id);
-        console.error(err);
-      });
+      msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+          .catch((err) => {
+            self.error('Error al enviar el mensaje de información del NPC: ' + msg.channel.id);
+            console.error(err);
+          });
     } else if (msg.text && !['show', 'list'].includes(msg.text.trim())) {
       reply(
           msg, 'npcUnknownTitle', 'npcUnknownBody', msg.text,
           `${msg.prefix}${self.postPrefix}`);
     } else {
-      const finalMessage = new self.Discord.MessageEmbed();
+      const finalMessage = new self.Discord.EmbedBuilder();
       finalMessage.setTitle(strings.get('npcListTitle', msg.locale));
       finalMessage.setColor(defaultColor);
       let iList = [];
@@ -3370,21 +3404,24 @@ function HG() {
         for (let i = 0; i < numCols - 1; i++) {
           const thisMessage =
               iList.splice(0, quarterLength).join('\n').substring(0, 1024);
-          finalMessage.addField(
-              strings.get(
-                  'listPlayerIncludedNum', msg.locale,
-                  `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
-              thisMessage, true);
-        }
-        finalMessage.addField(
-            strings.get(
+          finalMessage.addFields([{
+            name: strings.get(
                 'listPlayerIncludedNum', msg.locale,
-                `${(numCols - 1) * quarterLength + 1}-${numINPCs}`),
-            iList.join('\n'), true);
+                `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
+            value: thisMessage,
+          }]);
+        }
+        finalMessage.addFields([{
+          name: strings.get(
+              'listPlayerIncludedNum', msg.locale,
+              `${(numCols - 1) * quarterLength + 1}-${numINPCs}`),
+          value: iList.join('\n'),
+        }]);
       } else {
-        finalMessage.addField(
-            strings.get('listPlayerIncludedNum', msg.locale, numINPCs),
-            iList.join('\n') || 'None', false);
+        finalMessage.addFields([{
+          name: strings.get('listPlayerIncludedNum', msg.locale, numINPCs),
+          value: iList.join('\n') || 'None',
+        }]);
       }
       if (eList.length >= 5) {
         const numCols = self.calcColNum(eList.length > 10 ? 3 : 2, eList);
@@ -3393,27 +3430,33 @@ function HG() {
         for (let i = 0; i < numCols - 1; i++) {
           const thisMessage =
               eList.splice(0, quarterLength).join('\n').substring(0, 1024);
-          finalMessage.addField(
-              strings.get(
-                  'listPlayerExcludedNum', msg.locale,
-                  `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
-              thisMessage, true);
-        }
-        finalMessage.addField(
-            strings.get(
+          finalMessage.addFields([{
+            name: strings.get(
                 'listPlayerExcludedNum', msg.locale,
-                `${(numCols - 1) * quarterLength + 1}-${numENPCs}`),
-            eList.join('\n'), true);
+                `${i * quarterLength + 1}-${(i + 1) * quarterLength}`),
+            value: thisMessage,
+          }]);
+        }
+        finalMessage.addFields([{
+          name: strings.get(
+              'listPlayerExcludedNum', msg.locale,
+              `${(numCols - 1) * quarterLength + 1}-${numENPCs}`),
+          value: eList.join('\n'),
+        }]);
       } else {
-        finalMessage.addField(
-            strings.get('listPlayerExcludedNum', msg.locale, numENPCs),
-            eList.join('\n') || 'None', false);
+        finalMessage.addFields([{
+          name: strings.get('listPlayerExcludedNum', msg.locale, numENPCs),
+          value: eList.join('\n') || 'None',
+        }]);
       }
-      msg.channel.send(self.common.mention(msg), finalMessage).catch((err) => {
-        reply(msg, 'messageRejected', 'npcTooMany');
-        self.error('Error al enviar la lista de mensajes de NPC: ' + msg.channel.id);
-        console.error(err);
-      });
+      msg.channel
+          .send({content: self.common.mention(msg), embeds: [finalMessage]})
+          .catch((err) => {
+            reply(msg, 'messageRejected', 'npcTooMany');
+            self.error(
+                'Error al enviar la lista de mensajes de NPC: ' + msg.channel.id);
+            console.error(err);
+          });
     }
   }
 
@@ -3472,7 +3515,7 @@ function HG() {
         });
         req.end();
 
-        msg.channel.startTyping();
+        msg.channel.sendTyping();
       }
     }
     /**
@@ -3490,7 +3533,6 @@ function HG() {
         } else {
           reply(msg, 'npcBadURL', 'statusCode', incoming.statusCode);
         }
-        msg.channel.stopTyping();
         return;
       }
       const cl = incoming.headers['content-length'];
@@ -3501,7 +3543,6 @@ function HG() {
       if (!supported.includes(type)) {
         incoming.destroy();
         reply(msg, 'invalidFileType', 'fillOne', type || 'unknown filetype');
-        msg.channel.stopTyping();
         return;
       } else if (!cl) {
         incoming.destroy();
@@ -3510,7 +3551,6 @@ function HG() {
             strings.get(
                 'invalidFileSize', msg.locale, self.maxBytes / 1000 / 1000),
             strings.get('unknownFileSize', msg.locale));
-        msg.channel.stopTyping();
         return;
       } else if (cl > self.maxBytes) {
         incoming.destroy();
@@ -3519,7 +3559,6 @@ function HG() {
             strings.get(
                 'invalidFileSize', msg.locale, self.maxBytes / 1000 / 1000),
             Math.round(cl / 1000 / 100) / 10 + 'MB');
-        msg.channel.stopTyping();
         return;
       }
       const data = [];
@@ -3534,7 +3573,6 @@ function HG() {
               strings.get(
                   'invalidFileSize', msg.locale, self.maxBytes / 1000 / 1000),
               `>${Math.round(reqBytes / 1000 / 100) / 10}MB`);
-          msg.channel.stopTyping();
         }
       });
       incoming.on('end', () => onGetAvatar(Buffer.concat(data)));
@@ -3564,7 +3602,6 @@ function HG() {
           })
           .catch((err) => {
             reply(msg, 'invalidImage', 'fillOne', err.message);
-            msg.channel.stopTyping();
             self.error('Error al convertir el búfer en imagen.');
             console.error(err);
           });
@@ -3578,42 +3615,47 @@ function HG() {
      * @param {Buffer} buffer The Buffer the image buffer for showing.
      */
     function sendConfirmation(image, buffer) {
-      msg.channel.stopTyping();
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle(strings.get('npcConfirmTitle', msg.locale));
-      embed.setAuthor(username);
+      embed.setAuthor({name: username});
       embed.setDescription(
           strings.get(
               'npcConfirmDescription', msg.locale, emoji.whiteCheckMark,
               emoji.x));
-      embed.attachFiles(
-          [new self.Discord.MessageAttachment(buffer, `${username}.png`)]);
-      msg.channel.send(embed)
+      msg.channel
+          .send({
+            embeds: [embed],
+            files: [new self.Discord.AttachmentBuilder(
+                buffer, {name: `${username}.png`})],
+          })
           .then((msg_) => {
             msg_.react(emoji.whiteCheckMark).then(() => msg_.react(emoji.x));
             newReact(maxReactAwaitTime);
-            msg_.awaitReactions((reaction, user) => {
-              return user.id == msg.author.id &&
-                      (reaction.emoji.name == emoji.whiteCheckMark ||
-                       reaction.emoji.name == emoji.x);
-            }, {max: 1, time: maxReactAwaitTime}).then((reactions) => {
-              embed.setDescription('');
-              if (reactions.size == 0) {
-                msg_.reactions.removeAll().catch(() => {});
-                embed.setFooter(strings.get('timedOut', msg.locale));
-                msg_.edit(embed);
-              } else if (
-                reactions.first().emoji.name == emoji.whiteCheckMark) {
-                msg_.reactions.removeAll().catch(() => {});
-                embed.setFooter(strings.get('confirmed', msg.locale));
-                msg_.edit(embed);
-                onConfirm(image);
-              } else {
-                msg_.reactions.removeAll().catch(() => {});
-                embed.setFooter(strings.get('cancelled', msg.locale));
-                msg_.edit(embed);
-              }
-            });
+            const filter = (reaction, user) => user.id == msg.author.id &&
+                (reaction.emoji.name == emoji.whiteCheckMark ||
+                 reaction.emoji.name == emoji.x);
+            msg_.awaitReactions({filter, max: 1, time: maxReactAwaitTime})
+                .then((reactions) => {
+                  embed.setDescription(null);
+                  if (reactions.size == 0) {
+                    msg_.reactions.removeAll().catch(() => {});
+                    embed.setFooter(
+                        {text: strings.get('timedOut', msg.locale)});
+                    msg_.edit({embeds: [embed]});
+                  } else if (
+                    reactions.first().emoji.name == emoji.whiteCheckMark) {
+                    msg_.reactions.removeAll().catch(() => {});
+                    embed.setFooter(
+                        {text: strings.get('confirmed', msg.locale)});
+                    msg_.edit({embeds: [embed]});
+                    onConfirm(image);
+                  } else {
+                    msg_.reactions.removeAll().catch(() => {});
+                    embed.setFooter(
+                        {text: strings.get('cancelled', msg.locale)});
+                    msg_.edit({embeds: [embed]});
+                  }
+                });
           })
           .catch((err) => {
             self.error('Error al enviar la confirmación del NPC: ' + msg.channel.id);
@@ -3804,8 +3846,8 @@ function HG() {
     if (typeof success === 'string') {
       reply(msg, 'npcDeleteFailed', success);
     } else {
-      msg.channel.send(success).catch(
-          () => reply(msg, 'npcDeleteSuccess', 'fillOne', toDelete.id));
+      msg.channel.send({embeds: [success]})
+          .catch(() => reply(msg, 'npcDeleteSuccess', 'fillOne', toDelete.id));
     }
   }
   /**
@@ -3815,8 +3857,8 @@ function HG() {
    *
    * @param {string} gId Guild id of which to remove npc.
    * @param {string} npc ID of npc to delete.
-   * @param {string} [locale] Language locale to create MessageEmbed with.
-   * @returns {string|Discord~MessageEmbed} String key if error, MessageEmbed to
+   * @param {string} [locale] Language locale to create EmbedBuilder with.
+   * @returns {string|Discord~EmbedBuilder} String key if error, EmbedBuilder to
    * send if success.
    */
   this.removeNPC = function(gId, npc, locale) {
@@ -3839,10 +3881,10 @@ function HG() {
 
     if (!hg.getGame(gId).currentGame.inProgress) self.createGame(gId);
 
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setTitle(strings.get('npcDeleteSuccess', locale));
     embed.setDescription(toDelete.name);
-    embed.setFooter(toDelete.id);
+    embed.setFooter({text: toDelete.id});
     embed.setThumbnail(toDelete.avatarURL);
     return embed;
   };
@@ -3879,7 +3921,10 @@ function HG() {
    * @param {Discord~Message} msg The message that lead to this being called.
    */
   function help(msg) {
-    msg.author.send(self.helpMessage)
+    const message = typeof self.helpMessage === 'string' ?
+        {content: self.helpMessage} :
+        {embeds: [self.helpMessage]};
+    msg.author.send(message)
         .then(() => {
           if (msg.guild != null) {
             reply(msg, 'helpMessageSuccess', 'fillOne', ':wink:')
@@ -3917,15 +3962,15 @@ function HG() {
     const numTotal = game.statGroup ? 3 : 2;
     const user = msg.softMentions.users.first() || msg.author;
     let numDone = 0;
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setTitle(
-      strings.get('statsUserTitle', msg.locale, user.tag || user.username));
+        strings.get('statsUserTitle', msg.locale, user.tag || user.username));
     embed.setColor([255, 0, 255]);
 
     const checkDone = function() {
       numDone++;
       if (numDone === numTotal) {
-        msg.channel.send(self.common.mention(msg), embed);
+        msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
       }
     };
 
@@ -3944,15 +3989,17 @@ function HG() {
           const list = data.keys.map(
               (el) => `${self.common.camelToSpaces(el)}: ${data.get(el)}`);
           if (group.id === 'global') {
-            embed.addField(
-                strings.get('statsLifetime', msg.locale), list.join('\n'),
-                true);
+            embed.addFields([{
+              name: strings.get('statsLifetime', msg.locale),
+              value: list.join('\n'),
+            }]);
             checkDone();
             return;
           } else if (group.id === 'previous') {
-            embed.addField(
-                strings.get('statsPrevious', msg.locale), list.join('\n'),
-                true);
+            embed.addFields([{
+              name: strings.get('statsPrevious', msg.locale),
+              value: list.join('\n'),
+            }]);
             checkDone();
             return;
           }
@@ -3963,9 +4010,9 @@ function HG() {
               console.error(err);
             }
             if (meta && meta.name) {
-              embed.addField(meta.name, list.join('\n'), true);
+              embed.addFields([{name: meta.name, value: list.join('\n')}]);
             } else {
-              embed.addField(group.id, list.join('\n'), true);
+              embed.addFields([{name: group.id, value: list.join('\n')}]);
             }
             checkDone();
           });
@@ -4277,7 +4324,7 @@ function HG() {
           return `${i+1}) ${name}: ${el.get(col)}`;
         });
 
-        const embed = new self.Discord.MessageEmbed();
+        const embed = new self.Discord.EmbedBuilder();
         embed.setTitle(strings.get('rankedBy', msg.locale, col));
         const groupName = groupID === 'global' ?
             strings.get('lifetime', msg.locale) :
@@ -4292,20 +4339,23 @@ function HG() {
         for (let i = 0; i < numCols - 1; i++) {
           const thisMessage =
               list.splice(0, quarterLength).join('\n').slice(0, 1024);
-          embed.addField(
-              `${i * quarterLength + 1}-${(i + 1) * quarterLength}`,
-              thisMessage, true);
+          embed.addFields([{
+            name: `${i * quarterLength + 1}-${(i + 1) * quarterLength}`,
+            value: thisMessage,
+          }]);
         }
-        embed.addField(
-            `${(numCols - 1) * quarterLength + 1}-${numTotal}`,
-            list.join('\n').slice(0, 1024) || '.', true);
+        embed.addFields([{
+          name: `${(numCols - 1) * quarterLength + 1}-${numTotal}`,
+          value: list.join('\n').slice(0, 1024) || '.',
+        }]);
 
-        msg.channel.send(self.common.mention(msg), embed).catch((err) => {
-          self.error(
-              'Error al enviar la tabla de clasificación en el canal: ' + msg.channel.id);
-          console.error(err);
-          reply(msg, 'lbSendFailed', 'fillOne', err.code);
-        });
+        msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+            .catch((err) => {
+              self.error(
+                  'Error al enviar la tabla de clasificación en el canal: ' + msg.channel.id);
+              console.error(err);
+              reply(msg, 'lbSendFailed', 'fillOne', err.code);
+            });
       });
     });
   }
@@ -4320,15 +4370,18 @@ function HG() {
    */
   function commandNums(msg) {
     if (self.client.shard) {
-      self.client.shard.broadcastEval('this.getHGStats(true)').then((res) => {
-        const embed = new self.Discord.MessageEmbed();
-        embed.setTitle(strings.get('numsTitle', msg.locale));
-        res.forEach((el, i) => embed.addField(`#${i}`, el, true));
-        msg.channel.send(embed);
-      }).catch((err) => {
-        reply(msg, 'numsFailure');
-        self.error(err);
-      });
+      self.client.shard.broadcastEval('this.getHGStats(true)')
+          .then((res) => {
+            const embed = new self.Discord.EmbedBuilder();
+            embed.setTitle(strings.get('numsTitle', msg.locale));
+            res.forEach(
+                (el, i) => embed.addFields([{name: `#${i}`, value: el}]));
+            msg.channel.send({embeds: [embed]});
+          })
+          .catch((err) => {
+            reply(msg, 'numsFailure');
+            self.error(err);
+          });
     } else {
       self.common.reply(msg, getStatsString(false, msg.locale));
     }
@@ -4380,10 +4433,10 @@ function HG() {
    * @param {Discord~Message} msg The message that lead to this being called.
    */
   function commandRig(msg) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setThumbnail('https://discordemoji.com/assets/emoji/rigged.png');
     embed.setColor([187, 26, 52]);
-    msg.channel.send(self.common.mention(msg), embed);
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
   }
 
   /**
@@ -4756,13 +4809,13 @@ function HG() {
     }
     const locale = self.bot.getLocale && self.bot.getLocale(channel.guild.id);
 
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setColor(defaultColor);
     embed.setTitle(strings.get('reactToJoinTitle', locale));
     embed.setDescription(strings.get(
         'reactToJoinBody', locale,
         hg.getGame(channel.guild.id).currentGame.name));
-    channel.send(embed).then((msg) => {
+    channel.send({embeds: [embed]}).then((msg) => {
       hg.getGame(channel.guild.id).reactMessage = {
         id: msg.id,
         channel: msg.channel.id,
@@ -4843,7 +4896,7 @@ function HG() {
         hg.getGame(id).reactMessage = null;
         const locale = self.bot.getLocale && self.bot.getLocale(id);
         const ended = strings.get('ended', locale);
-        msg.edit(`\`${ended}\``).catch(() => {});
+        msg.edit({content: `\`${ended}\``}).catch(() => {});
         if (list.size == 0) {
           cb(null, 'reactNoUsers');
         } else {
@@ -5011,7 +5064,7 @@ function HG() {
               self.error(`Error al almacenar en caché el avatar: ${filename}`);
               console.error(err);
             }
-          });
+          }, self.common.encryptAvatars);
         });
       }
       return image;

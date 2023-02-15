@@ -89,7 +89,7 @@ function Sandbox() {
    */
   function commandJS(msg) {
     const cmd = `${sandboxCommand}${jsCommand}`;
-    msg.channel.startTyping();
+    msg.channel.sendTyping();
     const p = childProcess.exec(cmd, execArgs, (...args) => {
       scriptEnd(msg, ...args);
     });
@@ -107,7 +107,7 @@ function Sandbox() {
    */
   function commandPython(msg) {
     const cmd = `${sandboxCommand}${pyCommand}`;
-    msg.channel.startTyping();
+    msg.channel.sendTyping();
     const p = childProcess.exec(cmd, execArgs, (...args) => {
       scriptEnd(msg, ...args);
     });
@@ -125,7 +125,7 @@ function Sandbox() {
    */
   function commandPython3(msg) {
     const cmd = `${sandboxCommand}${py3Command}`;
-    msg.channel.startTyping();
+    msg.channel.sendTyping();
     const p = childProcess.exec(cmd, execArgs, (...args) => {
       scriptEnd(msg, ...args);
     });
@@ -144,7 +144,6 @@ function Sandbox() {
    * @param {string|Buffer} stderr All data paseed through stderr.
    */
   function scriptEnd(msg, err, stdout, stderr) {
-    msg.channel.stopTyping();
     if (err) {
       if (err.message === 'stderr maxBuffer exceeded' ||
           err.message === 'stdout maxBuffer exceeded') {
@@ -164,21 +163,21 @@ function Sandbox() {
       self.debug('STDOUT: ' + stdout);
       return;
     }
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setColor([0, 255, 255]);
     if (stdout.length > 0) {
       if (stdout.indexOf('\\n') != stdout.lastIndexOf('\\n')) {
         stdout = stdout.replace(/\\n/g, '\n');
       }
-      embed.addField('STDOUT', stdout.substr(0, 1024), true);
+      embed.addFields([{name: 'STDOUT', value: stdout.substr(0, 1024)}]);
     }
     if (stderr.length > 0) {
       if (stderr.indexOf('\\n') != stderr.lastIndexOf('\\n')) {
         stderr = stderr.replace(/\\n/g, '\n');
       }
-      embed.addField('STDERR', stderr.substr(0, 1024), true);
+      embed.addFields([{name: 'STDERR', value: stderr.substr(0, 1024)}]);
     }
-    msg.channel.send(self.common.mention(msg), embed);
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
   }
 }
 module.exports = new Sandbox();

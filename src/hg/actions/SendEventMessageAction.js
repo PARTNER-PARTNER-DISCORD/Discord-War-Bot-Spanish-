@@ -28,9 +28,9 @@ class SendEventMessageAction extends ChannelAction {
         game.currentGame.isPaused = true;
       } else if (evt.battle && evt.state < evt.attacks.length) {
         const attk = evt.attacks[evt.state];
-        const embed = new hg._parent.Discord.MessageEmbed();
+        const embed = new hg._parent.Discord.EmbedBuilder();
         const message = attk.message.split('\n');
-        embed.addField(message[1], message[2]);
+        embed.addFields([{name: message[1], value: message[2]}]);
         embed.setColor([50, 0, 0]);
 
         const avatarSizes = game.options.battleAvatarSizes;
@@ -38,12 +38,13 @@ class SendEventMessageAction extends ChannelAction {
         if (battleIconSize === 0 || attk.icons.length === 0) {
           // Send without image.
           if (!game.options.disableOutput) {
-            channel.send(message[0], embed).catch((err) => {
-              hg._parent.error(
-                  'Error al enviar el mensaje del evento de batalla sin imagen: ' +
-                  channel.id);
-              console.error(err);
-            });
+            channel.send({content: message[0], embeds: [embed]})
+                .catch((err) => {
+                  hg._parent.error(
+                      'Error al enviar el mensaje del evento de batalla sin imagen: ' +
+                      channel.id);
+                  console.error(err);
+                });
           }
         } else {
           const iconGap = avatarSizes.gap;
@@ -89,15 +90,20 @@ class SendEventMessageAction extends ChannelAction {
             if (responses == attk.icons.length) {
               finalImage.getBuffer(Jimp.MIME_PNG, function(err, out) {
                 // Attach file, then send.
-                embed.attachFiles([new hg._parent.Discord.MessageAttachment(
-                    out, 'hgBattle.png')]);
                 if (!game.options.disableOutput) {
-                  channel.send(message[0], embed).catch((err) => {
-                    hg._parent.error(
-                        'Error al enviar el mensaje del evento de batalla con la imagen: ' +
-                        channel.id);
-                    console.error(err);
-                  });
+                  channel
+                      .send({
+                        content: message[0],
+                        embeds: [embed],
+                        files: [new hg._parent.Discord.AttachmentBuilder(
+                            out, {name: 'hgBattle.png'})],
+                      })
+                      .catch((err) => {
+                        hg._parent.error(
+                            'Error al enviar el mensaje del evento de batalla con la imagen: ' +
+                            channel.id);
+                        console.error(err);
+                      });
                 }
               });
             }
@@ -132,9 +138,10 @@ class SendEventMessageAction extends ChannelAction {
         if (iconSize == 0 || evt.icons.length === 0) {
           if (!game.options.disableOutput) {
             channel
-                .send(
-                    (evt.mentionString || '') + evt.message + '\n' +
-                    (evt.subMessage || ''))
+                .send({
+                  content: (evt.mentionString || '') + evt.message + '\n' +
+                      (evt.subMessage || ''),
+                })
                 .catch((err) => {
                   hg._parent.error(
                       'Error al enviar mensaje sin imagen: ' + channel.id);
@@ -144,7 +151,7 @@ class SendEventMessageAction extends ChannelAction {
         } else {
           const iconGap = avatarSizes.gap;
           const underlineSize = avatarSizes.underline;
-          const embed = new hg._parent.Discord.MessageEmbed();
+          const embed = new hg._parent.Discord.EmbedBuilder();
           if (evt.subMessage) {
             embed.setDescription(`${evt.message}\n${evt.subMessage}`);
           } else {
@@ -197,15 +204,20 @@ class SendEventMessageAction extends ChannelAction {
             }
             responses++;
             if (responses == evt.icons.length) {
-              finalImage.getBuffer(Jimp.MIME_PNG, function(err, out) {
-                embed.attachFiles([new hg._parent.Discord.MessageAttachment(
-                    out, 'hgEvent.png')]);
+              finalImage.getBuffer(Jimp.MIME_PNG, (err, out) => {
                 if (!game.options.disableOutput) {
-                  channel.send(evt.mentionString, embed).catch((err) => {
-                    hg._parent.error(
-                        'Error al enviar mensaje con imagen: ' + channel.id);
-                    console.error(err);
-                  });
+                  channel
+                      .send({
+                        content: evt.mentionString || '\u200B',
+                        embeds: [embed],
+                        files: [new hg._parent.Discord.AttachmentBuilder(
+                            out, {name: 'hgEvent.png'})],
+                      })
+                      .catch((err) => {
+                        hg._parent.error(
+                            'Error al enviar mensaje con imagen: ' + channel.id);
+                        console.error(err);
+                      });
                 }
               });
             }

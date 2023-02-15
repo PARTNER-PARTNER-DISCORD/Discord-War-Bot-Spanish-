@@ -27,9 +27,9 @@ function CmdScheduling() {
     const adminOnlyOpts = new self.command.CommandSetting({
       validOnlyInGuild: true,
       defaultDisabled: true,
-      permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-          self.Discord.Permissions.FLAGS.MANAGE_GUILD |
-          self.Discord.Permissions.FLAGS.BAN_MEMBERS,
+      permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+          self.Discord.PermissionsBitField.Flags.ManageGuild |
+          self.Discord.PermissionsBitField.Flags.BanMembers,
     });
     self.command.on(
         new self.command.SingleCommand(
@@ -69,7 +69,7 @@ function CmdScheduling() {
           });
     });
 
-    longInterval = self.client.setInterval(reScheduleCommands, maxTimeout);
+    longInterval = setInterval(reScheduleCommands, maxTimeout);
   };
   /**
    * @inheritdoc
@@ -77,7 +77,7 @@ function CmdScheduling() {
    * */
   this.shutdown = function() {
     self.command.deleteEvent('schedule');
-    if (longInterval) self.client.clearInterval(longInterval);
+    if (longInterval) clearInterval(longInterval);
     for (const i in schedules) {
       if (!schedules[i] || !schedules[i].length) continue;
       schedules[i] = schedules[i].filter((el) => el.cancel(false) && false);
@@ -382,7 +382,7 @@ function CmdScheduling() {
     this.go = function() {
       if (myself.complete) {
         self.error('Command triggered after being completed!', myself.id);
-        self.client.clearTimeout(myself.timeout);
+        clearTimeout(myself.timeout);
         return;
       }
       const now = Date.now();
@@ -393,7 +393,7 @@ function CmdScheduling() {
             'ScheduledCmdFailed No Channel: ' + myself.channel.id +
             '@' + myself.memberId + ' ' + myself.cmd);
         myself.complete = true;
-        self.client.clearTimeout(myself.timeout);
+        clearTimeout(myself.timeout);
         return;
       } else if (!myself.message) {
         self.error(
@@ -416,14 +416,14 @@ function CmdScheduling() {
             myself.memberId + ' ' + myself.cmd);
         return;
       } else if (!myself.message.channel.permissionsFor(self.client.user)
-          .has(self.Discord.Permissions.FLAGS.SEND_MESSAGES)) {
+          .has(self.Discord.PermissionsBitField.Flags.SendMessages)) {
         self.error(
             'ScheduledCmdWarning No perm SEND_MESSAGES: ' +
             myself.channel.guild.id + '#' + myself.channel.id + '@' +
             myself.memberId + ' ' + myself.cmd);
         return;
       } else if (!myself.message.channel.permissionsFor(self.client.user)
-          .has(self.Discord.Permissions.FLAGS.VIEW_CHANNEL)) {
+          .has(self.Discord.PermissionsBitField.Flags.ViewChannel)) {
         self.error(
             'ScheduledCmdWarning No perm VIEW_CHANNEL: ' +
             myself.channel.guild.id + '#' + myself.channel.id + '@' +
@@ -462,7 +462,7 @@ function CmdScheduling() {
       // manually and the the scheduled time is in less than a second, then
       // consider the scheduled command to have been completed.
       if (myself.time - 1000 <= now) {
-        self.client.clearTimeout(myself.timeout);
+        clearTimeout(myself.timeout);
         if (myself.repeatDelay > 0) {
           myself.complete = false;
           myself.time += myself.repeatDelay;
@@ -483,7 +483,7 @@ function CmdScheduling() {
      *     completed after cancelling.
      */
     this.cancel = function(markComplete = true) {
-      self.client.clearTimeout(myself.timeout);
+      clearTimeout(myself.timeout);
       if (markComplete) myself.complete = true;
     };
 
@@ -500,10 +500,9 @@ function CmdScheduling() {
         return;  // Command was completed, and should no longer run.
       }
       if (myself.time - Date.now() <= maxTimeout) {
-        self.client.clearTimeout(myself.timeout);
+        clearTimeout(myself.timeout);
         try {
-          myself.timeout =
-              self.client.setTimeout(myself.go, myself.time - Date.now());
+          myself.timeout = setTimeout(myself.go, myself.time - Date.now());
         } catch (err) {
           self.error(
               'ScheduledCmd Failed: ' + myself.channelId + '@' +
@@ -656,7 +655,7 @@ function CmdScheduling() {
       return;
     }
 
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setTitle('Created Scheduled Command (' + newCmd.id + ')');
     embed.setColor(embedColor);
     let desc = 'Runs in ' + formatDelay(delay);
@@ -664,11 +663,12 @@ function CmdScheduling() {
       desc += '\nRepeats every ' + formatDelay(repeat);
     }
     embed.setDescription(desc);
-    embed.addField(
-        'To cancel:', `\`${msg.prefix}sch cancel ${newCmd.id}\``, true);
-    embed.setFooter(cmd);
+    embed.addFields([
+      {name: 'To cancel:', value: `\`${msg.prefix}sch cancel ${newCmd.id}\``},
+    ]);
+    embed.setFooter({text: cmd});
 
-    msg.channel.send(self.common.mention(msg), embed);
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
   }
 
   /**
@@ -795,7 +795,7 @@ function CmdScheduling() {
    * @param {Discord~Message} msg The message to reply to.
    */
   function replyWithSchedule(msg) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setTitle('Scheduled Commands');
     embed.setColor(embedColor);
     let list = getScheduledCommandsInGuild(msg.guild.id);
@@ -818,12 +818,13 @@ function CmdScheduling() {
       keys.forEach((k) => {
         total += Object.keys(schedules[k]).length;
       });
-      embed.setFooter(total);
+      embed.setFooter({text: total});
     }
-    msg.channel.send(self.common.mention(msg), embed).catch((err) => {
-      self.error('Failed to send reply in channel: ' + msg.channel.id);
-      console.error(err);
-    });
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+        .catch((err) => {
+          self.error('Failed to send reply in channel: ' + msg.channel.id);
+          console.error(err);
+        });
   }
 
   /**
@@ -872,7 +873,7 @@ function CmdScheduling() {
    * @param {Discord~Message} msg The message to reply to.
    */
   function cancelAndReply(msg) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     embed.setColor(embedColor);
     const list = schedules[msg.guild.id];
     if (!list || list.length == 0) {
@@ -898,10 +899,11 @@ function CmdScheduling() {
       }
     }
 
-    msg.channel.send(self.common.mention(msg), embed).catch((err) => {
-      self.error('Failed to send reply in channel: ' + msg.channel.id);
-      console.error(err);
-    });
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+        .catch((err) => {
+          self.error('Failed to send reply in channel: ' + msg.channel.id);
+          console.error(err);
+        });
   }
 
   /**

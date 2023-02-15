@@ -11,6 +11,13 @@ require('./mainModule.js')(SMLoader); // Extends the MainModule class.
  */
 function SMLoader() {
   const self = this;
+
+  /** Timeout of next slash command update to Discord API. */
+  let nextSlashCommandPush = null;
+  /**
+   * Delay after a load/unload event until we push the change to Discord API.
+   */
+  const slashCommandPushDelay = 5000;
   /** @inheritdoc */
   this.myName = 'SMLoader';
 
@@ -133,6 +140,24 @@ function SMLoader() {
    * @default
    */
   let saveTimeout = null;
+
+  /**
+   * @description A module has been loaded or unloaded, wait a moment for
+   * updates to finish, then push changes to Discord API.
+   * @private
+   */
+  function triggerSlashCommandUpdate() {
+    if (self.client.shard && self.client.shard.ids[0] != 0) return;
+    clearTimeout(nextSlashCommandPush);
+    nextSlashCommandPush = setTimeout(() => {
+      self.command.registerSlashCommands()
+          .then(() => self.log('Registered slash commands.'))
+          .catch((err) => {
+            self.error('Failed to register slash commands.');
+            console.error(err);
+          });
+    }, slashCommandPushDelay);
+  }
 
   /**
    * @description Save the current goal submodules to file.
@@ -391,6 +416,7 @@ function SMLoader() {
         el(message);
       });
     }
+    triggerSlashCommandUpdate();
   };
   /**
    * Loads submodules from file.
@@ -451,6 +477,7 @@ function SMLoader() {
       return;
     }
     cb(null);
+    triggerSlashCommandUpdate();
   };
   /**
    * @description Reloads submodules from file. Reloads currently loaded modules
@@ -561,7 +588,8 @@ function SMLoader() {
       if (self.client.shard) {
         const message = encodeURIComponent(msg.text);
         self.client.shard.broadcastEval(
-            `this.commandReload("${message}",${self.client.shard.ids[0]})`);
+            eval(`((client) => client.commandReload("${message}",${
+              self.client.shard.ids[0]}))`));
       }
       let toReload = msg.text.split(' ').splice(1);
       const opts = {};
@@ -586,11 +614,12 @@ function SMLoader() {
                   'won\'t notice interruption)')
           .then((warnMessage) => {
             self.reload(toReload, opts, (out) => {
-              const embed = new self.Discord.MessageEmbed();
+              const embed = new self.Discord.EmbedBuilder();
               embed.setTitle('Reload complete.');
               embed.setColor([255, 0, 255]);
               embed.setDescription(out.join('\n') || 'NOTHING reloaded');
-              warnMessage.edit(self.common.mention(msg), embed);
+              warnMessage.edit(
+                  {content: self.common.mention(msg), embeds: [embed]});
             });
           });
     } else {
@@ -684,7 +713,8 @@ function SMLoader() {
       if (self.client.shard) {
         const message = encodeURIComponent(msg.text);
         self.client.shard.broadcastEval(
-            `this.commandUnload("${message}",${self.client.shard.ids[0]})`);
+            eval(`((client) => client.commandUnload("${message}",${
+              self.client.shard.ids[0]}))`));
       }
       let toUnload = msg.text.split(' ').splice(1);
       const opts = {};
@@ -731,11 +761,12 @@ function SMLoader() {
         function done() {
           numComplete++;
           if (numComplete < numTotal) return;
-          const embed = new self.Discord.MessageEmbed();
+          const embed = new self.Discord.EmbedBuilder();
           embed.setTitle('Unload complete.');
           embed.setColor([255, 0, 255]);
           embed.setDescription(outs.join(' ') || 'NOTHING unloaded');
-          warnMessage.edit(self.common.mention(msg), embed);
+          warnMessage.edit(
+              {content: self.common.mention(msg), embeds: [embed]});
         }
         if (numTotal == 0) done();
       });
@@ -760,7 +791,8 @@ function SMLoader() {
       if (self.client.shard) {
         const message = encodeURIComponent(msg.text);
         self.client.shard.broadcastEval(
-            `this.commandLoad("${message}",${self.client.shard.ids[0]})`);
+            eval(`((client) => client.commandLoad("${message}",${
+              self.client.shard.ids[0]}))`));
       }
       const toLoad = msg.text.split(' ').splice(1);
       self.common.reply(msg, 'Loading modules...').then((warnMessage) => {
@@ -790,11 +822,12 @@ function SMLoader() {
         function done() {
           numComplete++;
           if (numComplete < numTotal) return;
-          const embed = new self.Discord.MessageEmbed();
+          const embed = new self.Discord.EmbedBuilder();
           embed.setTitle('Load complete.');
           embed.setColor([255, 0, 255]);
           embed.setDescription(outs.join(' ') || 'NOTHING loaded');
-          warnMessage.edit(self.common.mention(msg), embed);
+          warnMessage.edit(
+              {content: self.common.mention(msg), embeds: [embed]});
         }
         if (numTotal == 0) done();
       });
@@ -820,10 +853,12 @@ function SMLoader() {
      * Send the help message.
      *
      * @private
-     * @param {Discord~MessageEmbed} help THe message to send.
+     * @param {Discord~EmbedBuilder} help THe message to send.
      */
     function send(help) {
-      msg.author.send(help).catch((err) => {
+      const message =
+          typeof help === 'string' ? {content: help} : {embeds: [help]};
+      msg.author.send(message).catch((err) => {
         if (msg.guild !== null && !error) {
           error = true;
           self.common
