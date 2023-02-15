@@ -247,13 +247,13 @@ class HungryGames {
     const self = this;
     const getAll = function(members) {
       self.getAllPlayers(
-        members, [], false, [], opts.excludeNewUsers, [], (res) => {
-          self._games[guild.id] = new HungryGames.GuildGame(
-              self._parent.client.user.id, guild.id, opts,
-              `Hungry Games de ${guild.name}`, res);
-          cb(self._games[guild.id]);
-          self._parent._fire('create', guild.id);
-        });
+          members, [], false, [], opts.excludeNewUsers, [], (res) => {
+            self._games[guild.id] = new HungryGames.GuildGame(
+                self._parent.client.user.id, guild.id, opts,
+                `Hungry Games de ${guild.name}`, res);
+            cb(self._games[guild.id]);
+            self._parent._fire('create', guild.id);
+          });
     };
     if (guild.memberCount > 100) {
       opts.excludeNewUsers = true;
@@ -338,7 +338,7 @@ class HungryGames {
     const iTime = Date.now();
     const finalMembers = [];
     const self = this;
-    const memList = Array.isArray(members) ? members : members.array();
+    const memList = Array.isArray(members) ? members : [...members.values()];
     const large = memList.length >= HungryGames.largeServerCount;
     if (large || !Array.isArray(excluded)) excluded = [];
 
@@ -368,10 +368,9 @@ class HungryGames {
           (excluded && excluded.includes(obj.user.id) ||
            (excludeByDefault && included && !included.includes(obj.user.id))));
       if (toInclude) {
-        finalMembers.push(
-            new HungryGames.Player(
-                obj.id, obj.user.username,
-                obj.user.displayAvatarURL({format: 'png'}), obj.nickname));
+        finalMembers.push(new HungryGames.Player(
+            obj.id, obj.user.username,
+            obj.user.displayAvatarURL({extension: 'png'}), obj.nickname));
       }
     };
     let iTime2 = 0;

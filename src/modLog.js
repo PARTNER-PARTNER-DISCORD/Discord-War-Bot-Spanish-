@@ -31,16 +31,15 @@ class ModLog extends SubModule {
 
   /** @inheritdoc */
   initialize() {
-    this.command.on(
-        new this.command.SingleCommand(
-            ['setlogchannel', 'logchannel'], this._commandSetLogChannel, {
-              validOnlyInGuild: true,
-              defaultDisabled: true,
-              permissions: this.Discord.Permissions.FLAGS.MANAGE_ROLES |
-                  this.Discord.Permissions.FLAGS.MANAGE_GUILD |
-                  this.Discord.Permissions.FLAGS.BAN_MEMBERS |
-                  this.Discord.Permissions.FLAGS.KICK_MEMBERS,
-            }));
+    this.command.on(new this.command.SingleCommand(
+        ['setlogchannel', 'logchannel'], this._commandSetLogChannel, {
+          validOnlyInGuild: true,
+          defaultDisabled: true,
+          permissions: this.Discord.PermissionsBitField.Flags.ManageRoles |
+              this.Discord.PermissionsBitField.Flags.ManageGuild |
+              this.Discord.PermissionsBitField.Flags.BanMembers |
+              this.Discord.PermissionsBitField.Flags.KickMembers,
+        }));
 
     this.client.guilds.cache.forEach((g) => {
       this.common.readAndParse(
@@ -163,33 +162,33 @@ class ModLog extends SubModule {
   _actionColor(action) {
     switch (action) {
       case 'kick':
-        return 'ORANGE';
+        return 'Orange';
       case 'ban':
-        return 'RED';
+        return 'Red';
       case 'mute':
-        return 'YELLOW';
+        return 'Yellow';
       case 'warnAndMute':
-        return 'GOLD';
+        return 'Gold';
       case 'smite':
-        return 'DARK_GOLD';
+        return 'DarkGold';
       case 'mentionAbuse':
-        return 'DARK_PURPLE';
+        return 'DarkPurple';
       case 'messagePurge':
-        return 'BLUE';
+        return 'Blue';
       case 'messageDelete':
       case 'messageBotDelete':
-        return 'DARK_BLUE';
+        return 'DarkBlue';
       case 'messageUpdate':
       case 'messageBotUpdate':
-        return 'DARK_AQUA';
+        return 'DarkAqua';
       case 'memberJoin':
-        return 'GREEN';
+        return 'Green';
       case 'memberLeave':
-        return 'GREY';
+        return 'Grey';
       case 'lockdown':
-        return 'DARK_NAVY';
+        return 'DarkNavy';
       default:
-        return 'DEFAULT';
+        return 'Default';
     }
   }
 
@@ -214,29 +213,29 @@ class ModLog extends SubModule {
     if (!s.check(action)) return;
     const channel = guild.channels.resolve(s.channel);
     if (!channel) return;
-    const embed = new this.Discord.MessageEmbed();
+    const embed = new this.Discord.EmbedBuilder();
     embed.setTitle(this._actionString(action));
     embed.setColor(this._actionColor(action));
-    embed.setFooter(new Date().toString());
+    embed.setFooter({text: new Date().toString()});
     if (user) {
-      embed.setThumbnail(user.displayAvatarURL({size: 32, dynamic: true}));
-      embed.addField(user.tag, `<@${user.id}>\n${user.id}`, true);
+      embed.setThumbnail(user.displayAvatarURL({size: 32}));
+      embed.addFields([{name: user.tag, value: `<@${user.id}>\n${user.id}`}]);
     }
-    if (owner) embed.addField('Moderator', owner.tag, true);
+    if (owner) embed.addFields([{name: 'Moderator', value: owner.tag}]);
     if (message) {
       if (message2) {
-        embed.addField(message, message2, true);
+        embed.addFields([{name: message, value: message2}]);
       } else if (!user && !owner) {
         embed.setDescription(message);
       } else {
-        embed.addField('Additional', message, true);
+        embed.addFields([{name: 'Additional', value: message}]);
       }
     }
     for (let i = 0; i < msgs.length; i += 2) {
-      embed.addField(msgs[i], msgs[i + 1] || '\u200B', true);
+      embed.addFields([{name: msgs[i], value: msgs[i + 1] || '\u200B'}]);
     }
     embed.setTimestamp();
-    channel.send(embed);
+    channel.send({embeds: [embed]});
   }
 }
 

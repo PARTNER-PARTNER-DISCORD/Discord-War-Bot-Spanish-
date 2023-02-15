@@ -50,7 +50,7 @@ class SendVictorAction extends ChannelAction {
    * @param {HungryGames~Team} team The last team surviving.
    */
   _sendTeamVictor(hg, game, channel, team) {
-    const finalMessage = new hg._parent.Discord.MessageEmbed();
+    const finalMessage = new hg._parent.Discord.EmbedBuilder();
     finalMessage.setColor([255, 0, 255]);
     const teamName = team.name;
     const current = game.currentGame;
@@ -66,7 +66,7 @@ class SendVictorAction extends ChannelAction {
     }
     finalMessage.setDescription(teamPlayerList);
 
-    let winnerTag = '';
+    let winnerTag = '\u200B';
     if (game.options.mentionVictor) {
       winnerTag = team.players.filter((p) => !p.startsWith('NPC'))
           .map((p) => `<@${p}>`)
@@ -76,7 +76,7 @@ class SendVictorAction extends ChannelAction {
     const avatarSizes = game.options.victorAvatarSizes;
     const victorIconSize = avatarSizes.avatar;
     if (victorIconSize === 0) {
-      channel.send(winnerTag, finalMessage);
+      channel.send({content: winnerTag, embeds: [finalMessage]});
     } else {
       const iconGap = avatarSizes.gap;
       const underlineSize = avatarSizes.underline;
@@ -122,16 +122,19 @@ class SendVictorAction extends ChannelAction {
         }
         responses++;
         if (responses == team.players.length) {
-          finalImage.getBuffer(
-              Jimp.MIME_PNG, (err, out) => {
-                finalMessage.attachFiles(
-                    [new hg._parent.Discord.MessageAttachment(
-                        out, 'hgTeamVictor.png')]);
-                channel.send(winnerTag, finalMessage).catch((err) => {
+          finalImage.getBuffer(Jimp.MIME_PNG, (err, out) => {
+            channel
+                .send({
+                  content: winnerTag,
+                  embeds: [finalMessage],
+                  files: [new hg._parent.Discord.AttachmentBuilder(
+                      out, {name: 'hgTeamVictor.png'})],
+                })
+                .catch((err) => {
                   hg._parent.error('Error al enviar el mensaje de imagen del vencedor del equipo.');
                   console.error(err);
                 });
-              });
+          });
         }
       };
       team.players.forEach((player) => {
@@ -158,7 +161,7 @@ class SendVictorAction extends ChannelAction {
    * @param {?HungryGames~Team} team The last team surviving, if one.
    */
   _sendSoloVictor(hg, game, channel, p, team) {
-    const finalMessage = new hg._parent.Discord.MessageEmbed();
+    const finalMessage = new hg._parent.Discord.EmbedBuilder();
     finalMessage.setColor([255, 0, 255]);
     const current = game.currentGame;
     const name =
@@ -170,7 +173,7 @@ class SendVictorAction extends ChannelAction {
     let winnerTag = '';
     if (game.options.mentionVictor && !p.isNPC) winnerTag = `<@${p.id}>`;
     if (game.options.disableOutput) return;
-    channel.send(winnerTag, finalMessage).catch((err) => {
+    channel.send({content: winnerTag, embeds: [finalMessage]}).catch((err) => {
       hg._parent.error('Error al enviar el mensaje del ganador en solitario: ' + channel.id);
       console.error(err);
     });
@@ -183,13 +186,13 @@ class SendVictorAction extends ChannelAction {
    * @param {Discord~TextChannel} channel Channel to send the message.
    */
   _sendNoVictor(hg, game, channel) {
-    const finalMessage = new hg._parent.Discord.MessageEmbed();
+    const finalMessage = new hg._parent.Discord.EmbedBuilder();
     finalMessage.setColor([255, 0, 255]);
     const current = game.currentGame;
     finalMessage.setTitle(
         `¡Todos han muerto en ${current.name}!\n¡No hay ganadores!`);
     if (game.options.disableOutput) return;
-    channel.send('', finalMessage).catch((err) => {
+    channel.send({embeds: [finalMessage]}).catch((err) => {
       hg._parent.error('No se pudo enviar mensaje de ningún ganador: ' + channel.id);
       console.error(err);
     });

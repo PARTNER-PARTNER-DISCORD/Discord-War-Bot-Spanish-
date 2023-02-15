@@ -62,14 +62,14 @@ class SendStatusListAction extends ChannelAction {
       }
       const splitEmbeds = numTeamsToShow < 25 && game.options.teamSize > 0;
 
-      const finalMessage = new hg._parent.Discord.MessageEmbed();
+      const finalMessage = new hg._parent.Discord.EmbedBuilder();
       finalMessage.setColor([255, 0, 255]);
       const keys = [];
       if (showLiving) keys.push(`${emoji.redHeart}Vivo`);
       if (showWounded) keys.push(`${emoji.yellowHeart}Herido`);
       if (showRevived) keys.push(`${emoji.blueHeart}Revivido`);
       if (showDead) keys.push(`${emoji.skull}Muerto`);
-      if (keys.length > 0) finalMessage.setAuthor(keys.join(', '));
+      if (keys.length > 0) finalMessage.setAuthor({name: keys.join(', ')});
       let showKills = false;
       const statusList = playersToShow.map((obj) => {
         let myTeam = -1;
@@ -116,10 +116,12 @@ class SendStatusListAction extends ChannelAction {
         game.currentGame.teams.reverse().forEach((el, i) => {
           const index = game.currentGame.teams.length - i - 1;
           if (!numPerTeam[index]) return;
-          finalMessage.addField(
-              el.name,
-              statusList.splice(0, numPerTeam[index]).join('\n').slice(0, 1023),
-              true);
+          finalMessage.addFields([{
+            name: el.name,
+            value: statusList.splice(0, numPerTeam[index])
+                .join('\n')
+                .slice(0, 1023),
+          }]);
         });
       } else {
         if (game.options.teamSize == 0) {
@@ -147,13 +149,15 @@ class SendStatusListAction extends ChannelAction {
           for (let i = 0; i < numCols - 1; i++) {
             const thisMessage =
                 statusList.splice(0, quarterLength).join('\n').slice(0, 1024);
-            finalMessage.addField(
-                `${i * quarterLength + 1}-${(i + 1) * quarterLength}`,
-                thisMessage, true);
+            finalMessage.addFields([{
+              name: `${i * quarterLength + 1}-${(i + 1) * quarterLength}`,
+              value: thisMessage,
+            }]);
           }
-          finalMessage.addField(
-              `${(numCols - 1) * quarterLength + 1}-${numTotal}`,
-              statusList.join('\n').slice(0, 1024), true);
+          finalMessage.addFields([{
+            name: `${(numCols - 1) * quarterLength + 1}-${numTotal}`,
+            value: statusList.join('\n').slice(0, 1024),
+          }]);
         } else {
           finalMessage.setDescription(statusList.join('\n') || '...');
         }
@@ -172,10 +176,10 @@ class SendStatusListAction extends ChannelAction {
       if (numWholeTeams == 1) {
         const teamName = lastWholeTeam.name;
         finalMessage.setFooter(
-            hg.messages.get('teamRemaining', null, teamName));
+            {text: hg.messages.get('teamRemaining', null, teamName)});
       }
       if (game.options.disableOutput) return;
-      channel.send(finalMessage).catch((err) => {
+      channel.send({embeds: [finalMessage]}).catch((err) => {
         hg._parent.error('Error al enviar la lista de estado: ' + channel.id);
         console.error(err);
       });

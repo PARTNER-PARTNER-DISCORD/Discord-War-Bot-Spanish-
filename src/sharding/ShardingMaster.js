@@ -1274,7 +1274,6 @@ class ShardingMaster {
       done();
       console.log(dbg);
     }
-    
     if (script.startsWith('this.runBotUpdate(')) this._runBotUpdate();
   }
 
@@ -1355,7 +1354,7 @@ class ShardingMaster {
    *     or object with both filename and last modified time.
    * @param {Function} cb Callback with optional error argument.
    */
-  _sendSlaveFile(socket, filename, cb) {
+  _sendSlaveFile(socket, req, cb) {
     if (typeof socket === 'number' && !isNaN(socket)) {
       const shardInfo = this._getShardById(socket);
       if (!shardInfo || !shardInfo.id) {
@@ -1385,7 +1384,7 @@ class ShardingMaster {
       const res = {filename: filename, mtime: 1};
       if (err) {
         if (err.code === 'ENOENT') {
-          socket.emit('writeFile', filename, null, (err) => {
+          socket.emit('writeFile', res, null, (err) => {
             if (err) {
               common.error(`Failed to unlink file on slave: ${file}`);
               console.error(err);
@@ -1417,7 +1416,6 @@ class ShardingMaster {
         });
         return;
       }
-      
       fs.readFile(filename, (err, data) => {
         if (err) {
           if (err.code === 'ENOENT') {

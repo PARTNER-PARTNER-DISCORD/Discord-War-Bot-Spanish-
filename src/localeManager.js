@@ -1,4 +1,4 @@
-// Copyright 2019-2020 Campbell Crowley. All rights reserved.
+// Copyright 2019-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const fs = require('fs');
 const SubModule = require('./subModule.js');
@@ -76,7 +76,7 @@ class LocaleManager extends SubModule {
             this._commandLanguage, {
               validOnlyInGuild: true,
               defaultDisabled: true,
-              permissions: this.Discord.Permissions.FLAGS.MANAGE_GUILD,
+              permissions: this.Discord.PermissionsBitField.Flags.ManageGuild,
             }));
 
     this.client.guilds.cache.forEach((g) => {
@@ -258,8 +258,8 @@ class LocaleManager extends SubModule {
       this._strings.reply(this.common, msg, 'title', 'invalidLocale');
       return;
     }
-    const desc = msg.channel.permissionsFor(msg.guild.me)
-        .has(this.Discord.Permissions.FLAGS.ADD_REACTIONS) ?
+    const desc = msg.channel.permissionsFor(msg.guild.members.me)
+        .has(this.Discord.PermissionsBitField.Flags.AddReactions) ?
         'fillOne' :
         'confirmLocaleReact';
     const emoji = '✅';
@@ -267,17 +267,16 @@ class LocaleManager extends SubModule {
         this.common, msg, 'confirmLocale', desc, locale, emoji);
     p.then((msg_) => {
       msg_.react(emoji);
-      msg_.awaitReactions(
-          (reaction, user) =>
-            user.id === msg.author.id && reaction.emoji.name === emoji,
-          {max: 1, time: 30 * 1000})
+      const filter = (reaction, user) =>
+        user.id === msg.author.id && reaction.emoji.name === emoji;
+      msg_.awaitReactions({filter, max: 1, time: 30 * 1000})
           .then((reactions) => {
             if (reactions.size === 0) {
-              msg_.edit('Timed out');
+              msg_.edit({content: 'Timed out'});
               msg_.reactions.removeAll().catch(() => {});
               return;
             }
-            msg_.edit('Confirmed');
+            msg_.edit({content: 'Confirmed'});
             msg_.reactions.removeAll().catch(() => {});
             this.changeLocale(msg.guild.id, locale);
           });

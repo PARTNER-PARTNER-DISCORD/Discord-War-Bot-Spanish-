@@ -1,8 +1,8 @@
-// Copyright 2018-2020 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const emojiChecker = require('./lib/twemojiChcker.js');
 const childProcess = require('child_process');
-const dateFormat = require('dateformat');
+const dateFormat = require('date-format');
 const algebra = require('algebra.js');
 const mathjs = require('mathjs');
 const Jimp = require('jimp');
@@ -285,9 +285,9 @@ function Main() {
     const adminOnlyOpts = new self.command.CommandSetting({
       validOnlyInGuild: true,
       defaultDisabled: true,
-      permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-          self.Discord.Permissions.FLAGS.MANAGE_GUILD |
-          self.Discord.Permissions.FLAGS.BAN_MEMBERS,
+      permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+          self.Discord.PermissionsBitField.Flags.ManageGuild |
+          self.Discord.PermissionsBitField.Flags.BanMembers,
     });
 
     self.command.on(['addme', 'invite'], commandAddMe);
@@ -310,13 +310,13 @@ function Main() {
         new self.command.SingleCommand(['purge', 'prune'], commandPurge, {
           validOnlyInGuild: true,
           defaultDisabled: true,
-          permissions: self.Discord.Permissions.FLAGS.MANAGE_MESSAGES,
+          permissions: self.Discord.PermissionsBitField.Flags.ManageMessages,
         }));
     self.command.on(
         new self.command.SingleCommand(['ban', 'fuckyou'], commandBan, {
           validOnlyInGuild: true,
           defaultDisabled: true,
-          permissions: self.Discord.Permissions.FLAGS.BAN_MEMBERS,
+          permissions: self.Discord.PermissionsBitField.Flags.BanMembers,
         }));
     self.command.on(['profile', 'avatar'], commandAvatar);
     self.command.on('ping', commandPing);
@@ -350,13 +350,14 @@ function Main() {
 
 
     self.client.on('debug', onDebug);
-    self.client.on('rateLimit', onRateLimit);
     self.client.on('warn', onWarn);
     self.client.on('error', onError);
     self.client.on('guildCreate', onGuildCreate);
     self.client.on('guildDelete', onGuildDelete);
     self.client.on('guildBanAdd', onGuildBanAdd);
-    self.client.on('message', onMessage);
+    self.client.on('messageCreate', onMessage);
+
+    self.client.rest.on('rateLimited', onRateLimit);
 
     // Catch reasons for exiting in order to save first.
     if (self.client.shard) {
@@ -395,7 +396,7 @@ function Main() {
     });
 
     // Format help message into rich embed.
-    const tmpHelp = new self.Discord.MessageEmbed();
+    const tmpHelp = new self.Discord.EmbedBuilder();
     tmpHelp.setTitle(
         helpObject.title.replaceAll('{prefix}', self.bot.getPrefix()));
     tmpHelp.setURL(self.common.webURL);
@@ -404,8 +405,10 @@ function Main() {
     helpObject.sections.forEach(function(obj) {
       const titleID = encodeURIComponent(obj.title.replace(/\s/g, '_'));
       const titleURL = `${self.common.webHelp}#${titleID} `;
-      tmpHelp.addField(
-          obj.title, titleURL + '```js\n' +
+      tmpHelp.addFields([
+        {
+          name: obj.title,
+          value: titleURL + '```js\n' +
               obj.rows
                   .map((row) => {
                     if (typeof row === 'string') {
@@ -422,17 +425,19 @@ function Main() {
                   })
                   .join('\n') +
               '\n```',
-          true);
+        },
+      ]);
     });
-    tmpHelp.setFooter(
-        'Note: If a custom prefix is being used, replace `' +
-        self.bot.getPrefix() +
-        '` with the custom prefix.\nNote 2: Custom prefixes will not have a ' +
-        'space after them.');
+    tmpHelp.setFooter({
+      text: 'Note: If a custom prefix is being used, replace `' +
+          self.bot.getPrefix() +
+          '` with the custom prefix.\nNote 2: Custom prefixes will not have ' +
+          'a space after them.',
+    });
     self.helpMessage = tmpHelp;
 
     // Format admin help message into rich embed.
-    const tmpAdminHelp = new self.Discord.MessageEmbed();
+    const tmpAdminHelp = new self.Discord.EmbedBuilder();
     tmpAdminHelp.setTitle(
         adminHelpObject.title.replaceAll('{prefix}', self.bot.getPrefix()));
     tmpAdminHelp.setURL(self.common.webURL);
@@ -442,8 +447,10 @@ function Main() {
     adminHelpObject.sections.forEach(function(obj) {
       const titleID = encodeURIComponent(obj.title.replace(/\s/g, '_'));
       const titleURL = `${self.common.webHelp}#${titleID} `;
-      tmpAdminHelp.addField(
-          obj.title, titleURL + '```js\n' +
+      tmpAdminHelp.addFields([
+        {
+          name: obj.title,
+          value: titleURL + '```js\n' +
               obj.rows
                   .map((row) => {
                     if (typeof row === 'string') {
@@ -460,13 +467,15 @@ function Main() {
                   })
                   .join('\n') +
               '\n```',
-          true);
+        },
+      ]);
     });
-    tmpAdminHelp.setFooter(
-        'Note: If a custom prefix is being used, replace `' +
-        self.bot.getPrefix() +
-        '` with the custom prefix.\nNote 2: Custom prefixes will not have a ' +
-        'space after them.');
+    tmpAdminHelp.setFooter({
+      text: 'Note: If a custom prefix is being used, replace `' +
+          self.bot.getPrefix() +
+          '` with the custom prefix.\nNote 2: Custom prefixes will not have ' +
+          'a space after them.',
+    });
     self.helpMessage = [self.helpMessage, tmpAdminHelp];
 
     if (self.client.shard) {
@@ -482,7 +491,8 @@ function Main() {
         /* eslint-enable no-unused-vars */
         if (newNum < this.riggedCounter && !isNaN(this.riggedCounter * 1)) {
           this.shard.broadcastEval(
-              'this.updateRiggedCounter(' + this.riggedCounter + ')');
+              eval(`((client) => client.updateRiggedCounter(${
+                this.riggedCounter}))`));
         } else if (!isNaN(newNum * 1)) {
           this.riggedCounter = newNum;
         }
@@ -558,7 +568,7 @@ function Main() {
        * @returns {number} This shard's ID.
        */
       self.client.runBotUpdate = (cmd) => {
-        runBotUpdate({content: cmd});
+        runBotUpdate({content: decodeURIComponent(cmd)});
         return self.client.shard.ids[0];
       };
       /* eslint-enable no-unused-vars */
@@ -615,7 +625,7 @@ function Main() {
     self.client.removeListener('guildCreate', onGuildCreate);
     self.client.removeListener('guildDelete', onGuildDelete);
     self.client.removeListener('guildBanAdd', onGuildBanAdd);
-    self.client.removeListener('message', onMessage);
+    self.client.removeListener('messageCreate', onMessage);
 
     if (self.client.shard) {
       process.removeListener('message', shardMessage);
@@ -765,7 +775,7 @@ function Main() {
         if (val.type == 'text') {
           const perms = val.permissionsFor(self.client.user);
           if ((pos == -1 || val.position < pos) && perms &&
-              perms.has(self.Discord.Permissions.FLAGS.SEND_MESSAGES)) {
+              perms.has(self.Discord.PermissionsBitField.Flags.SendMessages)) {
             pos = val.position;
             channel = val;
           }
@@ -777,9 +787,10 @@ function Main() {
             'available channel: ' + guild.id);
         return;
       }
-      channel.send(
-          introduction.replaceAll('{prefix}', self.bot.getPrefix(guild))
-              .replaceAll('{username}', self.client.user.username));
+      channel.send({
+        content: introduction.replaceAll('{prefix}', self.bot.getPrefix(guild))
+            .replaceAll('{username}', self.client.user.username),
+      });
     } catch (err) {
       self.error('Failed to send welcome to guild:' + guild.id);
       console.log(err);
@@ -807,8 +818,8 @@ function Main() {
   function onGuildBanAdd(guild, user) {
     if (user.id == self.client.user.id) return;
     if (disabledBanMessage[guild.id]) return;
-    if (!guild.me.hasPermission(
-        self.Discord.Permissions.FLAGS.VIEW_AUDIT_LOG)) {
+    if (!guild.members.me.permissions.has(
+        self.Discord.PermissionsBitField.Flags.ViewAuditLog)) {
       return;
     }
     const modLog = self.bot.getSubmodule('./modLog.js');
@@ -943,23 +954,16 @@ function Main() {
                 'Rigged count: ' + self.client.riggedCounter + ' + ' +
                 matchCount + ': ' + msg.content.replace(/\n/g, '\\n'));
           }
-          // Disabled multple because people were spamming it.
-          /* if (false && matchCount > 1) {
-            msg.channel
-                .send(
-                    '#' + (startCount + 1) + ' - ' +
-                    (self.client.riggedCounter += matchCount))
-                .catch(() => {});
-          } else { */
           self.client.riggedCounter++;
           if (!disabledRiggedCounter[msg.guild.id]) {
-            msg.channel.send(`#${self.client.riggedCounter}`).catch(() => {});
+            msg.channel.send({content: `#${self.client.riggedCounter}`})
+                .catch(() => {});
           }
           // }
           if (self.client.shard) {
             self.client.shard.broadcastEval(
-                'this.updateRiggedCounter(' + self.client.riggedCounter + ',' +
-                matchCount + ')');
+                eval(`((client) => client.updateRiggedCounter(${
+                  self.client.riggedCounter}, ${matchCount}))`));
           }
         }
       }
@@ -974,9 +978,7 @@ function Main() {
               .awaitMessages(
                   (m) => m.author.id === dadId,
                   {max: 1, time: 10000, errors: ['time']})
-              .then(() => {
-                msg.channel.send('Hi Dad, I\'m Spikey!');
-              })
+              .then(() => msg.channel.send({content: 'Hi Dad, I\'m Spikey!'}))
               .catch(() => {});
         }
       }
@@ -1021,21 +1023,23 @@ function Main() {
               });
               member.guild.channels.cache.forEach(function(channel) {
                 if (channel.permissionsLocked) return;
-                const overwrites = channel.permissionOverwrites.get(role.id);
+                const overwrites =
+                    channel.permissionOverwrites.resolve(role.id);
                 if (overwrites) {
-                  if (channel.type == 'category') {
-                    if (overwrites.deny.has(
-                        self.Discord.Permissions.FLAGS.MENTION_EVERYONE)) {
+                  if (channel.type == 'GUILD_CATEGORY') {
+                    if (overwrites.deny.has(self.Discord.PermissionsBitField
+                        .Flags.MentionEveryone)) {
                       return;
                     }
-                  } else if (channel.type == 'text') {
-                    if (overwrites.deny.has(
-                        self.Discord.Permissions.FLAGS.MENTION_EVERYONE)) {
+                  } else if (channel.type == 'GUILD_TEXT') {
+                    if (overwrites.deny.has(self.Discord.PermissionsBitField
+                        .Flags.MentionEveryone)) {
                       return;
                     }
                   }
                 }
-                channel.updateOverwrite(role, {MENTION_EVERYONE: false})
+                channel.permissionOverwrites
+                    .edit(role, {MENTION_EVERYONE: false})
                     .catch(console.error);
               });
             } catch (err) {
@@ -1070,7 +1074,8 @@ function Main() {
             mute(muteRole, toMute);
           }
         } else if (count > 3) {
-          msg.channel.send(self.common.mention(msg) + ' Please stop.');
+          msg.channel.send(
+              {content: self.common.mention(msg) + ' Please stop.'});
         }
       }
     }
@@ -1358,7 +1363,8 @@ function Main() {
         ypVal = xVal.map((x) => exprSlope.evaluate({x: x}));
       } catch (err) {
         // console.error(err);
-        msg.channel.send('Failed to derive given equation. ' + err.message);
+        msg.channel.send(
+            {content: 'Failed to derive given equation. ' + err.message});
         return;
       }
     } catch (err) {
@@ -1410,20 +1416,22 @@ function Main() {
       expression = 'y = ' + simplify(expMatch[1]);
     }
     finalImage.getBuffer(Jimp.MIME_PNG, (err, out) => {
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('Graph of ' + expression);
       embed.setDescription(
           'Plot Domain: [' + domainMin + ', ' + domainMax + ']\nPlot Range: [' +
           minY + ', ' + maxY + ']');
-      embed.attachFiles([new self.Discord.MessageAttachment(out, 'graph.png')]);
       embed.setColor([255, 255, 255]);
       if (turningPoints.length > 0) {
-        embed.addField(
-            'Approximate Turning Points',
-            turningPoints.map((obj) => `(${obj.x}, ${obj.y})`).join('\n'),
-            false);
+        embed.addFields([{
+          name: 'Approximate Turning Points',
+          value: turningPoints.map((obj) => `(${obj.x}, ${obj.y})`).join('\n'),
+        }]);
       }
-      msg.channel.send(embed);
+      msg.channel.send({
+        embeds: [embed],
+        files: [new self.Discord.AttachmentBuilder(out, {name: 'graph.png'})],
+      });
     });
   }
   /**
@@ -1463,13 +1471,14 @@ function Main() {
     const perms = msg.channel.permissionsFor &&
         msg.channel.permissionsFor(self.client.user);
     const time = mention.createdAt;
-    if (!perms || perms.has('EMBED_LINKS')) {
-      const embed = new self.Discord.MessageEmbed();
+    if (!perms ||
+        perms.has(self.Discord.PermissionsBitField.Flags.EmbedLinks)) {
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('Account create date');
       embed.setColor([255, 0, 255]);
       embed.setDescription(`<@${mention.id}>: ${time.toUTCString()}`);
       embed.setTimestamp(time);
-      msg.channel.send(`<@${msg.author.id}>`, embed);
+      msg.channel.send({content: `<@${msg.author.id}>`, embeds: [embed]});
     } else {
       self.common.reply(
           msg, `${mention.tag} created ${time.toUTCString()}`, mention.id);
@@ -1492,13 +1501,15 @@ function Main() {
       const perms = msg.channel.permissionsFor &&
           msg.channel.permissionsFor(self.client.user);
       const time = member.joinedAt;
-      if (!perms || perms.has('EMBED_LINKS')) {
-        const embed = new self.Discord.MessageEmbed();
+      if (!perms ||
+          perms.has(self.Discord.PermissionsBitField.Flags.EmbedLinks)) {
+        const embed = new self.Discord.EmbedBuilder();
         embed.setTitle('Server join date');
         embed.setColor([255, 0, 255]);
         embed.setDescription(`<@${member.id}>: ${time.toUTCString()}`);
         embed.setTimestamp(time);
-        return msg.channel.send(`<@${msg.author.id}>`, embed);
+        return msg.channel.send(
+            {content: `<@${msg.author.id}>`, embeds: [embed]});
       } else {
         return self.common.reply(
             msg, `${member.tag} joined ${time.toUTCString()}`, member.id);
@@ -1540,8 +1551,9 @@ function Main() {
     const banner = guild.banner && guild.bannerURL();
     const splash = guild.splash && guild.splashURL();
     const vanity = guild.vanityURLCode;
-    if (!perms || perms.has('EMBED_LINKS')) {
-      const embed = new self.Discord.MessageEmbed();
+    if (!perms ||
+        perms.has(self.Discord.PermissionsBitField.Flags.EmbedLinks)) {
+      const embed = new self.Discord.EmbedBuilder();
       embed.setColor([255, 0, 255]);
       embed.setTitle(guild.name);
       if (splash) {
@@ -1551,42 +1563,44 @@ function Main() {
       }
       if (icon) embed.setThumbnail(icon);
       if (guild.description) embed.setDescription(guild.description);
-      embed.addField(
-          'Numbers', 'Members: ' + guild.memberCount + '\nChannels: ' +
-              guild.channels.cache.size + '+\nRoles: ' +
-              guild.roles.cache.size + '+\nEmojis: ' + guild.emojis.cache.size +
-              '+',
-          true);
-      if (!guild.ownerID) {
-        embed.addField(
-            'Server',
-            'ID: ' + guild.id + '\nCreated: ' + guild.createdAt.toUTCString() +
-                '\nOwner: _Unknown_\nRegion: ' + guild.region +
-                '\nVerification: ' + guild.verificationLevel + ' (' +
-                guild.verified + ')\nPartnered: ' + guild.partnered,
-            true);
+      embed.addFields([{
+        name: 'Numbers',
+        value: 'Members: ' + guild.memberCount + '\nChannels: ' +
+            guild.channels.cache.size + '+\nRoles: ' + guild.roles.cache.size +
+            '+\nEmojis: ' + guild.emojis.cache.size + '+',
+      }]);
+      if (!guild.ownerId) {
+        embed.addFields([{
+          name: 'Server',
+          value: 'ID: ' + guild.id +
+              '\nCreated: ' + guild.createdAt.toUTCString() +
+              '\nOwner: _Unknown_\nVerification: ' + guild.verificationLevel +
+              ' (' + guild.verified + ')\nPartnered: ' + guild.partnered,
+        }]);
       } else {
-        embed.addField(
-            'Server',
-            'ID: ' + guild.id + '\nCreated: ' + guild.createdAt.toUTCString() +
-                '\nOwner: <@' + guild.ownerID + '>\nRegion: ' + guild.region +
-                '\nVerification: ' + guild.verificationLevel + ' (' +
-                guild.verified + ')\nPartnered: ' + guild.partnered,
-            true);
+        embed.addFields([{
+          name: 'Server',
+          value: 'ID: ' + guild.id +
+              '\nCreated: ' + guild.createdAt.toUTCString() + '\nOwner: <@' +
+              guild.ownerId + '>' +
+              '\nVerification: ' + guild.verificationLevel + ' (' +
+              guild.verified + ')\nPartnered: ' + guild.partnered,
+        }]);
       }
-      embed.addField(
-          'Links', ((icon ? `Icon: ${icon}\n` : '') +
-                    (banner ? `Banner: ${banner}\n` : '') +
-                    (splash ? `Splash: ${splash}\n` : '') +
-                    (vanity ? `Vanity: discord.gg/${vanity}\n` : '')) ||
-              '*None*',
-          true);
+      embed.addFields([{
+        name: 'Links',
+        value: ((icon ? `Icon: ${icon}\n` : '') +
+                (banner ? `Banner: ${banner}\n` : '') +
+                (splash ? `Splash: ${splash}\n` : '') +
+                (vanity ? `Vanity: discord.gg/${vanity}\n` : '')) ||
+            '*None*',
+      }]);
       if (guild.shard) {
-        embed.setFooter(`Shard #${guild.shard.id} / ${self.bot.fqdn}`);
+        embed.setFooter({text: `Shard #${guild.shard.id} / ${self.bot.fqdn}`});
       } else {
-        embed.setFooter(`${self.bot.fqdn}`);
+        embed.setFooter({text: `${self.bot.fqdn}`});
       }
-      msg.channel.send(`<@${msg.author.id}>`, embed);
+      msg.channel.send({content: `<@${msg.author.id}>`, embeds: [embed]});
     } else {
       self.common.reply(
           msg, 'Please allow me to embed links to use this command here.');
@@ -1607,7 +1621,7 @@ function Main() {
   function commandEmoji(msg) {
     const embeddable = (!msg.channel.permissionsFor) ||
         msg.channel.permissionsFor(self.client.user)
-            .has(self.Discord.Permissions.FLAGS.EMBED_LINKS);
+            .has(self.Discord.PermissionsBitField.Flags.EmbedLinks);
 
     const unicode = emojiChecker.match(msg.content);
     const unicodeList = unicode && unicode.map((el) => {
@@ -1629,7 +1643,7 @@ function Main() {
             msg, 'No emojis specified',
             'Please type an emoji after the command.');
       } else if (embeddable) {
-        const embed = new self.Discord.MessageEmbed();
+        const embed = new self.Discord.EmbedBuilder();
         embed.setColor([255, 0, 255]);
         if (total == 1) {
           embed.setTitle('Emoji');
@@ -1643,7 +1657,7 @@ function Main() {
                   '\nIt\'s probably not from a server that I am in.' +
                   '\n\nBut here\'s the url: https://cdn.discordapp.com/emojis/' +
                   emojiIds[0]);
-              embed.setFooter(`${emojiText[0]} ${emojiIds[0]}`);
+              embed.setFooter({text: `${emojiText[0]} ${emojiIds[0]}`});
             } else {
               const toString =
                   `<${emoji.animated?'a':''}:${emoji.name}:${emoji.id||''}>`;
@@ -1652,7 +1666,7 @@ function Main() {
                   emoji.guildName || 'unknown server';
               embed.setDescription(`${toString} from ${gName}`);
               embed.setURL(emoji.url);
-              if (emoji.id) embed.setFooter(emoji.id);
+              if (emoji.id) embed.setFooter({text: emoji.id});
               const infoRows = [];
               infoRows.push(`Name: ${emoji.name}`);
               infoRows.push(`Formatted: \\${toString}`);
@@ -1660,7 +1674,7 @@ function Main() {
               infoRows.push(`Managed: ${emoji.managed}`);
               infoRows.push(`Requires Colons: ${emoji.requiresColons}`);
               infoRows.push(`URL: ${emoji.url}`);
-              embed.addField('Info', infoRows.join('\n'), true);
+              embed.addFields([{name: 'Info', value: infoRows.join('\n')}]);
             }
           } else {
             const emoji = unicodeList[0];
@@ -1670,21 +1684,23 @@ function Main() {
                   'strange, there isn\'t much to know about that one..');
             } else {
               embed.setDescription(emoji);
-              embed.setFooter('Unicode Emoji');
+              embed.setFooter({text: 'Unicode Emoji'});
             }
           }
         } else {
           embed.setTitle('Emojis');
           if (unicodeList.length > 0) {
-            embed.addField('Unicode Emojis', unicodeList.join('\n'), true);
+            embed.addFields(
+                [{name: 'Unicode Emojis', value: unicodeList.join('\n')}]);
           }
           if (emojis.length > 0) {
             const list = emojiText.map(
                 (el, i) => `${el}: ${emojis[i] && emojis[i].url || 'Unknown'}`);
-            embed.addField('Discord Emojis', list, true);
+            embed.addFields([{name: 'Discord Emojis', value: list}]);
           }
         }
-        msg.channel.send(self.common.mention(msg), embed).catch(console.error);
+        msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+            .catch(console.error);
       } else {
         const emojiList = emojis.map((el) => `${el.toString()}:${el.url}`);
         self.common.reply(
@@ -1694,15 +1710,18 @@ function Main() {
     };
 
     if (self.client.shard && emojiIds.length > 0) {
-      const toSend = JSON.stringify(emojiIds) +
-          '.map((el)=>this.emojis.resolve(el))' +
-          '.filter((el)=>el)' +
-          '.map((el)=>{el.guildName=el.guild.name;return JSON.stringify(el);})';
-      self.client.shard.broadcastEval(toSend)
+      self.client.shard
+          .broadcastEval(eval(`((client) => ${
+            JSON.stringify(emojiIds)}.map((el) => client.emojis.resolve(el))
+                      .filter((el) => el)
+                      .map((el) => {
+                        el.guildName = el.guild.name;
+                        return el;
+                      }))`))
           .then((res) => {
             res.forEach((el) => {
-              if (!el) return;
-              el.forEach((emoji) => emojis.push(JSON.parse(emoji)));
+              if (!el || !el.length) return;
+              el.forEach((emoji) => emojis.push(emoji));
             });
             finalSend();
           })
@@ -1727,9 +1746,10 @@ function Main() {
    */
   function commandPmMe(msg) {
     msg.author
-        .send(
-            introduction.replaceAll('{prefix}', msg.prefix)
-                .replaceAll('{username}', self.client.user.username))
+        .send({
+          content: introduction.replaceAll('{prefix}', msg.prefix)
+              .replaceAll('{username}', self.client.user.username),
+        })
         .then(() => {
           if (msg.guild !== null) {
             self.common.reply(msg, 'I sent you a message.', ':wink:');
@@ -1758,7 +1778,9 @@ function Main() {
     }
     self.client.users.fetch(self.common.spikeyId)
         .then((user) => {
-          user.send(msg.author.id + ': ' + msg.author.tag + ': ' + msg.content)
+          user.send({
+            content: msg.author.id + ': ' + msg.author.tag + ': ' + msg.content,
+          })
               .then(() => {
                 if (user.presence.status === 'offline') {
                   self.common.reply(
@@ -1793,9 +1815,9 @@ function Main() {
         msg.author.id == '126464376059330562') {
       if (msg.guild !== null) msg.delete();
       if (msg.mentions.users.size === 0) return;
-      msg.mentions.users.first().send(msg.text);
+      msg.mentions.users.first().send({content: msg.text});
       self.client.users.fetch(self.common.spikeyId).then((user) => {
-        user.send(msg.author.tag + ': ' + msg.content);
+        user.send({content: msg.author.tag + ': ' + msg.content});
       });
     }
   }
@@ -1851,9 +1873,10 @@ function Main() {
      * @param {string} message The message to send to the user.
      */
     function sendPm(msg, user, message) {
-      user.send(
-          msg.author.tag + ' has asked me to send you this message:\n' +
-              message)
+      user.send({
+        content: msg.author.tag +
+                ' has asked me to send you this message:\n' + message,
+      })
           .then(() => {
             self.common.reply(
                 msg, 'Message sent to ' + user.tag, msg.author.tag +
@@ -1888,9 +1911,9 @@ function Main() {
         url = 'https://www.spikeybot.com/tails.png';
         text = 'Tails!';
       }
-      const embed = new self.Discord.MessageEmbed({title: text});
+      const embed = new self.Discord.EmbedBuilder({title: text});
       embed.setImage(url);
-      msg.channel.send(embed).catch(() => {
+      msg.channel.send({embeds: [embed]}).catch(() => {
         self.common.reply(
             msg, 'Failed to send reply.',
             'Am I able to embed images and links?');
@@ -1908,13 +1931,15 @@ function Main() {
       }
       const p = numH / num;
       const percent = Math.round(p * 10000) / 100;
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle(`Flipped ${num} coins`);
       embed.setColor([p * 255, 0, (1 - p) * 255]);
       embed.setDescription(outList.join(''));
-      embed.setFooter(
-          `${percent}% Heads, ${numH} Heads, ${num-numH} Tails, ${num} Total`);
-      msg.channel.send(embed).catch(() => {
+      embed.setFooter({
+        text: `${percent}% Heads, ${numH} Heads, ${num - numH} Tails, ${
+          num} Total`,
+      });
+      msg.channel.send({embeds: [embed]}).catch(() => {
         self.common.reply(
             msg, 'Failed to send reply.',
             'Am I able to embed images and links?');
@@ -1931,7 +1956,7 @@ function Main() {
    */
   function commandPurge(msg) {
     if (!msg.channel.permissionsFor(self.client.user)
-        .has(self.Discord.Permissions.FLAGS.MANAGE_MESSAGES)) {
+        .has(self.Discord.PermissionsBitField.Flags.ManageMessages)) {
       self.common
           .reply(
               msg,
@@ -1965,10 +1990,13 @@ function Main() {
             .then(() => {
               self.common
                   .reply(
-                      msg, 'Deleted ' + num + ' messages by ' +
+                      msg,
+                      'Deleted ' + num + ' messages by ' +
                           msg.mentions.users.map((obj) => obj.username)
                               .join(', '))
-                  .then((msg_) => msg_.delete({timeout: 5000}));
+                  .then(
+                      (msg_) => setTimeout(
+                          () => msg_.delete().catch(() => {}), 5000));
             })
             .catch((err) => {
               self.common.reply(
@@ -2000,8 +2028,8 @@ function Main() {
    * @listens Command#fuckyou
    */
   function commandBan(msg) {
-    if (!msg.guild.me.hasPermission(
-        self.Discord.Permissions.FLAGS.BAN_MEMBERS)) {
+    if (!msg.guild.members.me.permissoins.has(
+        self.Discord.PermissionsBitField.Flags.BanMembers)) {
       self.common.reply(
           msg, 'Failed', 'I do not have permission to ban members.');
       return;
@@ -2041,7 +2069,7 @@ function Main() {
             .trim();
     if (reason == 'undefined') reason = null;
     banList.forEach((toBan) => {
-      if (msg.guild.ownerID !== msg.author.id &&
+      if (msg.guild.ownerId !== msg.author.id &&
           msg.member.roles.highest.comparePositionTo(toBan.roles.highest) <=
               0) {
         self.common
@@ -2050,7 +2078,7 @@ function Main() {
                     '! You are not stronger than them!')
             .catch(() => {});
       } else {
-        const me = msg.guild.me;
+        const me = msg.guild.members.me;
         const myRole = me.roles.highest;
         const highest = toBan.roles.highest;
 
@@ -2095,17 +2123,16 @@ function Main() {
    * @listens Command#avatar
    */
   function commandAvatar(msg) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     if (msg.mentions.users.size > 0) {
       embed.setDescription(
           msg.mentions.users.first().username + '\'s profile picture');
-      embed.setImage(msg.mentions.users.first().displayAvatarURL(
-          {size: 2048, dynamic: true}));
+      embed.setImage(msg.mentions.users.first().displayAvatarURL({size: 2048}));
     } else {
       embed.setDescription(msg.author.username + '\'s profile picture');
-      embed.setImage(msg.author.displayAvatarURL({size: 2048, dynamic: true}));
+      embed.setImage(msg.author.displayAvatarURL({size: 2048}));
     }
-    msg.channel.send(embed);
+    msg.channel.send({embeds: [embed]});
   }
 
   /**
@@ -2168,10 +2195,6 @@ function Main() {
         }
         graph[r] = graph[r].join('');
       }
-      /* const dfmt = 'mmm-dd HH:MM Z';
-      graph[rows] = '    ' + dateFormat(pingHistory[0].time, dfmt) +
-          '       --->       ' +
-          dateFormat(pingHistory[pingHistory.length - 1].time, dfmt); */
     }
 
     const finalGraph = '24 hour history ```' + graph.join('\n') + '```';
@@ -2271,7 +2294,7 @@ function Main() {
    * @listens Command#d
    */
   function commandRollDie(msg) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
 
     let numbers = msg.text.split(/\s+/).splice(1);
     let allSame = true;
@@ -2322,7 +2345,7 @@ function Main() {
 
     if (numbers.length > 500) {
       embed.setTitle('Sorry, but you may only roll at most 500 dice.');
-      msg.channel.send(self.common.mention(msg), embed);
+      msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
       return;
     }
 
@@ -2390,27 +2413,30 @@ function Main() {
           10;
       if (outList.length > 3) {
         const finalMode = mode ? `, Mode: ${mode}` : '';
-        embed.setFooter(
-            `Sum: ${sum}, Max: ${max}, Min: ${min}, ` +
-            `Mean: ${mean}, Median: ${median}${finalMode}`);
+        embed.setFooter({
+          text: `Sum: ${sum}, Max: ${max}, Min: ${min}, ` +
+              `Mean: ${mean}, Median: ${median}${finalMode}`,
+        });
       } else if (outList.length > 2) {
-        embed.setFooter(`Sum: ${sum}, Avg: ${mean}`);
+        embed.setFooter({text: `Sum: ${sum}, Avg: ${mean}`});
       } else {
-        embed.setFooter(`Sum: ${sum}`);
+        embed.setFooter({text: `Sum: ${sum}`});
       }
     } else {
       embed.setDescription(`Rolled: ${outcomes[0]}`);
     }
 
-    msg.channel.send(self.common.mention(msg), embed).catch((e) => {
-      if (e.code == 50035) {
-        self.common.reply(
-            msg, 'Oops! I wasn\'t able to fit all of the outcomes ' +
-                'into a message.\nPlease try again with fewer dice.');
-      } else {
-        console.error(e);
-      }
-    });
+    msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
+        .catch((e) => {
+          if (e.code == 50035) {
+            self.common.reply(
+                msg,
+                'Oops! I wasn\'t able to fit all of the outcomes ' +
+                    'into a message.\nPlease try again with fewer dice.');
+          } else {
+            console.error(e);
+          }
+        });
   }
 
   /**
@@ -2439,28 +2465,36 @@ function Main() {
       author = mem && mem.user;
       if (!guild) {
         if (self.client.shard) {
-          const toEval = `this.fetchPerms('${id}', '${id2}')`;
-          self.client.shard.broadcastEval(toEval).then((res) => {
-            const index = res.findIndex((el) => el);
-            const match = res[index];
-            if (!match) {
-              self.common.reply(
-                  msg, 'Failed to find channel or guild with that ID.',
-                  msg.text);
-              return;
-            }
-            const cId = match.cId;
-            const cY = match.cY;
-            const cM = match.cM;
-            const gId = match.gId;
-            const gY = match.gY;
-            const gM = match.gM;
-            const uId = match.uId;
-            const owner = match.oId === match.uId;
-            const embed = new self.Discord.MessageEmbed();
-            embed.setTitle(`Permissions (Shard #${index})`);
-            replyPerms(msg, gId, gM, gY, cId, cM, cY, uId, owner, embed);
-          });
+          self.client.shard
+              .broadcastEval(
+                  eval(`((client) => client.fetchPerms('${id}', '${id2}'))`))
+              .then((res) => {
+                const index = res.findIndex((el) => el);
+                const match = res[index];
+                if (!match) {
+                  self.common.reply(
+                      msg, 'Failed to find channel or guild with that ID.',
+                      msg.text);
+                  return;
+                }
+                const cId = match.cId;
+                const cY = match.cY;
+                const cM = match.cM;
+                const gId = match.gId;
+                const gY = match.gY;
+                const gM = match.gM;
+                const uId = match.uId;
+                const owner = match.oId === match.uId;
+                const embed = new self.Discord.EmbedBuilder();
+                embed.setTitle(`Permissions (Shard #${index})`);
+                replyPerms(msg, gId, gM, gY, cId, cM, cY, uId, owner, embed);
+              })
+              .catch((err) => {
+                self.error('fetchPerms failed');
+                console.error(err);
+                self.common.reply(
+                    msg, 'Failed to fetch perms!', 'Something broke!');
+              });
         } else {
           self.common.reply(
               msg, 'Failed to find channel or guild with that ID.', msg.text);
@@ -2472,9 +2506,9 @@ function Main() {
     const cY = chan && author && chan.permissionsFor(author).bitfield;
     const cM = chan && chan.permissionsFor(self.client.user).bitfield;
     const gY = author && mem.permissions.bitfield;
-    const gM = guild.members.resolve(self.client.user.id).permissions.bitfield;
+    const gM = guild.members.me.permissions.bitfield;
     const uId = author && author.id;
-    const owner = guild.ownerID === author.id;
+    const owner = guild.ownerId === (author && author.id);
     replyPerms(msg, guild.id, gM, gY, chan && chan.id, cM, cY, uId, owner);
   }
 
@@ -2491,39 +2525,40 @@ function Main() {
    * @param {number} [cY] Bitfield for user in channel.
    * @param {string} [uId] User id to show.
    * @param {boolean} [owner] Is the user the guild owner.
-   * @param {Discord~MessageEmbed} [embed] Embed object to modify
+   * @param {Discord~EmbedBuilder} [embed] Embed object to modify
    * instead of creating a new one.
    */
   function replyPerms(msg, gId, gM, gY, cId, cM, cY, uId, owner, embed) {
+    const padN = 41;
     if (!embed) {
-      embed = new self.Discord.MessageEmbed();
+      embed = new self.Discord.EmbedBuilder();
       embed.setTitle('Permissions');
     }
     const you = uId || 'You';
-    if ((cY != null && !isNaN(cY)) || (cM != null && !isNaN(cM))) {
-      embed.addField(
-          `Channel ${cId}`, '```css\n' +
-              (cY == null || isNaN(cY) ?
-                   '' :
-                   `${prePad(cY.toString(2), 31)} ${you}\n`) +
-              prePad(cM.toString(2), 31) + ' Me```');
+    if (cY != null || cM != null) {
+      embed.addFields([{
+        name: `Channel ${cId}`,
+        value: '```css\n' +
+            (cY == null ? '' : `${prePad(cY.toString(2), padN)} ${you}\n`) +
+            prePad(cM.toString(2), padN) + ' Me```',
+      }]);
     }
 
-    embed.addField(
-        `Guild ${gId}`, '```css\n' +
-            (gY == null || isNaN(gY) ?
-                 '' :
-                 `${prePad(gY.toString(2), 31)} ${you}\n`) +
-            prePad(gM.toString(2), 31) + ' Me```');
+    embed.addFields([{
+      name: `Guild ${gId}`,
+      value: '```css\n' +
+          (gY == null ? '' : `${prePad(gY.toString(2), padN)} ${you}\n`) +
+          prePad(gM.toString(2), padN) + ' Me```',
+    }]);
 
-    const allPermPairs = Object.entries(self.Discord.Permissions.FLAGS);
+    const allPermPairs = Object.entries(self.Discord.PermissionsBitField.Flags);
     const formatted = allPermPairs
         .map((el) => {
-          const cYou = (cY & el[1]) ? 'Y' : ' ';
-          const cMe = (cM & el[1]) ? 'M' : ' ';
-          const gYou = (gY & el[1]) ? 'Y' : ' ';
-          const gMe = (gM & el[1]) ? 'M' : ' ';
-          const bits = prePad(el[1].toString(2), 31);
+          const cYou = (cY != null && cY & el[1]) ? 'Y' : ' ';
+          const cMe = (cM != null && cM & el[1]) ? 'M' : ' ';
+          const gYou = (gY != null && gY & el[1]) ? 'Y' : ' ';
+          const gMe = (gM != null && gM & el[1]) ? 'M' : ' ';
+          const bits = prePad(el[1].toString(2), padN);
           const flags = `${cYou}${cMe}/${gYou}${gMe}`;
           return `${bits} ${flags} ${el[0]}`;
         })
@@ -2531,9 +2566,11 @@ function Main() {
     let ownerTag = '';
     if (owner) ownerTag = 'Guild Owner\n';
     embed.setDescription(ownerTag + '```css\n' + formatted + '```');
-    embed.setFooter(
-        'To see permissions for each command type: `' + msg.prefix + 'show`');
-    msg.channel.send(embed);
+    embed.setFooter({
+      text:
+          'To see permissions for each command type: `' + msg.prefix + 'show`',
+    });
+    msg.channel.send({embeds: [embed]});
   }
 
   /**
@@ -2582,7 +2619,7 @@ function Main() {
         gY: gY,
         gM: gM,
         uId: mem && mem.id,
-        iId: guild.ownerID,
+        iId: guild.ownerId,
       };
     } else {
       return null;
@@ -2614,7 +2651,7 @@ function Main() {
    * @listens Command#stats
    */
   function commandStats(msg) {
-    msg.channel.startTyping();
+    msg.channel.sendTyping();
     self.bot.getStats((values) => {
       if (!values) {
         self.common.reply(msg, 'Failed to fetch stats.');
@@ -2632,7 +2669,7 @@ function Main() {
             ',' + out.reverse().map((el) => ('000' + el).slice(-3)).join(',');
         return `${num}${joined}`;
       };
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('SpikeyBot Stats');
       embed.setDescription(
           'These statistics are collected from the entire bot, ' +
@@ -2644,11 +2681,11 @@ function Main() {
           fmtNum(values.numEmojis) + '\nVerified: ' +
           fmtNum(values.numVerified) + '\nPartnered: ' +
           fmtNum(values.numPartnered);
-      embed.addField('Guilds', guildString, true);
+      embed.addFields([{name: 'Guilds', value: guildString}]);
 
       const userString = 'Users: ' + fmtNum(values.numMembers) +
           '\nCached users: ' + fmtNum(values.numUsers);
-      embed.addField('Users', userString, true);
+      embed.addFields([{name: 'Users', value: userString}]);
 
       const shardUptimes = values.uptimes.map((el, i) => {
         // const mem = values.memory[i];
@@ -2659,19 +2696,18 @@ function Main() {
       const shardString = 'Number of shards: ' + fmtNum(values.numShards) +
           '\nThis guild/channel is in shard #' + values.reqShard + '\n' +
           shardUptimes.join('\n');
-      embed.addField('Shards', shardString, true);
+      embed.addFields([{name: 'Shards', value: shardString}]);
 
       if (values.saveData) {
         const systemString = 'Storage used: ' +
             values.saveData.match(/^\S+/)[0] + '\nPing: ' +
             Math.round(self.client.ws.ping) + 'ms';
-        embed.addField('System', systemString, true);
+        embed.addFields([{name: 'System', value: systemString}]);
       }
 
       embed.setColor([0, 100, 255]);
 
-      msg.channel.stopTyping();
-      msg.channel.send(self.common.mention(msg), embed);
+      msg.channel.send({content: self.common.mention(msg), embeds: [embed]});
     });
   }
 
@@ -2775,7 +2811,7 @@ function Main() {
         values.saveData = stdout.toString().trim();
       }
       if (self.client.shard) {
-        self.client.shard.broadcastEval('this.getStats()')
+        self.client.shard.broadcastEval((client) => client.getStats())
             .then(statsResponse)
             .catch((err) => {
               self.error('Failed to fetch stats from shards.');
@@ -2786,17 +2822,6 @@ function Main() {
         statsResponse([getStats()]);
       }
     });
-    /* if (self.client.shard) {
-      self.client.shard.broadcastEval('this.getStats()')
-          .then(statsResponse)
-          .catch((err) => {
-            self.error('Failed to fetch stats from shards.');
-            console.error(err);
-            statsResponse(null);
-          });
-    } else {
-      statsResponse([getStats()]);
-    } */
   }
   /**
    * Fetch our statistics about the bot on this shard.
@@ -2882,20 +2907,22 @@ function Main() {
     const trusted = self.common.trustedIds.includes(msg.author.id);
 
     if (self.client.shard) {
-      self.client.shard.broadcastEval(`this.lookupId('${id}',${trusted})`)
+      self.client.shard
+          .broadcastEval(
+              eval(`((client)=>client.lookupId('${id}',${trusted}))`))
           .then((res) => {
             if (!res.find((el) => el)) {
               self.error(`Failed to lookup id: ${id}`);
-              msg.channel.send(`${id} Failed to be looked up.`);
+              msg.channel.send({content: `${id} Failed to be looked up.`});
               return;
             }
 
-            const embed = new self.Discord.MessageEmbed();
+            const embed = new self.Discord.EmbedBuilder();
             embed.setTitle(id);
             res.forEach((el, i) => {
-              if (el) embed.addField(`Shard #${i}`, el, true);
+              if (el) embed.addFields([{name: `Shard #${i}`, value: el}]);
             });
-            msg.channel.send(embed);
+            msg.channel.send({embeds: [embed]});
           })
           .catch((err) => {
             self.error('Failed to broadcast lookupId command.');
@@ -2905,9 +2932,9 @@ function Main() {
       const message = lookupId.call(self.client, id, trusted);
       if (!message) {
         self.error('Failed to lookup id: ' + id);
-        msg.channel.send(id + ' Failed to be looked up.');
+        msg.channel.send({content: id + ' Failed to be looked up.'});
       } else {
-        msg.channel.send(message);
+        msg.channel.send({content: message});
       }
     }
   }
@@ -3002,7 +3029,7 @@ function Main() {
     const user = self.client.users.resolve(idString);
     const message = msg.text.split(' ').slice(2).join(' ');
     if (channel) {
-      channel.send(message)
+      channel.send({content: message})
           .then(() => {
             self.common.reply(msg, 'Message sent!');
           })
@@ -3012,7 +3039,7 @@ function Main() {
                 err.message);
           });
     } else if (user) {
-      user.send(message)
+      user.send({content: message})
           .then(() => {
             self.common.reply(msg, 'Message sent!');
           })
@@ -3025,7 +3052,8 @@ function Main() {
       if (self.client.shard) {
         const toSend = encodeURIComponent(message);
         self.client.shard
-            .broadcastEval(`this.sendTo('${idString}',"${toSend}")`)
+            .broadcastEval(
+                eval(`((client) => client.sendTo('${idString}', '${toSend}'))`))
             .then((res) => {
               const success = res.find((el) => el);
               if (success) {
@@ -3058,11 +3086,14 @@ function Main() {
     const user = this.users.resolve(id);
     if (channel) {
       const perms = channel.permissionsFor(this.user);
-      if (perms && !perms.has('SEND_MESSAGES')) return false;
-      channel.send(message).catch(console.error);
+      if (perms &&
+          !perms.has(self.Discord.PermissionsBitField.Flags.SendMessages)) {
+        return false;
+      }
+      channel.send({content: message}).catch(console.error);
       return true;
     } else if (user) {
-      user.send(message).catch(console.error);
+      user.send({content: message}).catch(console.error);
     } else {
       return false;
     }
@@ -3091,9 +3122,9 @@ function Main() {
         if (i == mentions.length - 1) mentionString += 'and ';
         mentionString += mentions[i];
       }
-      msg.channel.send('Thanks ' + mentionString + '!');
+      msg.channel.send({content: 'Thanks ' + mentionString + '!'});
     } else {
-      msg.channel.send('You\'re welcome! 😀');
+      msg.channel.send({content: 'You\'re welcome! 😀'});
     }
   }
 
@@ -3141,11 +3172,11 @@ function Main() {
       childProcess.exec(
           'git' + msg.text, (err, stdout) => {
             if (err) {
-              msg.channel.send(`<@${msg.author.id}> ${err.message}`);
+              msg.channel.send({content: `<@${msg.author.id}> ${err.message}`});
             } else {
               stdout = stdout.toString().trim().substr(0, 1900);
               const out = `<@${msg.author.id}> \`\`\`md\n${stdout}\`\`\``;
-              msg.channel.send(out);
+              msg.channel.send({content: out});
             }
           });
     } else {
@@ -3159,7 +3190,8 @@ function Main() {
               self.common.reply(
                   msg, 'Failed to get the current Git status.', err.message);
             } else {
-              msg.channel.send(`<@${msg.author.id}> \`\`\`md\n${stdout}\`\`\``);
+              msg.channel.send(
+                  {content: `<@${msg.author.id}> \`\`\`md\n${stdout}\`\`\``});
             }
           });
     }
@@ -3176,11 +3208,8 @@ function Main() {
    */
   function commandGetTime(msg) {
     const now = new Date();
-    const nowPST = dateFormat(now, 'default');
-    const tz = dateFormat(now, 'Z');
-    const nowGMT = dateFormat(now, 'GMT:ddd mmm dd yyyy HH:MM:ss');
-    self.common.reply(
-        msg, `Server Time: ${tz}`, `${tz}: ${nowPST}\nGMT: ${nowGMT}`);
+    const tz = dateFormat(dateFormat.ISO8601_WITH_TZ_OFFSET_FORMAT, now);
+    self.common.reply(msg, `Server Time: ${tz}`);
   }
 
   /**
@@ -3202,12 +3231,16 @@ function Main() {
     }
     self.common.reply(msg, 'Updating from git...').then((msg_) => {
       if (self.common.isSlave || self.comomn.isMaster) {
+        const sendable = encodeURIComponent(msg.content);
         self.client.shard
-            .broadcastEval(`this.runBotUpdate(${JSON.stringify(msg.content)})`)
-            .then(() => msg_.edit('Updating has begun on all shards.'))
+            .broadcastEval(
+                eval(`((client) => client.runBotUpdate('${sendable}'))`))
+            .then(
+                () => msg_.edit({content: 'Updating has begun on all shards.'}))
             .catch((err) => {
               if (!err || !err.name) return;
-              msg_.edit('Update request failed to be sent to all shards!');
+              msg_.edit(
+                  {content: 'Update request failed to be sent to all shards!'});
               self.error('Failed to send update request to shards.');
               console.error(err);
             });
@@ -3238,10 +3271,11 @@ function Main() {
         if (!noReload) {
           self.bot.reloadCommon();
           if (self.client.shard && !self.common.isSlave) {
-            self.client.shard.broadcastEval(
-                'this.reloadUpdatedMainModules()', () => {
+            self.client.shard
+                .broadcastEval((client) => client.reloadUpdatedMainModules())
+                .then(() => {
                   self.client.shard.broadcastEval(
-                      'this.reloadUpdatedSubModules()');
+                      (client) => client.reloadUpdatedSubModules());
                 });
           } else {
             self.client.reloadUpdatedMainModules();
@@ -3253,21 +3287,21 @@ function Main() {
               (self.bot.version.split('#')[1] || commit) +
               ' -- ./src/SpikeyBot.js');
           if (msg_) {
-            const embed = new self.Discord.MessageEmbed();
+            const embed = new self.Discord.EmbedBuilder();
             embed.setTitle('Bot update complete!');
             embed.setColor([255, 0, 255]);
             if (noReload) embed.setDescription('Modules not reloaded.');
-            msg_.edit(self.common.mention(msg), embed);
+            msg_.edit({content: self.common.mention(msg), embeds: [embed]});
           }
         } catch (err) {
           if (err.status === 1) {
             if (msg_) {
-              const embed = new self.Discord.MessageEmbed();
+              const embed = new self.Discord.EmbedBuilder();
               embed.setTitle(
                   'Bot update complete, but requires manual reboot.');
               embed.setDescription(err.message);
               embed.setColor([255, 0, 255]);
-              msg_.edit(self.common.mention(msg), embed);
+              msg_.edit({content: self.common.mention(msg), embed: [embed]});
             }
           } else {
             self.error(
@@ -3275,12 +3309,12 @@ function Main() {
             console.error('STDOUT:', err.stdout.toString());
             console.error('STDERR:', err.stderr.toString());
             if (msg_) {
-              const embed = new self.Discord.MessageEmbed();
+              const embed = new self.Discord.EmbedBuilder();
               embed.setTitle(
                   'Bot update complete, but failed to check if ' +
                   'reboot is necessary.');
               embed.setColor([255, 0, 255]);
-              msg_.edit(self.common.mention(msg), embed);
+              msg_.edit({content: self.common.mention(msg), embeds: [embed]});
             }
           }
         }
@@ -3290,10 +3324,10 @@ function Main() {
         if (stdout && stdout !== 'null') console.log('STDOUT:', stdout);
         if (stderr && stderr !== 'null') console.error('STDERR:', stderr);
         if (msg_) {
-          const embed = new self.Discord.MessageEmbed();
+          const embed = new self.Discord.EmbedBuilder();
           embed.setTitle('Bot update FAILED!');
           embed.setColor([255, 0, 255]);
-          msg_.edit(self.common.mention(msg), embed);
+          msg_.edit({content: self.common.mention(msg), embeds: [embed]});
         }
       }
     });
@@ -3355,7 +3389,8 @@ function Main() {
       }
       banListRequests[userId].callbacks.push(cb);
       self.client.shard
-          .broadcastEval(`this.broadcastBanList('${userId}',${num})`)
+          .broadcastEval(eval(
+              `((client) => client.broadcastBanList('${userId}', ${num}))`))
           .catch((err) => {
             self.error('Failed to broadcast for ban list.');
             console.error(err);
@@ -3366,7 +3401,7 @@ function Main() {
       const res = {};
       self.client.guilds.cache.forEach((g) => {
         total++;
-        g.fetchBans().then((bans) => {
+        g.bans.fetch().then((bans) => {
           bans.forEach((b) => {
             if (b.user.id != userId) return;
             res[g.id] = b.reason || true;
@@ -3437,11 +3472,15 @@ function Main() {
       done++;
       if (done >= total) {
         self.client.shard.broadcastEval(
-            `this.banListResponse('${userId}',${JSON.stringify(res)})`);
+            eval(`((client) => client.banListResponse('${userId}', ${
+              JSON.stringify(res)}))`));
       }
     };
     self.client.guilds.cache.forEach((g) => {
-      if (!g.me.permissions.has('BAN_MEMBERS')) return;
+      if (!g.members.me.permissions.has(
+          self.Discord.PermissionsBitField.Flags.BanMembers)) {
+        return;
+      }
       total++;
       const now = Date.now();
       if (banListCache[g.id] && banListCache[g.id].timestamp &&
@@ -3452,7 +3491,7 @@ function Main() {
       } else if (banListCache[g.id]) {
         banListCache[g.id].users = {};
       }
-      g.fetchBans()
+      g.bans.fetch()
           .then((bans) => {
             bans.forEach((b) => {
               if (!banListCache[g.id]) banListCache[g.id] = {users: {}};

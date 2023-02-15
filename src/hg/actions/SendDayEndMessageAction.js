@@ -17,7 +17,7 @@ class SendDayEndMessageAction extends ChannelAction {
    */
   constructor() {
     super((hg, game, channel) => {
-      const embed = new hg._parent.Discord.MessageEmbed();
+      const embed = new hg._parent.Discord.EmbedBuilder();
       if (game.currentGame.day.num == 0) {
         embed.setTitle(hg.messages.get('bloodbathEnd'));
       } else {
@@ -27,7 +27,7 @@ class SendDayEndMessageAction extends ChannelAction {
                 .replace(/\{alive\}/g, game.currentGame.numAlive));
       }
       embed.setColor([255, 0, 255]);
-      if (!game.options.disableOutput) channel.send(embed);
+      if (!game.options.disableOutput) channel.send({embeds: [embed]});
     });
   }
   /**

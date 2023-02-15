@@ -17,14 +17,11 @@ function RoleColors() {
   /** @inheritdoc */
   this.initialize = function() {
     const cmdColor = new self.command.SingleCommand(
-        [
-          'color',
-        ],
-        commandColor, new self.command.CommandSetting({
+        ['color'], commandColor, new self.command.CommandSetting({
           validOnlyInGuild: true,
           defaultDisabled: true,
-          permissions: self.Discord.Permissions.FLAGS.MANAGE_ROLES |
-              self.Discord.Permissions.FLAGS.MANAGE_GUILD,
+          permissions: self.Discord.PermissionsBitField.Flags.ManageRoles |
+              self.Discord.PermissionsBitField.Flags.ManageGuild,
         }));
     self.command.on(cmdColor);
   };
@@ -45,51 +42,61 @@ function RoleColors() {
    * @listens Command#color
    */
   function commandColor(msg) {
-    if (!msg.guild.me.hasPermission('MANAGE_ROLES')) {
+    if (!msg.guild.members.me.permissions.has(
+        self.Discord.PermissionsBitField.Flags.ManageRoles)) {
       self.common.reply(
           msg, 'Unfortunately, I do not have permission to manage roles.');
       return;
     }
     let target = msg.member;
-    if (msg.member.hasPermission('MANAGE_ROLES') &&
+    if (msg.member.permissions.has(
+        self.Discord.PermissionsBitField.Flags.ManageRoles) &&
         msg.mentions.members.size > 0) {
       target = msg.mentions.members.first();
       msg.text =
-          msg.text.replace(self.Discord.MessageMentions.USERS_PATTERN, '');
+          msg.text.replace(self.Discord.MessageMentions.UsersPattern, '');
     }
     let color = msg.text.trim();
     let colorString = color;
     let role =
         msg.guild.roles.cache.find((el) => el.name.indexOf(target.id) > -1);
     const colorList = [
-      'DEFAULT',
-      'WHITE',
-      'AQUA',
-      'GREEN',
-      'BLUE',
-      'PURPLE',
-      'LUMINOUS_VIVID_PINK',
-      'GOLD',
-      'ORANGE',
-      'RED',
-      'GREY',
-      'DARKER_GREY',
-      'NAVY',
-      'DARK_AQUA',
-      'DARK_GREEN',
-      'DARK_BLUE',
-      'DARK_PURPLE',
-      'DARK_VIVID_PINK',
-      'DARK_GOLD',
-      'DARK_ORANGE',
-      'DARK_RED',
-      'DARK_GREY',
-      'LIGHT_GREY',
-      'DARK_NAVY',
-      'RANDOM',
+      'Default',
+      'White',
+      'Aqua',
+      'Green',
+      'Blue',
+      'Yellow',
+      'Purple',
+      'LuminousVividPink',
+      'Fuchsia',
+      'Gold',
+      'Orange',
+      'Red',
+      'Grey',
+      'Navy',
+      'DarkAqua',
+      'DarkGreen',
+      'DarkBlue',
+      'DarkPurple',
+      'DarkVividPink',
+      'DarkGold',
+      'DarkOrange',
+      'DarkRed',
+      'DarkGrey',
+      'DarkerGrey',
+      'LightGrey',
+      'DarkNavy',
+      'Blurple',
+      'Greyple',
+      'DarkButNotBlack',
+      'NotQuiteBlack',
+      'Random',
     ];
-    if (colorList.includes(color.toUpperCase())) {
-      color = color.toUpperCase();
+    const found = colorList.find(
+        (el) => el.toLowerCase() == color.toLowerCase().replace(/[_\s-]/g, ''));
+    if (found) {
+      color = found;
     } else {
       const rgbMatch =
           color.match(/(\d{1,3})\b\D+\b(\d{1,3})\b\D+\b(\d{1,3}\b)/);
@@ -111,11 +118,11 @@ function RoleColors() {
       }
     }
     const finished = function() {
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setColor(role.color);
       embed.setTitle('Updated color.');
       embed.setDescription(colorString);
-      msg.channel.send(embed).catch(() => {
+      msg.channel.send({embeds: [embed]}).catch(() => {
         const padded = ('000000' + role.color.toString(16)).slice(-6);
         self.common.reply(msg, 'Updated color.', `#${padded}`);
       });
@@ -126,8 +133,12 @@ function RoleColors() {
       self.common.reply(msg, 'Unable to update color.', err.message);
     };
     if (!role) {
-      const roleData = {name: target.id, color: color, permissions: 0};
-      msg.guild.roles.create({data: roleData})
+      const roleData = {
+        name: target.id,
+        color: color,
+        permissions: BigInt(0),
+      };
+      msg.guild.roles.create(roleData)
           .then((r) => {
             role = r;
             return r.setColor(color);

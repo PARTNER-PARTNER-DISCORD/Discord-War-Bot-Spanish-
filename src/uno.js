@@ -1,4 +1,4 @@
-// Copyright 2018-2019 Campbell Crowley. All rights reserved.
+// Copyright 2018-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 require('./subModule.js').extend(Uno);  // Extends the SubModule class.
 
@@ -15,17 +15,16 @@ function Uno() {
 
   /** @inheritdoc */
   this.initialize = function() {
-    pFlags = self.Discord.Permissions.FLAGS;
-    self.command.on(
-        new self.command.SingleCommand(
-            ['uno', 'one'], commandUno, {validOnlyInGuild: true}, [
-              new self.command.SingleCommand('endall', commandEndAll, {
-                validOnlyInGuild: true,
-                permissions: pFlags.MANAGE_CHANNELS,
-                defaultDisabled: true,
-              }),
-              new self.command.SingleCommand('stats', commandStats),
-            ]));
+    pFlags = self.Discord.PermissionsBitField.Flags;
+    self.command.on(new self.command.SingleCommand(
+        ['uno', 'one'], commandUno, {validOnlyInGuild: true}, [
+          new self.command.SingleCommand('endall', commandEndAll, {
+            validOnlyInGuild: true,
+            permissions: pFlags.ManageChannels,
+            defaultDisabled: true,
+          }),
+          new self.command.SingleCommand('stats', commandStats),
+        ]));
   };
 
   /** @inheritdoc */
@@ -74,7 +73,7 @@ function Uno() {
   let numGames = 0;
 
   /**
-   * Self.Discord.Permissions.FLAGS.
+   * Self.Discord.Permissions.Flags.
    *
    * @private
    */
@@ -138,7 +137,7 @@ function Uno() {
    * @listens Command#uno
    */
   function commandUno(msg) {
-    if (!msg.guild.me.hasPermission(pFlags.MANAGE_CHANNELS)) {
+    if (!msg.guild.members.me.permissions.has(pFlags.ManageChannels)) {
       self.common.reply(
           msg,
           'I need permission to manage channels in order to start a game of ' +
@@ -163,7 +162,7 @@ function Uno() {
         'Please be aware, Uno is still in BETA and has many known bugs.');
     if (!games[msg.guild.id]) games[msg.guild.id] = {};
     const newGame = new self.Game(
-        (msg.mentions.members.array() || []).concat([msg.member]), msg.member);
+        ([...msg.mentions.members.values()]).concat([msg.member]), msg.member);
     games[msg.guild.id][newGame.id] = newGame;
   }
 
@@ -176,7 +175,7 @@ function Uno() {
    * @listens Command#uno_endall
    */
   function commandEndAll(msg) {
-    if (!msg.guild.me.hasPermission(pFlags.MANAGE_CHANNELS)) {
+    if (!msg.guild.members.me.permissions.has(pFlags.ManageChannels)) {
       self.common.reply(msg, 'I don\'t have permission to manage channels.');
       return;
     }
@@ -602,12 +601,12 @@ function Uno() {
         {
           id: maker.guild.roles.everyone,
           allow: 0,
-          deny: pFlags.VIEW_CHANNEL | pFlags.SEND_MESSAGES,
+          deny: pFlags.ViewChannel | pFlags.SendMessages,
           type: 'role',
         },
         {
           id: self.client.user.id,
-          allow: pFlags.VIEW_CHANNEL | pFlags.SEND_MESSAGES,
+          allow: pFlags.ViewChannel | pFlags.SendMessages,
           deny: 0,
           type: 'member',
         },
@@ -616,7 +615,7 @@ function Uno() {
         members[memberList[i].id] = memberList[i];
         groupPerms.push({
           id: memberList[i].id,
-          allow: pFlags.VIEW_CHANNEL | pFlags.SEND_MESSAGES,
+          allow: pFlags.ViewChannel | pFlags.SendMessages,
           deny: 0,
           type: 'member',
         });
@@ -639,10 +638,11 @@ function Uno() {
                 fail = fail || !game.addPlayer(memberList[i]);
               }
               if (memberList.length > maxPlayerCount) {
-                setTimeout(function() {
-                  c.send(
-                      'A maximum of ' + maxPlayerCount +
-                      ' players are allowed');
+                setTimeout(() => {
+                  c.send({
+                    content: 'A maximum of ' + maxPlayerCount +
+                        ' players are allowed',
+                  });
                 }, 1000);
               }
               finishSetup();
@@ -663,7 +663,7 @@ function Uno() {
         // random notifications.
         /* game.groupChannel.permissionOverwrites
             .resolve(maker.guild.roles.everyone)
-            .update({VIEW_CHANNEL: true}); */
+            .update({ViewChannel: true}); */
       });
       if (currentCollector) {
         currentCollector.stop(
@@ -794,11 +794,11 @@ function Uno() {
      * Send the list of current players in this game to the group channel.
      */
     function listPlayers() {
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('Current Players');
       embed.setDescription(players.map((p) => p.name).join(', '));
       embed.setColor('WHITE');
-      game.groupChannel.send(embed);
+      game.groupChannel.send({embeds: [embed]});
     }
 
     /**
@@ -807,9 +807,9 @@ function Uno() {
      * @private
      */
     function startGame() {
-      game.groupChannel.updateOverwrite(
+      game.groupChannel.permissionOverwrites.edit(
           maker.guild.roles.everyone, {
-            VIEW_CHANNEL: false,
+            ViewChannel: false,
           },
           'UNO game has starte.');
 
@@ -818,7 +818,7 @@ function Uno() {
         drawCards(7, true);
       }
 
-      game.groupChannel.send('`Cards have been dealt.`');
+      game.groupChannel.send({content: '`Cards have been dealt.`'});
 
       turn = -1;
       game.started = true;
@@ -899,7 +899,7 @@ function Uno() {
           game.lastInteractTimestamp = Date.now();
           // self.debug(m.channel.id + '@' + m.author.id + ' ' + m.content);
           drawAndSkip();
-          game.groupChannel.send(getCardEmbed(topCard));
+          game.groupChannel.send({embeds: [getCardEmbed(topCard)]});
           return false;
         }
       }, {max: 1});
@@ -931,9 +931,9 @@ function Uno() {
      * to the channel.
      */
     function sendHelp() {
-      const embed = new self.Discord.MessageEmbed();
+      const embed = new self.Discord.EmbedBuilder();
       embed.setTitle('Welcome to UNO! (Beta)');
-      embed.setAuthor(maker.user.tag);
+      embed.setAuthor({name: maker.user.tag});
       embed.setColor([237, 21, 31]);
       embed.setDescription(
           'Just type `UNO!` into this channel to call uno.\nTo play a card, ' +
@@ -941,38 +941,42 @@ function Uno() {
           'something like that.\nIf you play a wild card, you must say what ' +
           'color it is when you play it (eg: `play wild red` or `play yellow ' +
           'draw four`).\n`draw` to draw a card.');
-      embed.addField(
-          'Current Rules',
-          'Original rules (non-point based) as described here: ' +
-              'https://www.unorules.com/\nWith the following exceptions:\n' +
-              '1) Challenging a plus four card is not in this version,\n' +
-              '2) If you draw a card, you do not get to play it until your ' +
-              'next turn.');
-      embed.addField(
-          'Player Commands',
-          'If you do not wish to be in this game anymore, just type ' +
-              '`uno leave` in this channel, and you will be removed.');
+      embed.addFields([{
+        name: 'Current Rules',
+        value: 'Original rules (non-point based) as described here: ' +
+            'https://www.unorules.com/\nWith the following exceptions:\n' +
+            '1) Challenging a plus four card is not in this version,\n' +
+            '2) If you draw a card, you do not get to play it until your ' +
+            'next turn.',
+      }]);
+      embed.addFields([{
+        name: 'Player Commands',
+        value: 'If you do not wish to be in this game anymore, just type ' +
+            '`uno leave` in this channel, and you will be removed.',
+      }]);
       if (!game.started) {
-        embed.addField(
-            'Lobby Settings',
-            'The creator of this game can use the following commands in this ' +
-                'channel.\n\nUse `invite @SpikeyRobot#0001` to add new people' +
-                ' to this game.\nUse `uno npc add 2` to add 2 NPCs or `uno ' +
-                'npc remove 3` to remove 3 NPCs.\nType `uno kick ' +
-                '@SpikeyRobot#0001` to remove them from the game (Note: ' +
-                'don\'t use the command prefix).\nType `uno start` to start ' +
-                'the game once you\'re ready!\n`uno end` to end this game at ' +
-                'any time.');
+        embed.addFields([{
+          name: 'Lobby Settings',
+          value: 'The creator of this game can use the following commands in ' +
+              'this channel.\n\nUse `invite @SpikeyRobot#0001` to add new ' +
+              'people to this game.\nUse `uno npc add 2` to add 2 NPCs or ' +
+              '`uno npc remove 3` to remove 3 NPCs.\nType `uno kick ' +
+              '@SpikeyRobot#0001` to remove them from the game (Note: ' +
+              'don\'t use the command prefix).\nType `uno start` to start ' +
+              'the game once you\'re ready!\n`uno end` to end this game at ' +
+              'any time.',
+        }]);
       } else {
-        embed.addField(
-            'Lobby Settings',
-            'The creator of this game can use the following commands in this ' +
-                'channel.\n\n`uno end` to end this game at any time (this ' +
-                'deletes all Uno text channels).\n`uno kick @SpikeyRobot#0001' +
-                '` to kick players (Careful! They cannot be added back during' +
-                ' the game!).');
+        embed.addFields([{
+          name: 'Lobby Settings',
+          value: 'The creator of this game can use the following commands in ' +
+              'this channel.\n\n`uno end` to end this game at any time (this ' +
+              'deletes all Uno text channels).\n`uno kick @SpikeyRobot#0001' +
+              '` to kick players (Careful! They cannot be added back during' +
+              ' the game!).',
+        }]);
       }
-      return game.groupChannel.send(embed);
+      return game.groupChannel.send({embeds: [embed]});
     }
 
     /**
@@ -985,8 +989,10 @@ function Uno() {
      */
     function nextTurn(skip) {
       if (turn > -1 && players[turn] && !players[turn].npc) {
-        players[turn].channel.send(
-            '`Your current hand:`', getCardEmbed(players[turn].hand));
+        players[turn].channel.send({
+          content: '`Your current hand:`',
+          embeds: [getCardEmbed(players[turn].hand)],
+        });
       }
 
       if (turn == -1) turn = Math.floor(Math.random() * players.length);
@@ -994,19 +1000,21 @@ function Uno() {
       if (turn < 0) turn = players.length - 1;
       if (turn > players.length - 1) turn = 0;
       if (!players[turn]) {
-        game.groupChannel.send(
-            'Game Crashed. Unable to keep track of players properly.' +
-            ' Please report this bug.');
+        game.groupChannel.send({
+          content: 'Game Crashed. Unable to keep track of players properly.' +
+              ' Please report this bug.',
+        });
         endGame();
         return;
       }
       if (skip) {
         game.groupChannel.send(
-            '`Skipping` ' + players[turn].mention + '\'s turn!');
+            {content: '`Skipping` ' + players[turn].mention + '\'s turn!'});
       } else {
-        game.groupChannel.send(
-            '`Next turn.` ' + players[turn].mention + '\'s turn! They have ' +
-            players[turn].hand.length + ' cards.');
+        game.groupChannel.send({
+          content: '`Next turn.` ' + players[turn].mention +
+              '\'s turn! They have ' + players[turn].hand.length + ' cards.',
+        });
         if (players[turn].npc) setTimeout(playCard, npcDelay);
       }
     }
@@ -1055,17 +1063,22 @@ function Uno() {
       }
 
       if (!silent) {
-        game.groupChannel.send(
-            '`' + players[turn].name + '` drew ' + num + ' card' +
-            (num == 1 ? '' : 's') + ' from the deck.');
+        game.groupChannel.send({
+          content: '`' + players[turn].name + '` drew ' + num + ' card' +
+              (num == 1 ? '' : 's') + ' from the deck.',
+        });
         if (!players[turn].npc) {
-          players[turn].channel.send(
-              '`You drew:` ' + drawn.map((card) => card.toString()).join(', '));
+          players[turn].channel.send({
+            content: '`You drew:` ' +
+                drawn.map((card) => card.toString()).join(', '),
+          });
         }
       } else {
         if (!players[turn].npc) {
-          players[turn].channel.send(
-              '`Your current hand`', getCardEmbed(players[turn].hand));
+          players[turn].channel.send({
+            content: '`Your current hand`',
+            embeds: [getCardEmbed(players[turn].hand)],
+          });
         }
       }
       players[turn].calledUno = false;
@@ -1137,19 +1150,19 @@ function Uno() {
           }
         } else if (!text || !text.trim()) {
           game.groupChannel.send(
-              '`Please specify a card, that you have, to play.`');
+              {content: '`Please specify a card, that you have, to play.`'});
           return false;
         } else {
           const parsed = parseToCard(text);
           if (!parsed) {
             game.groupChannel.send(
-                '`I\'m not sure what card that is.`\n' + text);
+                {content: '`I\'m not sure what card that is.`\n' + text});
             return false;
           }
           if (parsed.face & self.CardFace.WILD_EFFECT) {
             if (parsed.color == self.Color.NONE) {
               game.groupChannel.send(
-                  '`Please specify a color to make this card.`');
+                  {content: '`Please specify a color to make this card.`'});
               return false;
             } else {
               color = parsed.color;
@@ -1158,9 +1171,11 @@ function Uno() {
           if (!((parsed.face == topCard.face) ||
                 (parsed.face & self.CardFace.WILD_EFFECT ||
                  parsed.color == topCard.color))) {
-            game.groupChannel.send(
-                '`That\'s not a valid card to play. The current card is`',
-                getCardEmbed(topCard));
+            game.groupChannel.send({
+              content:
+                  '`That\'s not a valid card to play. The current card is`',
+              embeds: [getCardEmbed(topCard)],
+            });
             return false;
           }
           selected = hand.findIndex((el) => {
@@ -1169,9 +1184,11 @@ function Uno() {
                  parsed.color == el.color);
           });
           if (selected < 0) {
-            game.groupChannel.send(
-                '`You don\'t have that card.` Please play a card that you ' +
-                'have, or \'draw\' to draw a card from the deck.');
+            game.groupChannel.send({
+              content:
+                  '`You don\'t have that card.` Please play a card that you ' +
+                  'have, or \'draw\' to draw a card from the deck.',
+            });
             return false;
           }
         }
@@ -1189,18 +1206,20 @@ function Uno() {
       }
 
       if (turn > -1 && players[turn].hand.length > 0) {
-        game.groupChannel.send(
-            '`' + players[turn].name + '` has ' + players[turn].hand.length +
-                ' cards.',
-            getCardEmbed(card));
+        game.groupChannel.send({
+          content: '`' + players[turn].name + '` has ' +
+              players[turn].hand.length + ' cards.',
+          embeds: [getCardEmbed(card)],
+        });
       } else {
-        game.groupChannel.send(getCardEmbed(card));
+        game.groupChannel.send({embeds: [getCardEmbed(card)]});
       }
 
       if (hand.length == 0) {
-        game.groupChannel.send(
-            players[turn].mention + ' `has no cards remaining!`\n```' +
-            players[turn].name + ' is the winner!```');
+        game.groupChannel.send({
+          content: players[turn].mention + ' `has no cards remaining!`\n```' +
+              players[turn].name + ' is the winner!```',
+        });
         if (players[turn].npc) endGame();
         return true;
       }
@@ -1300,7 +1319,8 @@ function Uno() {
           !players[turn].calledUno && players[turn].hand.length == 2) {
         players[turn].calledUno = true;
         const mention = players[turn].mention;
-        game.groupChannel.send(`${mention} called\`\`\`\n${unoText}\n\`\`\``);
+        game.groupChannel.send(
+            {content: `${mention} called\`\`\`\n${unoText}\n\`\`\``});
       }
       if (previousTurn > -1) {
         if (players[previousTurn] && players[previousTurn].id == caller &&
@@ -1308,13 +1328,15 @@ function Uno() {
             players[previousTurn].hand.length == 1) {
           players[previousTurn].calledUno = true;
           const mention = players[previousTurn].mention;
-          game.groupChannel.send(`${mention} called\`\`\`\n${unoText}\n\`\`\``);
+          game.groupChannel.send(
+              {content: `${mention} called\`\`\`\n${unoText}\n\`\`\``});
         }
         if (players[previousTurn] && !players[previousTurn].calledUno &&
             players[previousTurn].hand.length == 1) {
-          game.groupChannel.send(
-              players[previousTurn].mention +
-              ' `forgot to call "UNO!" and now must draw 2 cards!`');
+          game.groupChannel.send({
+            content: players[previousTurn].mention +
+                ' `forgot to call "UNO!" and now must draw 2 cards!`',
+          });
           const tmp = turn;
           turn = previousTurn;
           drawCards(2);
@@ -1369,10 +1391,10 @@ function Uno() {
       } else {
         players.push(new self.Player(p, game));
       }
-      game.groupChannel.updateOverwrite(
+      game.groupChannel.permissionOverwrites.edit(
           p.user.id, {
-            VIEW_CHANNEL: true,
-            SEND_MESSAGES: true,
+            ViewChannel: true,
+            SendMessages: true,
           },
           'Player added to game.');
       return true;
@@ -1439,7 +1461,7 @@ function Uno() {
         players[index].remove();
         discarded = discarded.concat(players[index].hand.splice(0));
         players.splice(index, 1);
-        const perms = game.groupChannel.permissionOverwrites.get(p);
+        const perms = game.groupChannel.permissionOverwrites.resolve(p);
         if (perms) perms.delete('User removed from game');
         if (turn == index) nextTurn();
       }
@@ -1476,18 +1498,18 @@ function Uno() {
       {
         id: member.guild.roles.everyone,
         allow: 0,
-        deny: pFlags.VIEW_CHANNEL,
+        deny: pFlags.ViewChannel,
         type: 'role',
       },
       {
         id: member.id,
-        allow: pFlags.VIEW_CHANNEL,
-        deny: pFlags.SEND_MESSAGES,
+        allow: pFlags.ViewChannel,
+        deny: pFlags.SendMessages,
         type: 'member',
       },
       {
         id: self.client.user.id,
-        allow: pFlags.VIEW_CHANNEL | pFlags.SEND_MESSAGES,
+        allow: pFlags.ViewChannel | pFlags.SendMessages,
         deny: 0,
         type: 'member',
       },
@@ -1560,12 +1582,13 @@ function Uno() {
             channelOpts)
         .then((channel) => {
           player.channel = channel;
-          channel.send(
-              player.mention +
-              ' You have been added to this game of Uno!\n\nThis channel ' +
-              'will show you the cards you currently have in your hand once ' +
-              'the game starts.\n\nUse <#' + parent.groupChannel.id +
-              '> to play your cards and talk to other players!');
+          channel.send({
+            content: player.mention +
+                ' You have been added to this game of Uno!\n\nThis channel ' +
+                'will show you the cards you currently have in your hand ' +
+                'once the game starts.\n\nUse <#' + parent.groupChannel.id +
+                '> to play your cards and talk to other players!',
+          });
         })
         .catch((err) => {
           self.error(
@@ -1573,8 +1596,9 @@ function Uno() {
               ' in guild: ' + member.guild.id);
           console.error(err);
           if (parent.groupChannel) {
-            parent.groupChannel.send(
-                'Failed to create text channel for ' + member.user.tag);
+            parent.groupChannel.send({
+              content: 'Failed to create text channel for ' + member.user.tag,
+            });
           }
         });
     /**
@@ -1696,14 +1720,14 @@ function Uno() {
   };
 
   /**
-   * Format a hand of cards or a single card into Discord~MessageEmbed.
+   * Format a hand of cards or a single card into Discord~EmbedBuilder.
    *
    * @private
    * @param {Uno~Card|Uno~Card[]} hand The card or hand of cards to format.
-   * @returns {Discord~MessageEmbed} The MessageEmbed to send to the user.
+   * @returns {Discord~EmbedBuilder} The EmbedBuilder to send to the user.
    */
   function getCardEmbed(hand) {
-    const embed = new self.Discord.MessageEmbed();
+    const embed = new self.Discord.EmbedBuilder();
     const colors = {};
     if (hand instanceof self.Card) hand = [hand];
     hand.forEach((card) => {
@@ -1720,7 +1744,7 @@ function Uno() {
       if (noTitle) {
         embed.setTitle(str);
       } else {
-        embed.addField(c[0], str, true);
+        embed.addFields([{name: c[0], value: str}]);
       }
     });
     if (colors[0]) {
@@ -1729,7 +1753,7 @@ function Uno() {
       if (noTitle) {
         embed.setTitle(str);
       } else {
-        embed.addField('WILD', str, true);
+        embed.addFields([{name: 'WILD', value: str}]);
       }
     } else if (hand.length == 1) {
       if (hand[0].color == self.Color.YELLOW) {

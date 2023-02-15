@@ -1,4 +1,4 @@
-// Copyright 2019 Campbell Crowley. All rights reserved.
+// Copyright 2019-2022 Campbell Crowley. All rights reserved.
 // Author: Campbell Crowley (dev@campbellcrowley.com)
 const fs = require('fs');
 const SubModule = require('./subModule.js');
@@ -74,36 +74,35 @@ class BotCommands extends SubModule {
   }
   /** @inheritdoc */
   initialize() {
-    this.command.on(
-        new this.command.SingleCommand(
-            [
-              'allowbot',
-              'allowbots',
-              'enablebot',
-              'enablebots',
-              'togglebot',
-              'togglebots',
-              'denybot',
-              'denybots',
-              'disablebot',
-              'disablebots',
-            ],
-            this._commandToggleBotCmds, new this.command.CommandSetting({
-              validOnlyInGuild: true,
-              defaultDisabled: true,
-              permissions: this.Discord.Permissions.FLAGS.MANAGE_ROLES |
-                  this.Discord.Permissions.FLAGS.MANAGE_GUILD,
-            })));
+    this.command.on(new this.command.SingleCommand(
+        [
+          'allowbot',
+          'allowbots',
+          'enablebot',
+          'enablebots',
+          'togglebot',
+          'togglebots',
+          'denybot',
+          'denybots',
+          'disablebot',
+          'disablebots',
+        ],
+        this._commandToggleBotCmds, new this.command.CommandSetting({
+          validOnlyInGuild: true,
+          defaultDisabled: true,
+          permissions: this.Discord.PermissionsBitField.Flags.ManageRoles |
+              this.Discord.PermissionsBitField.Flags.ManageGuild,
+        })));
     this.client.guilds.cache.forEach((g) => {
       this.common.readFile(
           `${this.common.guildSaveDir}${g.id}${this._filename}`, () => {});
     });
-    this.client.on('message', this._onMessage);
+    this.client.on('messageCreate', this._onMessage);
   }
   /** @inheritdoc */
   shutdown() {
     this.command.deleteEvent('allowbot');
-    this.client.removeListener('message', this._onMessage);
+    this.client.removeListener('messageCreate', this._onMessage);
   }
 
   /**
@@ -219,14 +218,13 @@ class BotCommands extends SubModule {
                   ' to confirm')
           .then((msg_) => {
             msg_.react(emoji).catch(() => {});
-            msg_.awaitReactions(
-                (reaction, user) => reaction.emoji.name == emoji &&
-                        user.id === msg.author.id,
-                {max: 1, time: 30 * 1000})
+            const filter = (reaction, user) =>
+              reaction.emoji.name == emoji && user.id === msg.author.id;
+            msg_.awaitReactions({filter, max: 1, time: 30 * 1000})
                 .then((reactions) => {
                   msg_.reactions.removeAll().catch(() => {});
                   if (reactions.size == 0) {
-                    msg_.edit('Timed Out').catch(() => {});
+                    msg_.edit({content: 'Timed Out'}).catch(() => {});
                     return;
                   }
                   try {
