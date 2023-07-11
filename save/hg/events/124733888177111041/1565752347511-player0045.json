@@ -1,0 +1,7 @@
+{
+    "message":"{victim} se tuerce el tobillo mientras huye de {attacker}, lo que permite que {attacker} alcance[A|n] a {victim} y acabe[A|n] con su vida.",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"1","outcome":"dies"},
+    "id":"124733888177111041/1565752347511-player0045",
+    "creator":"124733888177111041"
+}

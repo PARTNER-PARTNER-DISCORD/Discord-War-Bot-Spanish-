@@ -1,0 +1,9 @@
+{
+    "message":"{victim} ruega[V|n] a {attacker} que lo[V|s] mate[V|n], y {attacker} lo hace[A|n] sin dudarlo.",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347511-player0073",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

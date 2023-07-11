@@ -1,0 +1,15 @@
+{
+    "message": "{victim} [Ves un patoso|son unos patosos] y se hiere[V|n] [Vél solito|ellos solitos].",
+    "attacker": {
+        "count": "0",
+        "outcome": "nothing"
+    },
+    "victim": {
+        "count": "-1",
+        "outcome": "wounded"
+    },
+    "id": "124733888177111041/1565752347511-player0039",
+    "type": "normal",
+    "creator": "124733888177111041",
+    "privacy": "public"
+}
