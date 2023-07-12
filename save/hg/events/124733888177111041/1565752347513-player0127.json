@@ -1,0 +1,9 @@
+{
+    "message":"{victim} mira[V|n] al sol para saber la hora, y se queda[V|n] ciego[V|s].",
+    "attacker":{"count":"0","outcome":"nothing"},
+    "victim":{"count":"-1","outcome":"nothing"},
+    "id":"124733888177111041/1565752347513-player0127",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

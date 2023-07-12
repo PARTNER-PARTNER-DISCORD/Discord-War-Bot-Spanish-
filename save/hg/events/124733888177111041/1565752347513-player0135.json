@@ -1,0 +1,9 @@
+{
+    "message":"Un coco cae de un árbol sobre {victim}, se queda inconsciente y cae al agua donde se ahoga.",
+    "attacker":{"count":"0","outcome":"nothing"},
+    "victim":{"count":"1","outcome":"dies"},
+    "id":"124733888177111041/1565752347513-player0135",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}
