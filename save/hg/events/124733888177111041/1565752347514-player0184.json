@@ -1,0 +1,9 @@
+{
+    "message":"{victim} sufre[V|n] un ataque al corazón, pero {atacante} siempre quis[Vo|ieron] probar la RCP, ¡y logra[A|n] revivirlo[V|s]!",
+    "victim":{"count":-1,"outcome":"wounded"},
+    "attacker":{"count":-1,"outcome":"nothing"},
+    "id":"124733888177111041/1565752347514-player0184",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

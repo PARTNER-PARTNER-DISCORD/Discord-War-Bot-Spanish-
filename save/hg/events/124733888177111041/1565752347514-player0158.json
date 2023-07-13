@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} encuentra[A|n] provisiones en los restos de {dead}.",
+    "attacker":{"count":"-1","outcome":"thrives"},
+    "victim":{"count":"0","outcome":"nothing"},
+    "id":"124733888177111041/1565752347514-player0158",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

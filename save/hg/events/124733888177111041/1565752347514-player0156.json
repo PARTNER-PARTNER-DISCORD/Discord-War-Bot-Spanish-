@@ -1,0 +1,9 @@
+{
+    "message":"{victim} sufre[V|n] una sobredosis de analgésicos.",
+    "attacker":{"count":"0","outcome":"nothing"},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347514-player0156",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}
