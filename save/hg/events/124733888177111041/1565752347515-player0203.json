@@ -1,0 +1,10 @@
+{
+    "message":"{attacker} teme que no puedan abrir las puertas de la bahía de cápsulas, por lo que {victim} muere en el vacío.",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":-1,"outcome":"nothing","killer":true},
+    "_reference":"2001 A Space Odyssey",
+    "id":"124733888177111041/1565752347515-player0203",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

@@ -1,0 +1,10 @@
+{
+    "message":"La hierba crece, los pájaros vuelan, el sol brilla, y hermano, {attacker} mata[A|n] {victim}.",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":-1,"outcome":"nothing","killer":true},
+    "_reference":"Team Fortress 2",
+    "id":"124733888177111041/1565752347515-player0214",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

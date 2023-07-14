@@ -1,0 +1,10 @@
+{
+    "message":"Bueno, parece que no trabajaremos juntos. No me arrepiento, {victim}...",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":0,"outcome":"nothing"},
+    "_reference":"Half Life",
+    "id":"124733888177111041/1565752347515-player0202",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}
