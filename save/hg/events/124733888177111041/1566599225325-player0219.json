@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566599225325-player0219",
+    "message":"{victim} se queda[V|n] un rato y escucha[V|n].",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"nothing"},
+    "attacker":{"count":0,"outcome":"nothing"}
+}

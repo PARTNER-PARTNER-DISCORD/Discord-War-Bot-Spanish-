@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566601244395-player0231",
+    "message":"¡Gracias {víctima}! Pero {atacante} está[A|n] en otro castillo.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"nothing"},
+    "attacker":{"count":-1,"outcome":"nothing"}
+}

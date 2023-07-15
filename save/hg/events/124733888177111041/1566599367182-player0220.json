@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566599367182-player0220",
+    "message":"¿Qué significan los números, {victim}?",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":1,"outcome":"nothing"},
+    "attacker":{"count":0,"outcome":"nothing"}
+}

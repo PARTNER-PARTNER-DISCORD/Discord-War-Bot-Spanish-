@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566599975815-player0224",
+    "message":"{victim} podría[V|n] tener un caso muy leve de daño cerebral grave.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"wounded"},
+    "attacker":{"count":0,"outcome":"nothing"}
+}

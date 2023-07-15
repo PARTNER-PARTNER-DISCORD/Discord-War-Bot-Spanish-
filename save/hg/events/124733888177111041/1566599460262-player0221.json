@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566599460262-player0221",
+    "message":"¡{victim} le trae un balde a {attacker} y {attacker} le muestra a {victim} un balde!",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":1,"outcome":"nothing"},
+    "attacker":{"count":1,"outcome":"nothing"}
+}

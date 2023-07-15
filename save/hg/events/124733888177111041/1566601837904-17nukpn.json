@@ -1,1 +1,8 @@
-{"id":"124733888177111041/1566601837904-17nukpn","message":"Not even death can save {victim} from {attacker}.","custom":true,"creator":"124733888177111041","type":"normal","subMessage":"","action":null,"victim":{"count":-1,"outcome":"dies","killer":false},"attacker":{"count":-1,"outcome":"revived","killer":true},"battle":false,"state":0,"attacks":[],"consumes":null}
+{
+    "id":"124733888177111041/1566601837904-player0234",
+    "message":"Ni siquiera la muerte puede salvar a {victim} de {attacker}.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":-1,"outcome":"revived","killer":true}
+}
