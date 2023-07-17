@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} encuentra[A|n] un gimnasio y se pone[A|n] a levantar pesas.",
-    "attacker":{"count":"-1","outcome":"nothing"},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0023",
-    "creator":"124733888177111041"
-}

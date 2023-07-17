@@ -45,7 +45,7 @@ class LocaleManager extends SubModule {
      * @type {object.<string>}
      * @default
      */
-    this._mappings = {español: 'es_ES'};
+    this._mappings = {english: 'en_US'};
     /**
      * @description Locale settings set for specific guilds. If a guild is not
      * included in here, they are expected to use the default locale settings.

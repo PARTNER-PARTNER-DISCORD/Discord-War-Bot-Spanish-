@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} encuentra algunas botellas de alguna bebida alcohólica.",
-    "attacker":{"count":"1","outcome":"nothing","weapon":{"count":3,"id":"124733888177111041/1565752347503-weapon0003"}},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0010",
-    "creator":"124733888177111041"
-}

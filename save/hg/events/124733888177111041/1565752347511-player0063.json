@@ -1,9 +1,0 @@
-{
-    "message":"{victim} se cuenta[V|n] historias V[a sí|sobre ellos] mismo[V|s]",
-    "attacker":{"count":"0","outcome":"nothing"},
-    "victim":{"count":"-1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347511-player0063",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

@@ -1,9 +1,0 @@
-{
-    "message":"{victim} está[V|n] encantado[V|s] al ver algunos gatos, ¡y termina[V|n] siendo arañados hasta la muerte!",
-    "victim":{"count":"-1","outcome":"dies"},
-    "attacker":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347514-player0176",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

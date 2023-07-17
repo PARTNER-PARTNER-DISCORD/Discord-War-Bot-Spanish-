@@ -1,9 +1,0 @@
-{
-    "message":"{victim} intenta trepar un árbol, pero resbala, cae y muere por el golpe en la cabeza.",
-    "attacker":{"count":"0","outcome":"nothing"},
-    "victim":{"count":"1","outcome":"dies"},
-    "id":"124733888177111041/1565752347512-player0109",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

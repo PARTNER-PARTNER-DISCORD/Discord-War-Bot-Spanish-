@@ -1,9 +1,0 @@
-{
-    "message":"{attacker} sac[Aó|aron] a {victim} de su miseria.",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"1","outcome":"dies"},
-    "id":"124733888177111041/1565752347512-player0100",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

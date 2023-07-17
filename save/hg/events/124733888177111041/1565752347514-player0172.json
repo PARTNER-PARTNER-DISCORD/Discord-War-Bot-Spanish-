@@ -1,9 +1,0 @@
-{
-    "message":"¡{attacker} mata[A|n] a {victim}!",
-    "victim":{"count":1,"outcome":"dies"},
-    "attacker":{"count":1,"outcome":"nothing","killer":true},
-    "id":"124733888177111041/1565752347514-player0172",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

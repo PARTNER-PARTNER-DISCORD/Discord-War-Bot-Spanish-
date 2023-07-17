@@ -14,11 +14,11 @@ class Strings {
    * locale. Excluding path and extension.
    * @param {string} [dir='../../strings/'] Path to find folder of available
    * locales, relative to this file.
-   * @param {string} [defaultLocale='es_ES'] Default and fallback locale to use
+   * @param {string} [defaultLocale='en_US'] Default and fallback locale to use
    * when unspecified or no string in given locale is found.
    */
   constructor(
-      filename = 'global', dir = '../../strings/', defaultLocale = 'es_ES') {
+      filename = 'global', dir = '../../strings/', defaultLocale = 'en_US') {
     if (typeof filename !== 'string') {
       throw new TypeError('Filename is not a string.');
     }
@@ -49,7 +49,7 @@ class Strings {
      * @description Default and fallback locale.
      * @private
      * @type {string}
-     * @default 'es_ES'
+     * @default 'en_US'
      * @constant
      */
     this._stringsDefault =

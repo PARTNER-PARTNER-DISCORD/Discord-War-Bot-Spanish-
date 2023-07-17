@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} recibe[A|n] un puñado de cuchillos arrojadizos de un patrocinador.",
-    "attacker":{"count":"-1","outcome":"nothing","weapon":{"count":5,"id":"124733888177111041/1565752347504-weapon0009"}},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0014",
-    "creator":"124733888177111041"
-}

@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} pone[A|n] una trampa y mata[A|n] a {victim}.",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347510-bloodbath0062",
-    "creator":"124733888177111041"
-}

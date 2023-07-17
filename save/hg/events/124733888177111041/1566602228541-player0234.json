@@ -1,8 +1,0 @@
-{
-    "id":"124733888177111041/1566602228541-player0234",
-    "message":"Francamente, a {victim}, {attacker} le[A|s] importa un comino [Vtu|vuestras] vida[V|s].",
-    "creator":"124733888177111041",
-    "type":"normal",
-    "victim":{"count":-1,"outcome":"dies"},
-    "attacker":{"count":-1,"outcome":"nothing","killer":true}
-}

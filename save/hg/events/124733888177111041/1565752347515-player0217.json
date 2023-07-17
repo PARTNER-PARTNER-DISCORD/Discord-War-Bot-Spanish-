@@ -1,9 +1,0 @@
-{
-    "message":"{victim} encuentra[V un trozo de|n] madera tirada en el suelo.",
-    "victim":{"count":"-1","outcome":"nothing","weapon":{"count":"1","id":"124733888177111041/1565752347504-weapon0018"}},
-    "attacker":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347515-player0217",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

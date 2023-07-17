@@ -1,9 +1,0 @@
-{
-    "message":"{victim} se vuelve[V|n] uno con la arena mientras se camufla[V|n] en un arbusto.",
-    "attacker":{"count":"0","outcome":"nothing"},
-    "victim":{"count":"-1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347511-player0066",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

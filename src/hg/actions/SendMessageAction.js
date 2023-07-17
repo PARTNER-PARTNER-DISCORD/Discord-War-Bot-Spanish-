@@ -36,7 +36,7 @@ class SendMessageAction extends ChannelAction {
    */
   set message(msg) {
     if (typeof msg !== 'string' || msg.length === 0) {
-      throw new TypeError('¡El mensaje debe ser un string!');
+      throw new TypeError('Message must be a string!');
     }
     this._message = msg;
     this._saveData.message = msg;

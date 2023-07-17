@@ -1,8 +1,0 @@
-{
-    "id":"124733888177111041/1566600582859-player0227",
-    "message":"{attacker} le[A|s] da[A|n] un puñetazo a {victim}. ¡[AEs|Son] súper efectivo!",
-    "creator":"124733888177111041",
-    "type":"normal",
-    "victim":{"count":-1,"outcome":"dies"},
-    "attacker":{"count":-1,"outcome":"nothing","killer":true}
-}

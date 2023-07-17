@@ -1,9 +1,0 @@
-{
-    "message":"Una araña venenosa mortal muerde a {victim} y muere[V|n] poco después.",
-    "attacker":{"count":"0","outcome":"nothing"},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347514-player0162",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

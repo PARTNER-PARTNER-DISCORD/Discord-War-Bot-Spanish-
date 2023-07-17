@@ -1,7 +1,0 @@
-{
-	"message":"¡{victim} coge una pistola que puede o no funcionar!",
-	"attacker":{"count":"0","outcome":"nothing"},
-	"victim":{"count":"1","outcome":"nothing","weapon":{"count":6,"id":"124733888177111041/1565752347503-weapon0005"}},
-	"id":"124733888177111041/1565752347508-bloodbath0006",
-	"creator":"124733888177111041"
-}

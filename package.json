@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@discordjs/voice": "^0.11.0",
-    "@google-cloud/text-to-speech": "^3.1.2",
     "algebra.js": "^0.2.6",
     "async": "^3.2.0",
     "bufferutil": "^4.0.2",
@@ -37,7 +36,6 @@
     "threads": "^1.7.0",
     "utf-8-validate": "^5.0.3",
     "yieldable-json": "^2.0.1",
-    "youtube-dl": "^3.5.0",
     "zlib": "^1.0.5",
     "zlib-sync": "^0.1.7"
   },

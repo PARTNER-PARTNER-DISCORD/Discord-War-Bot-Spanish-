@@ -1,9 +1,0 @@
-{
-    "message":"A {victim} le[V|s] arañ[Vó|aron] un gato en la cara.",
-    "victim":{"count":"-1","outcome":"wounded"},
-    "attacker":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347514-player0175",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

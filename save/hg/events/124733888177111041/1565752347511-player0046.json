@@ -1,9 +1,0 @@
-{
-    "message":"{attacker} tiene sed de sangre y busca a victimas.",
-    "attacker":{"count":"1","outcome":"nothing"},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347511-player0046",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

@@ -27,8 +27,8 @@ class SendDayStartMessageAction extends ChannelAction {
       if (!game.autoPlay && game.currentGame.day.num < 2) {
         const prefix = hg._parent.bot.getPrefix(game.id);
         embed.setFooter({
-          text: 'Consejo: Usa "' + prefix + hg._parent.postPrefix +
-              'autoplay" para automatizar los juegos.',
+          text: 'Tip: Use "' + prefix + hg._parent.postPrefix +
+              'autoplay" to automate the games.',
         });
       }
       embed.setColor([255, 0, 255]);

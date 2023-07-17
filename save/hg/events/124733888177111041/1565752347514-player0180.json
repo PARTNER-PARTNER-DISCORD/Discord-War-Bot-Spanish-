@@ -1,9 +1,0 @@
-{
-    "message":"Miles de ojos miran a {victim} mientras camina[V|n] hacia una cueva.",
-    "victim":{"count":-1,"outcome":"nothing"},
-    "attacker":{"count":0,"outcome":"nothing"},
-    "id":"124733888177111041/1565752347514-player0180",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

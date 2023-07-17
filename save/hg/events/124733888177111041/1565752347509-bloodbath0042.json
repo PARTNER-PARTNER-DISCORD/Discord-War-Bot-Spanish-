@@ -1,7 +1,0 @@
-{
-	"message":"{attacker} coge[A|n] un cepillo de dientes.",
-	"attacker":{"count":"-1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0014"}},
-	"victim":{"count":"0","outcome":"nothing"},
-	"id":"124733888177111041/1565752347509-bloodbath0042",
-	"creator":"124733888177111041"
-}

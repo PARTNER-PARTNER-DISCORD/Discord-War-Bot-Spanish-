@@ -1,9 +1,0 @@
-{
-    "message":"{victim}, {attacker} celebran el cumpleaños de {victim}.",
-    "attacker":{"count":"-2","outcome":"nothing"},
-    "victim":{"count":"1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347513-player0138",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

@@ -30,7 +30,7 @@ Grammar.formatMultiNames = function(names, format = 'username') {
     }
 
     if (i == names.length - 2) {
-      output += ' y ';
+      output += ' and ';
     } else if (i != names.length - 1) {
       output += ', ';
     }

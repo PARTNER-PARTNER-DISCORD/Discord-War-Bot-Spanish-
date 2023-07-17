@@ -1,9 +1,0 @@
-{
-    "message":"{victim} se tuerce el tobillo mientras huye de {attacker}.",
-    "attacker":{"count":"-1","outcome":"nothing"},
-    "victim":{"count":"1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347511-player0049",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

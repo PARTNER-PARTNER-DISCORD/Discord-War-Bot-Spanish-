@@ -1,9 +1,0 @@
-{
-    "message":"{victim} le[V|s] ruega[V|n] a {attacker} que lo[V|s] mate[V|n], pero {attacker} se niega[A|n].",
-    "attacker":{"count":"-1","outcome":"nothing"},
-    "victim":{"count":"-1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347511-player0058",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

@@ -44,7 +44,7 @@ class StatGroup {
     }
 
     // Ensure SQL connection is established.
-    //common.connectSQL();
+    common.connectSQL();
 
     /**
      * @description The ID of this current bot.
@@ -137,7 +137,7 @@ class StatGroup {
   _fetchUser(uId, cb) {
     if (typeof uId !== 'string' ||
         (uId !== 'meta' && !uId.match(/^(\d{17,19}|NPC[A-F0-9]+)$/))) {
-      throw new TypeError('uId (' + uId + ') no es una ID válida.');
+      throw new TypeError('uId (' + uId + ') is not a valid ID.');
     }
     // Data is queued to be saved, and is still cached, return the cached
     // version instead of reading the stale version from file.
@@ -178,42 +178,42 @@ class StatGroup {
           done(err);
         }
       });
-    } //else {
-      // const toSend = global.sqlCon.format(
-          // 'SELECT * FROM HGStats WHERE ' +
-              // 'botId=? AND guildId=? AND groupId=? AND userId=?',
-          // [this.bot, this.guild, this.id, uId]);
-      // global.sqlCon.query(toSend, (err, rows) => {
-        // if (err) {
-          // done(err);
-          // return;
-        // }
-        // if (!rows || rows.length == 0) {
-          // // Fallback to legacy filesytem.
-          // fs.readFile(`${this._dir}${uId}.json`, (err, data) => {
-            // if (err) {
-              // if (err.code === 'ENOENT') {
-                // data = '{}';
-              // } else {
-                // done(err);
-                // return;
-              // }
-            // }
-            // try {
-              // const parsed = JSON.parse(data);
-              // parsed.id = uId;
-              // done(null, Stats.from(parsed));
-            // } catch (err) {
-              // done(err);
-            // }
-          // });
-        // } else {
-          // const data = rows[0] || {};
-          // data.id = uId;
-          // done(null, Stats.from(data));
-        // }
-      // });
-    //}
+    } else {
+      const toSend = global.sqlCon.format(
+          'SELECT * FROM HGStats WHERE ' +
+              'botId=? AND guildId=? AND groupId=? AND userId=?',
+          [this.bot, this.guild, this.id, uId]);
+      global.sqlCon.query(toSend, (err, rows) => {
+        if (err) {
+          done(err);
+          return;
+        }
+        if (!rows || rows.length == 0) {
+          // Fallback to legacy filesytem.
+          fs.readFile(`${this._dir}${uId}.json`, (err, data) => {
+            if (err) {
+              if (err.code === 'ENOENT') {
+                data = '{}';
+              } else {
+                done(err);
+                return;
+              }
+            }
+            try {
+              const parsed = JSON.parse(data);
+              parsed.id = uId;
+              done(null, Stats.from(parsed));
+            } catch (err) {
+              done(err);
+            }
+          });
+        } else {
+          const data = rows[0] || {};
+          data.id = uId;
+          done(null, Stats.from(data));
+        }
+      });
+    }
   }
 
   /**
@@ -262,7 +262,7 @@ class StatGroup {
       opts = {};
     }
     if (typeof cb !== 'function') {
-      throw new TypeError('La devolución de llamada debe ser una función');
+      throw new TypeError('Callback must be a function');
     }
     if (!opts || typeof opts !== 'object') {
       opts = {};
@@ -376,7 +376,7 @@ class StatGroup {
    */
   increment(uId, key, amount = 1, cb) {
     if (typeof amount !== 'number' || isNaN(amount)) {
-      throw new TypeError('La cantidad no es un número.');
+      throw new TypeError('Amount is not a number.');
     }
     this._fetchUser(uId, (err, data) => {
       if (err) {
@@ -389,7 +389,7 @@ class StatGroup {
       }
       if (!data.get(key)) data.set(key, 0);
       if (typeof data.get(key) !== 'number') {
-        const err = new TypeError('El valor obtenido no es un número.');
+        const err = new TypeError('Fetched value is not a number.');
         if (typeof cb !== 'function') {
           console.error(err);
         } else {
@@ -442,7 +442,7 @@ class StatGroup {
       const fn = `${this._dir}${data.id}.json`;
       common.unlink(fn, (err) => {
         if (err) {
-          console.error('Error al eliminar el archivo de estadísticas de usuario heredado:', fn);
+          console.error('Failed to remove legacy user stat file:', fn);
           console.error(err);
         }
       });
@@ -582,12 +582,12 @@ class StatGroup {
       }
     };
     resetQueue();
-    // const toSend = global.sqlCon.format(
-        // 'DELETE FROM HGStats WHERE botId=? AND guildId=? AND groupID=?;',
-        // [this.bot, this.guild, this.id]);
-    // global.sqlCon.query(toSend, (err) => {
-      // if (err) console.error(err);
-    // });
+    const toSend = global.sqlCon.format(
+        'DELETE FROM HGStats WHERE botId=? AND guildId=? AND groupID=?;',
+        [this.bot, this.guild, this.id]);
+    global.sqlCon.query(toSend, (err) => {
+      if (err) console.error(err);
+    });
     rimraf(this._dir, (err) => {
       if (err) console.error(err);
       resetQueue();

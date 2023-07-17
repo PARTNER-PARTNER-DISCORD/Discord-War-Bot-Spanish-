@@ -79,7 +79,7 @@ class FinalEvent {
               if (deadUsers.length > 0) {
                 return Grammar.formatMultiNames(deadUsers, useNickname);
               } else {
-                return 'un animal';
+                return 'an animal';
               }
           }
         });
@@ -112,7 +112,7 @@ class FinalEvent {
         this.consumes = [];
       }
     } else if (!Array.isArray(this.consumes)) {
-      throw new TypeError('Consumes no es un array: ' + evt.consumes);
+      throw new TypeError('Consumes is not an array: ' + evt.consumes);
     }
     /**
      * @description The ID of the player that will be consuming weapons.

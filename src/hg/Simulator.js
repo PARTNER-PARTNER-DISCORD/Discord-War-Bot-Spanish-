@@ -68,7 +68,8 @@ class Simulator {
   go(cb) {
     if (this.game.currentGame.day.state == 1) {
       this.hg._parent.error(
-          'No se puede comenzar a simular porque la simulación ya está en progreso.');
+          'Unable to start simulating because simulation is already in ' +
+          'progress.');
       return;
     }
     const locale = this.hg._parent.bot.getLocale &&
@@ -109,7 +110,7 @@ class Simulator {
           this.game.currentGame = HungryGames.Game.from(msg.game.currentGame);
         } else {
           this.hg._parent.warn(
-              'Se canceló el guardado del simulador debido a que no estaba en estado de carga.');
+              'Aborted simulator saving due to not being in loading state.');
         }
         cb();
       }
@@ -122,19 +123,20 @@ class Simulator {
       this.game.currentGame.day.state = 0;
       this.hg._parent.common.reply(
           this.msg,
-          'El simulador se bloqueó por razones desconocidas al simular al día siguiente.',
-          'Inténtalo de nuevo con `hg next`, de lo contrario el juego puede estar en mal estado.');
+          'Simulator crashed for unknown reason while simulating next day.',
+          'Try again with `hg next`, otherwise game may be in a bad state.');
     });
     worker.on('exit', (code) => {
       if (code != 0) this.hg._parent.debug('Worker exited with code ' + code);
       if (this.game.currentGame.day.state == 1) {
         this.hg._parent.error(
-            '¡El trabajador salió pero el juego todavía está en estado de carga! ¡Considerando esto un error fatal!');
+            'Worker exited but game is still in loading state! Considering ' +
+            'this a fatal error!');
         this.game.currentGame.day.state = 0;
         this.hg._parent.common.reply(
             this.msg,
-            'El simulador se bloqueó por razones desconocidas al simular al día siguiente.',
-            'Inténtalo de nuevo con `hg next`, de lo contrario el juego puede estar en mal estado.');
+            'Simulator crashed for unknown reason while simulating next day.',
+            'Try again with `hg next`, otherwise game may be in a bad state.');
       }
     });
   }
@@ -200,7 +202,7 @@ Simulator.weightedUserRand = function() {
   for (const i in Simulator._multiEventUserDistribution) {
     if (typeof Simulator._multiEventUserDistribution[i] !== 'number') {
       throw new Error(
-          'Valor no válido para multiEventUserDistribution:' +
+          'Invalid value for multiEventUserDistribution:' +
           Simulator._multiEventUserDistribution[i]);
     } else {
       sum += Simulator._multiEventUserDistribution[i];
@@ -635,7 +637,7 @@ Simulator._pickEvent = function(
         }
       }
       if (count >= 100) {
-        self.error('Bucle infinito al elegir el recuento de jugadores.');
+        self.error('Infinite loop while picking player count.');
         // fails.push('Infinite loop while picking player count.');
         continue;
       }
@@ -714,7 +716,7 @@ Simulator._validateEventTeamConstraint = function(
         }) > -1;
       });
       if (!attackerTeam) {
-        self.error(weaponWielder.id + ' no en ningún equipo');
+        self.error(weaponWielder.id + ' not on any team');
         return 'TEAM_WEAPON_NO_TEAM';
       }
       return !(numAttacker <= attackerTeam.numPool &&
@@ -1023,7 +1025,7 @@ Simulator.formatWeaponEvent = function(
         consumableName += 's';
       }
     }
-    subMessage = `\n${ownerName} se queda sin ${consumableName}.`;
+    subMessage = `\n${ownerName} runs out of ${consumableName}.`;
   } else if (consumed != 0) {
     let consumableName = weaponName;
     const count = consumed;
@@ -1036,17 +1038,17 @@ Simulator.formatWeaponEvent = function(
     } else if (count != 1) {
       consumableName += 's';
     }
-    subMessage = `\n${ownerName} pierde ${count} ${consumableName}.`;
+    subMessage = `\n${ownerName} lost ${count} ${consumableName}.`;
   }
 
-  let owner = 'él';
+  let owner = 'their';
   if (numAttacker > 1 || (numAttacker == 1 && !firstAttacker)) {
-    owner = `${ownerName}`;
+    owner = `${ownerName}'s`;
   }
   if (!eventTry.message) {
     eventTry.message =
         HungryGames.WeaponEvent.action
-            .replace(/\{weapon\}/g, `${weaponName} de ${owner}`)
+            .replace(/\{weapon\}/g, `${owner} ${weaponName}`)
             .replace(/\{action\}/g, eventTry.action)
             .replace(/\[C([^|]*)\|([^\]]*)\]/g, (consumed == 1 ? '$1' : '$2'));
   } else {
@@ -1086,7 +1088,7 @@ Simulator.formatWeaponCounts = function(
     const count = el[1];
     if (!weapon) {
       console.error('Unable to find weapon ' + el[0]);
-      return `(Arma desconocida ${weaponName}. ¿Fue eliminada?)`;
+      return `(Unknown weapon ${weaponName}. Was it deleted?)`;
     }
     if (weapon.consumable) {
       consumableName = weapon.consumable.replace(
@@ -1122,8 +1124,8 @@ Simulator.formatWeaponCounts = function(
   const subMessage = [];
   Object.entries(finalConsumeList).forEach((el) => {
     const multi = HungryGames.Grammar.formatMultiNames(el[1], nameFormat);
-    const has = el[1].length == 1 ? 'tiene' : 'tienen';
-    subMessage.push(`\n${multi} ahora ${has} ${el[0]}.`);
+    const has = el[1].length == 1 ? 'has' : 'have';
+    subMessage.push(`\n${multi} now ${has} ${el[0]}.`);
   });
   return subMessage.join('');
 };

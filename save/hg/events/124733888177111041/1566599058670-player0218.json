@@ -1,8 +1,0 @@
-{
-    "id":"124733888177111041/1566599058670-player0218",
-    "message":"{victim} busca[V|n] la tarta. No la encuentra[V|n].",
-    "creator":"124733888177111041",
-    "type":"normal",
-    "victim":{"count":-1,"outcome":"nothing"},
-    "attacker":{"count":0,"outcome":"nothing"}
-}

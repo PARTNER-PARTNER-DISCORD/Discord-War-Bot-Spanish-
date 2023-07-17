@@ -1,9 +1,0 @@
-{
-    "message":"{victim} regresa[V|n] a la cornucopia para buscar suministros, pero se mete[V|n] en la trampa de {attacker} y muere.",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347513-player0122",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

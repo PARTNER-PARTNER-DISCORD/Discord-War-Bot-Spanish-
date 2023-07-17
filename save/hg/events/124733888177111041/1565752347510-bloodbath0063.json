@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} mata[A|n] a {victim} cuando intenta[V|n] escapar.",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347510-bloodbath0063",
-    "creator":"124733888177111041"
-}

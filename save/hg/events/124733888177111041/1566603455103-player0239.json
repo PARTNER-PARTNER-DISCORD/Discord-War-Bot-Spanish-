@@ -1,8 +1,0 @@
-{
-    "id":"124733888177111041/1566603455103-player0239",
-    "message":"{victim} toma[V|n] una droga pensando que le[V|s] daría[V|n] un coeficiente intelectual de cuatro dígitos.",
-    "creator":"124733888177111041",
-    "type":"normal",
-    "victim":{"count":-1,"outcome":"dies"},
-    "attacker":{"count":0,"outcome":"nothing"}
-}

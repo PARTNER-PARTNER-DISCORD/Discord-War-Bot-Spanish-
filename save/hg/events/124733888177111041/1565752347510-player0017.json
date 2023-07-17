@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} recibe[A|n] una pala de un patrocinador.",
-    "attacker":{"count":"-1","outcome":"nothing","weapon":{"count":"1","id":"124733888177111041/1565752347504-weapon0010"}},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0017",
-    "creator":"124733888177111041"
-}

@@ -1,9 +1,0 @@
-{
-    "message":"{victim} se detiene[V|n] a oler las flores, y {attacker} le[A|s] apuñala[A|n] por la espalda.",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347514-player0154",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

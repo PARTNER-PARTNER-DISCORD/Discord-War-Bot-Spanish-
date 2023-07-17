@@ -4,7 +4,6 @@ const fs = require('fs');
 const Jimp = require('jimp');
 const http = require('http');
 const https = require('https');
-const mathjs = require('mathjs');
 const crypto = require('crypto');
 const FuzzySearch = require('fuzzy-search');
 const MessageMaker = require('./lib/MessageMaker.js');
@@ -12,8 +11,7 @@ require('./subModule.js').extend(HG);  // Extends the SubModule class.
 
 delete require.cache[require.resolve('./locale/Strings.js')];
 const Strings = require('./locale/Strings.js');
-const math = mathjs.create(mathjs.all, {matrix: 'Array'});
- 
+
 /**
  * @classdesc Hunger Games simulator subModule.
  * @class
@@ -271,7 +269,7 @@ function HG() {
   function updateEvents() {
     fs.readFile(eventFileList, (err, data) => {
       if (err) {
-        self.error('Error al leer la lista de eventos predeterminada.');
+        self.error('Failed to read default event list.');
         console.error(err);
         return;
       }
@@ -280,7 +278,7 @@ function HG() {
         if (!parsed) return;
         loadDefaultsFromIds(parsed);
       } catch (err) {
-        self.error(eventFileList + ' El analizador falló');
+        self.error(eventFileList + ' Parse failed.');
         console.log(err);
       }
     });
@@ -289,9 +287,9 @@ function HG() {
   fs.watchFile(eventFileList, {persistent: false}, (curr, prev) => {
     if (curr.mtime == prev.mtime) return;
     if (self.initialized) {
-      self.debug('Relectura de eventos predeterminados del archivo');
+      self.debug('Re-reading default events from file');
     } else {
-      console.log('HG: Relectura de eventos predeterminados del archivo');
+      console.log('HG: Re-reading default events from file');
     }
     updateEvents();
   });
@@ -335,9 +333,9 @@ function HG() {
   fs.watchFile(battleFile, {persistent: false}, (curr, prev) => {
     if (curr.mtime == prev.mtime) return;
     if (self.initialized) {
-      self.debug('Relectura de batallas de archivo');
+      self.debug('Re-reading battles from file');
     } else {
-      console.log('HG: Relectura de batallas de archivo');
+      console.log('HG: Re-reading battles from file');
     }
     updateBattles();
   });
@@ -350,7 +348,7 @@ function HG() {
    */
   const helpObject = JSON.parse(fs.readFileSync('./docs/hgHelp.json'));
   /** @inheritdoc */
-  this.helpMessage = 'Módulo cargando ...';
+  this.helpMessage = 'Module loading...';
 
   /**
    * @description Set all help messages once we know what prefix to use.
@@ -359,7 +357,7 @@ function HG() {
    */
   function setupHelp() {
     const prefix = self.bot.getPrefix() + self.postPrefix;
-    self.helpMessage = '`' + prefix + 'help` para ayuda sobre los Hungry Games.';
+    self.helpMessage = '`' + prefix + 'help` for Hungry Games help.';
     // Format help message into rich embed.
     const tmpHelp = new self.Discord.EmbedBuilder();
     tmpHelp.setTitle(helpObject.title);
@@ -413,7 +411,6 @@ function HG() {
     };
     const subCmds = [
       new self.command.SingleCommand('help', help),
-	  new self.command.SingleCommand('ping', commandPing),
       new self.command.SingleCommand('makemewin', commandMakeMeWin),
       new self.command.SingleCommand('makemelose', commandMakeMeLose),
       new self.command.SingleCommand(
@@ -665,11 +662,11 @@ function HG() {
    */
   function mkCmd(cb) {
     return function(msg) {
-      /**if (self.common.isRelease && (msg.guild && msg.guild.memberCount > 75000)) { // Limitación del número de usuarios
-        *reply(msg, 'largeServerDisabled', 'largeServerDisabledSub');
-        *return;
-      *}
-	*/
+      if (self.common.isRelease &&
+          (msg.guild && msg.guild.memberCount > 75000)) {
+        reply(msg, 'largeServerDisabled', 'largeServerDisabledSub');
+        return;
+      }
       const id = msg.guild && msg.guild.id;
       const cached = id && hg._games[id];
       hg.fetchGame(id, (game) => {
@@ -755,25 +752,6 @@ function HG() {
         str, self.bot.getLocale && self.bot.getLocale(gId), ...rep);
   };
 
-  /**
-   * Reply to user with my ping to the Discord servers.
-   *
-   * @private
-   * @type {commandHandler}
-   * @param {Discord~Message} msg Message that triggered command.
-   * @listens Command#ping
-   */
-  function commandPing(msg) {
-    if (self.client.ping) {
-      self.common.reply(
-          msg, 'Mi ping es', Math.round(self.client.ping * 10) / 10 + 'ms');
-    } else {
-      self.common.reply(
-          msg,
-          'Mi ping actual', Math.round(self.client.ws.ping * 10) / 10 + 'ms');
-    }
-  }
-  
   /**
    * Tell a user their chances of winning have not increased.
    *
@@ -896,7 +874,7 @@ function HG() {
   NPC.saveAvatar = function(avatar, id) {
     if (!NPC.checkID(id)) return null;
     return self.readImage(avatar).then((image) => {
-      if (!image) throw new Error('No se pudo obtener el avatar de NPC.');
+      if (!image) throw new Error('Failed to fetch NPC avatar.');
       const dir = self.common.userSaveDir + 'avatars/' + id + '/';
       const imgName = Date.now() + '.png';
       const filename = dir + imgName;
@@ -907,13 +885,13 @@ function HG() {
       image.resize(fetchSize, fetchSize);
       image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
         if (err) {
-          self.error(`Error al convertir la imagen en búfer: ${avatar}`);
+          self.error(`Failed to convert image into buffer: ${avatar}`);
           console.error(err);
           return;
         }
         self.common.mkAndWrite(filename, dir, buffer, (err) => {
           if (!err) return;
-          self.error(`Error al almacenar en caché el avatar de NPC: ${filename}`);
+          self.error(`Failed to cache NPC avatar: ${filename}`);
           console.error(err);
         }, self.common.encryptAvatars);
       });
@@ -1191,7 +1169,7 @@ function HG() {
       file.setFile(Buffer.from(JSON.stringify(game.serializable, null, 2)));
       file.setName(`HG-${finalId}.json`);
       msg.channel.send(
-          {content: `Datos HG para el servidor ${finalId}`, files: [file]});
+          {content: `HG Data for guild ${finalId}`, files: [file]});
     } else {
       reply(msg, 'noGame', 'fillOne', finalId);
     }
@@ -1264,7 +1242,7 @@ function HG() {
           game.loading = false;
           if (game.currentGame) game.currentGame.inProgress = false;
         }
-        self.warn('No se pudo crear el juego para iniciar el juego.');
+        self.warn('Failed to create game to start game');
         reply(msg, 'createFailedUnknown');
         return;
       }
@@ -1290,7 +1268,7 @@ function HG() {
           .catch((err) => {
             reply(msg, 'startedTitle', 'startMessageRejected');
             self.error(
-                'Error al enviar el mensaje de inicio del juego: ' + msg.channel.id +
+                'Failed to send start game message: ' + msg.channel.id +
                 ' (Num: ' + g.currentGame.includedUsers.length + ')');
             console.error(err);
           });
@@ -1507,7 +1485,7 @@ function HG() {
    */
   function nextDay(msg, id, autoStep = true) {
     if (!msg.channel) {
-      self.error('No se pudo iniciar al día siguiente porque se desconoce el canal: ' + id);
+      self.error('Failed to start next day because channel is unknown: ' + id);
       return;
     }
     const game = hg.getGame(id);
@@ -1516,7 +1494,7 @@ function HG() {
       const prefix = msg.prefix = self.postPrefix;
       reply(msg, 'needStartGameTitle', 'needStartGameBody', prefix)
           .catch((err) => {
-            self.error('Error al decirle al usuario que inicie el juego: ' + err.message);
+            self.error('Failed to tell user to start game: ' + err.message);
             if (err.message != 'No Perms') console.error(err);
           });
       if (game) game.clearIntervals();
@@ -1528,7 +1506,7 @@ function HG() {
       } else if (game.currentGame.day.state == 1) {
         reply(msg, 'nextDayAlreadySimBroken').catch((err) => {
           self.error(
-              'Error al decir que el día del usuario ya está en progreso: ' + err.message);
+              'Failed to tell user day is already in progress: ' + err.message);
           if (err.message != 'No Perms') console.error(err);
         });
       } else if (autoStep) {
@@ -1546,7 +1524,7 @@ function HG() {
       reply(msg, 'nextDayPermImagesTitle', 'nextDayPermImagesBody');
       if (!myPerms) {
         self.error(
-            'No pude obtener permisos para mí. ' +
+            'Failed to fetch perms for myself. ' +
             (msg.guild.members.me && true));
       }
       return;
@@ -1615,7 +1593,7 @@ function HG() {
 
     if (current.numAlive != numAlive) {
       self.warn(
-          '¡El conteo de vivos en tiempo real es incorrecto! ' + current.numAlive + ' vs ' +
+          'Realtime alive count is incorrect! ' + current.numAlive + ' vs ' +
           numAlive);
       current.numAlive = numAlive;
     }
@@ -1653,7 +1631,7 @@ function HG() {
    */
   function commandStep(msg, id) {
     if (!msg.channel) {
-      self.error('No se pudo iniciar al día siguiente porque se desconoce el canal: ' + id);
+      self.error('Failed to start next day because channel is unknown: ' + id);
       return;
     }
     const game = hg.getGame(id);
@@ -1830,7 +1808,7 @@ function HG() {
     const num = users.length + npcs.length;
     const numUsers = users.length;
     if (num > 10000) {
-      self.warn(`Excluyendo ${num} usuarios.`);
+      self.warn(`Excluding ${num} users.`);
     }
     const iTime2 = Date.now();
     const onlyError = num > 2;
@@ -1874,7 +1852,7 @@ function HG() {
       const begin = iTime2 - iTime;
       const loop = now - iTime2;
       if (begin > 10 || loop > 10) {
-        self.debug(`Excluyendo ${num} ${begin} ${loop}`);
+        self.debug(`Excluding ${num} ${begin} ${loop}`);
       }
       const finalRes = (response.length > 0 &&
                         response.filter((el) => el !== '\n').join('').trim()) ||
@@ -1929,7 +1907,7 @@ function HG() {
       obj = game.includedNPCs.find((el) => el.id == obj.id);
       if (!obj) {
         response.push(strings.get('excludeUnableToFind', locale, objId));
-        self.error(`No se pueden encontrar datos NPC que coincidan con los de tipo NPC: ${game.id}`);
+        self.error(`Unable to find NPC matching NPC-like data: ${game.id}`);
         return `${response.join('\n')}\n`;
       }
     }
@@ -1982,7 +1960,7 @@ function HG() {
         } else {
           response.push(
               strings.get('excludeFailedUnknown', locale, obj.username));
-          self.error(`No se pudo eliminar al jugador de la lista incluida. (${obj.id})`);
+          self.error(`Failed to remove player from included list. (${obj.id})`);
         }
       }
     }
@@ -2098,7 +2076,7 @@ function HG() {
     const large = self.client.guilds.resolve(id).memberCount >=
         HungryGames.largeServerCount;
     if (large && typeof users === 'string') {
-      cb('Demasiados jugadores');
+      cb('Too many members');
       return;
     }
     switch (users) {
@@ -2129,7 +2107,7 @@ function HG() {
     const num = users.length + npcs.length;
     const numUsers = users.length;
     if (num > 10000) {
-      self.warn(`Incluyendo ${num} usuarios.`);
+      self.warn(`Including ${num} users.`);
     }
     const iTime2 = Date.now();
     const onlyError = num > 2;
@@ -2172,7 +2150,7 @@ function HG() {
       const begin = iTime2 - iTime;
       const loop = now - iTime2;
       if (begin > 10 || loop > 10) {
-        self.debug(`Incluyendo ${num} ${begin} ${loop}`);
+        self.debug(`Including ${num} ${begin} ${loop}`);
       }
       const finalRes = (response.length > 0 &&
                         response.filter((el) => el !== '\n').join('').trim()) ||
@@ -2224,7 +2202,7 @@ function HG() {
       obj = game.excludedNPCs.find((el) => el.id == obj.id);
       if (!obj) {
         response.push(strings.get('includeUnableToFind', locale, objId));
-        self.error(`No se pueden encontrar datos NPC que coincidan con NPC: ${game.id}`);
+        self.error(`Unable to find NPC matching NPC-like data: ${game.id}`);
         return `${response.join('\n')}\n`;
       }
     }
@@ -2314,7 +2292,7 @@ function HG() {
         .catch((err) => {
           reply(msg, 'messageRejected');
           self.error(
-              'Error al enviar el mensaje de la lista de jugadores: ' + msg.channel.id);
+              'Failed to send list of players message: ' + msg.channel.id);
           console.error(err);
         });
   }
@@ -3298,7 +3276,7 @@ function HG() {
         hg.createEvent(evt, (err, out) => {
           if (err) {
             self.error(
-                'Error al actualizar el evento heredado: ' + type + ' ' + type2 + ' ' +
+                'Failed to update legacy event: ' + type + ' ' + type2 + ' ' +
                 i + ' ' + game.id);
             console.error(err);
             errored = true;
@@ -3379,7 +3357,7 @@ function HG() {
       embed.setThumbnail(specific.avatarURL);
       msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
           .catch((err) => {
-            self.error('Error al enviar el mensaje de información del NPC: ' + msg.channel.id);
+            self.error('Failed to send NPC info message: ' + msg.channel.id);
             console.error(err);
           });
     } else if (msg.text && !['show', 'list'].includes(msg.text.trim())) {
@@ -3454,7 +3432,7 @@ function HG() {
           .catch((err) => {
             reply(msg, 'messageRejected', 'npcTooMany');
             self.error(
-                'Error al enviar la lista de mensajes de NPC: ' + msg.channel.id);
+                'Failed to send list of NPCs message: ' + msg.channel.id);
             console.error(err);
           });
     }
@@ -3504,13 +3482,13 @@ function HG() {
         try {
           req = request(url, opt, onIncoming);
         } catch (err) {
-          self.warn('Error al solicitar avatar del npc: ' + url);
+          self.warn('Failed to request npc avatar: ' + url);
           // console.error(err);
           self.common.reply(msg, err.message);
           return;
         }
         req.on('error', (err) => {
-          self.error('Error al recuperar la imagen: ' + url);
+          self.error('Failed to fetch image: ' + url);
           console.error(err);
         });
         req.end();
@@ -3587,7 +3565,7 @@ function HG() {
     function onGetAvatar(buffer) {
       Jimp.read(buffer)
           .then((image) => {
-            if (!image) throw new Error('Datos inválidos');
+            if (!image) throw new Error('Invalid Data');
             let size = 128;
             if (hg.getGame(id) && hg.getGame(id).options &&
                 hg.getGame(id).options.eventAvatarSizes) {
@@ -3602,7 +3580,7 @@ function HG() {
           })
           .catch((err) => {
             reply(msg, 'invalidImage', 'fillOne', err.message);
-            self.error('Error al convertir el búfer en imagen.');
+            self.error('Failed to convert buffer to image.');
             console.error(err);
           });
     }
@@ -3658,7 +3636,7 @@ function HG() {
                 });
           })
           .catch((err) => {
-            self.error('Error al enviar la confirmación del NPC: ' + msg.channel.id);
+            self.error('Failed to send NPC confirmation: ' + msg.channel.id);
             console.error(err);
           });
     }
@@ -3685,7 +3663,7 @@ function HG() {
                 msg, strings.get('npcCreated', msg.locale, username), id);
           }
         }).catch((err) => {
-          self.error('Error al crear NPC.');
+          self.error('Failed to create NPC.');
           console.log(err);
         });
       }
@@ -3932,17 +3910,6 @@ function HG() {
           }
         })
         .catch(() => reply(msg, 'helpMessageFailed').catch(() => {}));
-		const hasPatron = null;
-		if (msg.guild != null){
-			const game = hg.getGame(msg.guild.id);
-			const hasPatron =
-				game.currentGame.includedUsers.find((el) => el.settings.isPatron);
-		}
-		// if (!hasPatron) {
-		//   msg.author.send(
-		// 	  'Si te gusta SpikeyBot, considera apoyarlo en Patreon:\n' +
-		// 	  '<https://www.patreon.com/campbellcrowley>');
-		// }
   }
 
   /**
@@ -3982,7 +3949,7 @@ function HG() {
       group.fetchUser(user.id, (err, data) => {
         if (err) {
           self.error(
-              'Error al recuperar las estadísticas de usuario de HG: ' + id + '@' + user.id + '/' +
+              'Failed to fetch HG User stats: ' + id + '@' + user.id + '/' +
               group.id);
           console.error(err);
         } else {
@@ -4006,7 +3973,7 @@ function HG() {
           group.fetchMetadata((err, meta) => {
             if (err) {
               self.error(
-                  'Error al obtener metadatos para el grupo ' + id + '/' + group.id);
+                  'Failed to fetch metadata for group ' + id + '/' + group.id);
               console.error(err);
             }
             if (meta && meta.name) {
@@ -4079,7 +4046,7 @@ function HG() {
           if (err.code === 'ENOENT') {
             list = [];
           } else {
-            self.error('Error al obtener la lista de grupos de estadísticas.');
+            self.error('Failed to get list of stat groups.');
             console.error(err);
             reply(msg, 'groupListFailedTitle', 'groupListFailedBody');
             return;
@@ -4294,7 +4261,7 @@ function HG() {
       if (num && num[0] * 1 > 0) opts.limit = num[0] * 1;
       group.fetchUsers(opts, (err, rows) => {
         if (err) {
-          self.error('No se pudo obtener la tabla de clasificación: ' + id + '/' + groupID);
+          self.error('Failed to fetch leaderboard: ' + id + '/' + groupID);
           console.error(err);
           reply(msg, 'lbFailed');
           return;
@@ -4352,7 +4319,7 @@ function HG() {
         msg.channel.send({content: self.common.mention(msg), embeds: [embed]})
             .catch((err) => {
               self.error(
-                  'Error al enviar la tabla de clasificación en el canal: ' + msg.channel.id);
+                  'Failed to send leaderboard in channel: ' + msg.channel.id);
               console.error(err);
               reply(msg, 'lbSendFailed', 'fillOne', err.code);
             });
@@ -4626,7 +4593,7 @@ function HG() {
     if (name.length > 100) return false;
     hg.getGame(id).currentGame.customName = name;
     hg.getGame(id).currentGame.name =
-        name || 'Hungry Games de ' + (self.client.guilds.resolve(id).name);
+        name || (self.client.guilds.resolve(id).name + '\'s Hungry Games');
     return true;
   };
 
@@ -4654,7 +4621,7 @@ function HG() {
     if (self.renameGame(id, msg.text.trim())) {
       reply(
           msg, 'renameGameSuccess', 'fillOne',
-          msg.text.trim() || 'Hungry Games de ' + self.client.guilds.resolve(id).name);
+          msg.text.trim() || self.client.guilds.resolve(id).name);
     } else {
       reply(msg, 'renameGameFail');
     }
@@ -4863,7 +4830,7 @@ function HG() {
             msg.reactions.cache.forEach((el) => {
               numTotal++;
               el.users.fetch().then(usersFetched).catch((err) => {
-                self.error(`Error al obtener las reacciones del usuario: ${msg.channel.id}`);
+                self.error(`Failed to fetch user reactions: ${msg.channel.id}`);
                 console.error(err);
                 usersFetched();
               });
@@ -5055,13 +5022,13 @@ function HG() {
         image.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
           if (err) {
             self.error(
-                `Error al convertir la imagen en búfer: ${filename || url}`);
+                `Failed to convert image into buffer: ${filename || url}`);
             console.error(err);
             return;
           }
           self.common.mkAndWrite(filename, dir, buffer, (err) => {
             if (err) {
-              self.error(`Error al almacenar en caché el avatar: ${filename}`);
+              self.error(`Failed to cache avatar: ${filename}`);
               console.error(err);
             }
           }, self.common.encryptAvatars);
@@ -5086,7 +5053,7 @@ function HG() {
       }
       return Jimp.read(path).catch((err) => {
         if (fromCache) {
-          self.error(`Error al leer del caché: ${path}`);
+          self.error(`Failed to read from cache: ${path}`);
           console.error(err);
           fromCache = false;
           return toJimp(url);
@@ -5156,7 +5123,7 @@ function HG() {
       try {
         el(self, ...args);
       } catch (err) {
-        self.error('Error detectado durante la activación del evento: ' + evt);
+        self.error('Caught error during event firing: ' + evt);
         console.error(err);
       }
     });

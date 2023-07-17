@@ -1,8 +1,0 @@
-{
-    "id":"124733888177111041/1566602943538-player0237",
-    "message":"{attacker} habla[A|n] con {victim}, pero {victim} no pud[Vo|ieron] soportar la verdad.",
-    "creator":"124733888177111041",
-    "type":"normal",
-    "victim":{"count":-1,"outcome":"dies"},
-    "attacker":{"count":-1,"outcome":"nothing","killer":true}
-}

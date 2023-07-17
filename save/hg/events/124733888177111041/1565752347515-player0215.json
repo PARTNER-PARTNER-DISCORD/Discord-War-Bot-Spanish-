@@ -1,9 +1,0 @@
-{
-    "message":"¡{victim} ha[V|n] resucitado y ha[V|n] vuelto a la arena!",
-    "victim":{"count":-1,"outcome":"revived"},
-    "attacker":{"count":0,"outcome":"nothing"},
-    "id":"124733888177111041/1565752347515-player0215",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}

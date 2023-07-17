@@ -131,9 +131,10 @@ class Worker {
           (el) => !sim.game.disabledEventIds.bloodbath.includes(el.id));
       if (userEventPool.length == 0) {
         this.cb({
-          reply: '¡Todos los eventos de baño de sangre han sido deshabilitados! ¡Activa eventos para que algo pueda suceder en los juegos!',
+          reply: 'All bloodbath events have been disabled! Please enable ' +
+              'events so that something can happen in the games!',
           endGame: true,
-          reason: 'No hay eventos de baño de sangre',
+          reason: 'No Bloodbath Events',
         });
         return;
       }
@@ -187,9 +188,10 @@ class Worker {
         if (userEventPool.length == 0) {
           this.cb({
             reply:
-                '¡Todos los eventos de jugadores han sido deshabilitados! ¡Activa eventos para que algo pueda suceder en los juegos!',
+                'All player events have been disabled! Please enable events' +
+                ' so that something can happen in the games!',
             endGame: true,
-            reason: 'No hay eventos de jugadores',
+            reason: 'No Player Events',
           });
           return;
         }
@@ -319,10 +321,10 @@ class Worker {
             sim.game.currentGame.includedUsers.length, teams, probOpts);
         if (!eventTry) {
           console.error(
-              'No hay evento para ' + userPool.length + ' de ' +
-              userEventPool.length + ' eventos. Sin arma, evento de arena: ' +
-              (doArenaEvent ? arenaEvent.message : 'No') + ', Día: ' +
-              sim.game.currentGame.day.num + ' Guild: ' + id + ' Reintentando: ' +
+              'No event for ' + userPool.length + ' from ' +
+              userEventPool.length + ' events. No weapon, Arena Event: ' +
+              (doArenaEvent ? arenaEvent.message : 'No') + ', Day: ' +
+              sim.game.currentGame.day.num + ' Guild: ' + id + ' Retrying: ' +
               retries > 0);
           sim.game.currentGame.day.state = 0;
 
@@ -333,10 +335,14 @@ class Worker {
           }
 
           this.cb({
-            reply: '¡Uy! No pude encontrar un evento válido para los jugadores restantes.\nEsto generalmente se debe a que hay demasiados eventos deshabilitados.\nSi crees que esto es un error, repórtalo en mis Servidor de Discord.',
-            reply2: 'Inténtelo de nuevo con `{prefix}next`.\n(No se pudo encontrar un evento válido para \'' +
+            reply: 'Oops! I wasn\'t able to find a valid event for the ' +
+                'remaining players.\nThis is usually because too many ' +
+                'events are disabled.\nIf you think this is a bug, ' +
+                'please report this to my Discord server.',
+            reply2: 'Try again with `{prefix}next`.\n(Failed to find valid ' +
+                'event for \'' +
                 (doArenaEvent ? arenaEvent.message : 'player events') +
-                '\' adecuado para ' + userPool.length + ' jugadores restantes.)',
+                '\' suitable for ' + userPool.length + ' remaining players)',
             reason: 'Bad Configuration',
             game: sim.game,
           });

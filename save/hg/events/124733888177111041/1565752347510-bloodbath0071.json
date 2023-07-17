@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} encuentra un arco con flechas y dispara una flecha a {victim} y lo mata.",
-    "attacker":{"count":"1","outcome":"nothing","killer":true,"weapon":{"count":2,"id":"124733888177111041/1565752347503-weapon0006"}},
-    "victim":{"count":"1","outcome":"dies"},
-    "id":"124733888177111041/1565752347510-bloodbath0071",
-    "creator":"124733888177111041"
-}

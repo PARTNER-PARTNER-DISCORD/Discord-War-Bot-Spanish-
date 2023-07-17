@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} asusta[A|n] a {victim} mientras estaba[V|n] en el baño.",
-    "attacker":{"count":"-1","outcome":"nothing"},
-    "victim":{"count":"-1","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0027",
-    "creator":"124733888177111041"
-}

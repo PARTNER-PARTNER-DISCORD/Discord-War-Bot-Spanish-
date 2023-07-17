@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} coge una espada y ataca a {victim}.",
-    "attacker":{"count":"1","outcome":"nothing","killer":true,"weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0012"}},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347510-bloodbath0067",
-    "creator":"124733888177111041"
-}

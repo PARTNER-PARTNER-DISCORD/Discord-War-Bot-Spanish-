@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} recibe[A|n] frascos de veneno de los patrocinadores.",
-    "attacker":{"count":"-1","outcome":"nothing","weapon":{"count":3,"id":"124733888177111041/1565752347504-weapon0016"}},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0016",
-    "creator":"124733888177111041"
-}

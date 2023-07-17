@@ -19,11 +19,11 @@ class Option {
   constructor(value, comment = null, category = null) {
     this._value = value;
     if (comment != null && typeof comment !== 'string') {
-      throw new Error('El comentario no es un string');
+      throw new Error('Comment is not a string');
     }
     this._comment = comment;
     if (category != null && typeof category !== 'string') {
-      throw new Error('La categoría no es un string');
+      throw new Error('Category is not a string');
     }
     this._category = category;
   }
@@ -96,7 +96,7 @@ class NumberOption extends Option {
    */
   constructor(value, comment, category, range) {
     if (typeof value !== 'number' || isNaN(value)) {
-      throw new Error('El valor no es un número.');
+      throw new Error('Value is not a number');
     }
     super(value, comment, category);
     if (range) {
@@ -130,7 +130,7 @@ class BooleanOption extends Option {
    * showing user.
    */
   constructor(value, comment, category) {
-    if (typeof value !== 'boolean') throw new Error('El valor no es un booleano.');
+    if (typeof value !== 'boolean') throw new Error('Value is not a boolean');
     super(value, comment, category);
   }
 }
@@ -155,7 +155,7 @@ class ObjectOption extends Option {
    * this option.
    */
   constructor(value, comment, category, range) {
-    if (typeof value !== 'object') throw new Error('El valor no es un objeto.');
+    if (typeof value !== 'object') throw new Error('Value is not an object');
     value = Object.assign({}, value);
     super(value, comment, category);
     if (range) {
@@ -192,17 +192,17 @@ class SelectOption extends Option {
    */
   constructor(value, comment, category, values) {
     if (!values || !Array.isArray(values)) {
-      throw new Error('Los valores no son un array de strings');
+      throw new Error('Values is not array of strings');
     }
     let included = false;
     for (let i = 0; i < values.length; i++) {
       if (typeof values[i] !== 'string') {
-        throw new Error('Los valores no son un array de strings');
+        throw new Error('Values is not array of strings');
       } else if (values[i] === value) {
         included = true;
       }
     }
-    if (!included) throw new Error('El valor no está en valores dados');
+    if (!included) throw new Error('Value is not in given values');
     super(value, comment, category);
     this._values = values.slice(0);
   }
@@ -228,110 +228,146 @@ class DefaultOptions {
   constructor() {
     this._bloodbathOutcomeProbs = new ObjectOption(
         {kill: 30, wound: 6, thrive: 8, revive: 0, nothing: 56},
-        'Probabilidades relativas de elegir un evento con cada resultado. Esto es para los eventos del baño de sangre.',
+        'Relative probabilities of choosing an event with each outcome. This ' +
+            'is for the bloodbath events.',
         'probabilities');
     this._playerOutcomeProbs = new ObjectOption(
         {kill: 22, wound: 4, thrive: 8, revive: 6, nothing: 60},
-        'Probabilidades relativas de elegir un evento con cada resultado. Esto es para eventos diarios normales.',
+        'Relative probabilities of choosing an event with each outcome. This ' +
+            'is for normal daily events.',
         'probabilities');
     this._arenaOutcomeProbs = new ObjectOption(
         {kill: 64, wound: 10, thrive: 5, revive: 6, nothing: 15},
-        'Probabilidades relativas de elegir un evento con cada resultado. Esto es para los eventos especiales de la arena.',
+        'Relative Probabilities of choosing an event with each outcome. This ' +
+            'is for the special arena events.',
         'probabilities');
     this._arenaEvents = new BooleanOption(
         true,
-        '¿Son posibles los eventos de arena? (Eventos como perros lobos o un volcán en erupción).',
+        'Are arena events possible. (Events like wolf mutts, or a volcano ' +
+            'erupting.)',
         'probabilities');
     this._includeBots = new BooleanOption(
         false, 'Should bots be included in the games. If this is false, bots ' +
             'cannot be added manually.',
         'players');
     this._excludeNewUsers = new BooleanOption(
-        false, 'En caso de que los nuevos usuarios que se unan a su servidor sean excluidos de los juegos por defecto. true agregará a todos los nuevos usuarios a la lista negra, false pondrá a todos los nuevos usuarios en el próximo juego automáticamente.',
+        false, 'Should new users who join your server be excluded from the ' +
+            'games by default. True will add all new users to the blacklist, ' +
+            'false will put all new users into the next game automatically.',
         'players');
     this._allowNoVictors = new BooleanOption(
         false,
-        'Debería ser posible finalizar un juego sin ningún ganador. Si es cierto, es posible que todos los jugadores mueran, haciendo que el juego termine con todos muertos. false fuerza a al menos un ganador.',
+        'Should it be possible to end a game without any winners. If true, ' +
+            'it is possible for every player to die, causing the game to end ' +
+            'with everyone dead. False forces at least one winner.',
         'other');
     this._bleedDays = new NumberOption(
-        2, 'Número de días que un usuario puede sangrar antes de morir.', 'other');
+        2, 'Number of days a user can bleed before they can die.', 'other');
     this._battleHealth = new NumberOption(
-        5, 'La cantidad de salud que cada usuario obtiene para una batalla.', 'other',
+        5, 'The amount of health each user gets for a battle.', 'other',
         {min: 1, max: 10});
     this._teamSize = new NumberOption(
-        0, 'Tamaño máximo de equipos cuando se forman equipos automáticamente. 0 para deshabilitar equipos',
+        0, 'Maximum size of teams when automatically forming teams. 0 to ' +
+            'disable teams',
         'players');
     this._teammatesCollaborate = new SelectOption(
         'always',
-        '¿Los compañeros de equipo trabajarán juntos? Si está desactivado, los compañeros de equipo pueden matarse entre sí, y solo habrá 1 vencedor. Si está habilitado, los compañeros de equipo no pueden matarse entre sí, y el juego termina cuando queda un EQUIPO, no un jugador. untilend significa que los compañeros de equipo trabajan juntos hasta el final del juego, esto significa que solo habrá 1 vencedor.',
+        'Will teammates work together. If disabled, teammates can kill ' +
+            'eachother, and there will only be 1 victor. If enabled, ' +
+            'teammates cannot kill eachother, and the game ends when one TEAM' +
+            ' is remaining, not one player. Untilend means teammates work ' +
+            'together until the end of the game, this means only there will ' +
+            'be only 1 victor.',
         'players', ['disabled', 'always', 'untilend']);
     this._useEnemyWeapon = new BooleanOption(
         false,
-        'Esto permitirá al atacante en caso de utilizar el arma de la víctima contra ellos.',
+        'This will allow the attacker in an event to use the victim\'s ' +
+            'weapon against them.',
         'players');
     this._mentionVictor = new BooleanOption(
         false,
-        '¿Debería etiquetarse / mencionarse al vencedor del juego (puede ser un equipo) para que se les notifique?',
+        'Should the victor of the game (can be team), be tagged/mentioned ' +
+            'so they get notified?',
         'messages');
     this._mentionAll = new SelectOption(
         'disabled',
-        '¿Debería mencionarse a un usuario cada vez que algo le sucede en el juego? (se puede deshabilitar, para todos los eventos o para cuando el usuario muere)',
+        'Should a user be mentioned every time something happens to them ' +
+            'in the game? (can be disabled, for all events, or for when the ' +
+            'user dies)',
         'messages', ['disabled', 'all', 'death']);
     this._mentionEveryoneAtStart = new BooleanOption(
-        false, '¿Deberían mencionarse a @everyone cuando se inicia el juego?',
+        false, 'Should @everyone be mentioned when the game is started?',
         'messages');
     this._useNicknames = new BooleanOption(
-        true, '¿Deberíamos usar los apodos del servidor personalizado del usuario en lugar del nombre de usuario de su cuenta? Los nombres solo cambian cuando se crea un nuevo juego.',
+        true, 'Should we use user\'s custom server nicknames instead of ' +
+            'their account username? Names only change when a new game is ' +
+            'created.',
         'messages');
     this._delayEvents = new NumberOption(
-        3500, 'Retraso en milisegundos entre cada evento que se imprime.',
+        3500, 'Delay in milliseconds between each event being printed.',
         'other', {min: 1500, max: 30000}, 'time');
     this._delayDays = new NumberOption(
-        7000, 'Retraso en milisegundos entre cada día que se imprime.', 'other',
+        7000, 'Delay in milliseconds between each day being printed.', 'other',
         {min: 2500, max: 129600000},  // 1.5 days
         'time');
     this._probabilityOfArenaEvent = new NumberOption(
-        0.25, 'Probabilidad cada día de que ocurra un evento de arena.',
+        0.25, 'Probability each day that an arena event will happen.',
         'probabilities', {min: 0, max: 1}, 'percent');
     this._probabilityOfBleedToDeath = new NumberOption(
-        0.5, 'Probabilidad de que después de sangrar los días muera un jugador. Si no mueren, volverán a la normalidad.',
+        0.5, 'Probability that after bleedDays a player will die. If they ' +
+            'don\'t die, they will heal back to normal.',
         'probabilities', {min: 0, max: 1}, 'percent');
     this._probabilityOfBattle = new NumberOption(
         0.05,
-        'Probabilidad de que un evento sea reemplazado por una batalla entre dos jugadores.',
+        'Probability of an event being replaced by a battle between two ' +
+            'players.',
         'probabilities', {min: 0, max: 1}, 'percent');
     this._probabilityOfUseWeapon = new NumberOption(
         0.75,
-        'Probabilidad de que cada jugador use su arma cada día si tiene una.',
+        'Probability of each player using their weapon each day if they ' +
+            'have one.',
         'probabilities', {min: 0, max: 1}, 'percent');
     this._eventAvatarSizes = new ObjectOption(
         {avatar: 64, underline: 4, gap: 4},
-        'El número de píxeles del avatar de cada jugador será alto y ancho, la altura del estado subrayado y la brecha entre cada avatar. Esto es para todos los eventos normales y mensajes de eventos de arena.',
+        'The number of pixels each player\'s avatar will be tall and wide, ' +
+            'the underline status height, and the gap between each avatar. ' +
+            'This is for all normal events and arena event messages.',
         'messages', {min: 0, max: 512});
     this._battleAvatarSizes = new ObjectOption(
         {avatar: 32, underline: 4, gap: 4},
-        'El número de píxeles del avatar de cada jugador será alto y ancho, la altura del estado subrayado y la brecha entre cada avatar. Esto es para cada turno de batalla.',
+        'The number of pixels each player\'s avatar will be tall and wide, ' +
+            'the underline status height, and the gap between each avatar. ' +
+            'This is for each battle turn.',
         'messages', {min: 0, max: 512});
     this._victorAvatarSizes = new ObjectOption(
         {avatar: 80, underline: 4, gap: 4},
-        'El número de píxeles del avatar de cada jugador será alto y ancho, la altura del estado subrayado y la brecha entre cada avatar. Esto es cuando se anuncian los ganadores del juego.',
+        'The number of pixels each player\'s avatar will be tall and wide, ' +
+            'the underline status height, and the gap between each avatar. ' +
+            'This is when announcing the winners of the game.',
         'messages', {min: 0, max: 512});
     this._numDaysShowDeath = new NumberOption(
         -1,
-        'El número de días después de la muerte de un jugador para mostrarlo como muerto en la lista de estado después de cada día. -1 siempre mostrará jugadores muertos. 0 nunca mostrará jugadores muertos. Solo les mostraré el día de su muerte. 2 los mostrará por 2 días.',
+        'The number of days after a player has died to show them as dead in' +
+            ' the status list after each day. -1 will always show dead ' +
+            'players. 0 will never show dead players. 1 will only show them ' +
+            'for the day they died. 2 will show them for 2 days.',
         'messages', {min: -1, max: 100});
     this._showLivingPlayers = new BooleanOption(
         true,
-        'Incluye a los jugadores vivos en las actualizaciones de estado. En lugar de solo jugadores heridos o muertos.',
+        'Include the living players in the status updates. Instead of only ' +
+            'wounded or dead players.',
         'messages');
     this._customEventWeight = new NumberOption(
-        1.1, 'El peso relativo de los eventos personalizados. `2` significa que los eventos personalizados tienen el doble de probabilidades de ser elegidos.',
+        2, 'The relative weight of custom events. 2 means custom events are ' +
+            'twice as likely to be chosen.',
         'probabilities', {min: 0, max: 1000});
     this._anonForceOutcome = new BooleanOption(
-        false, 'Los resultados forzados utilizarán eventos existentes en lugar de decir "Los creadores del juego" lo hicieron.',
+        false, 'Forced outcomes will use existing events instead of saying ' +
+            '"The game makers" did it.',
         'other');
     this._disableOutput = new BooleanOption(
-        false, 'Solo para propósitos de depuración. Quiero decir, puedes habilitarlo, pero hace que los juegos sean realmente aburridos. Depende de usted ¯\\_(ツ)_/¯',
+        false, 'Debugging purposes only. I mean, you can enable it, but it ma' +
+            'kes the games really boring. Up to you ¯\\_(ツ)_/¯',
         'other');
   }
 

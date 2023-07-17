@@ -1,7 +1,0 @@
-{
-	"message":"{attacker} se encuentra[A|n] [Auna |]lanza[A|s] y se la[A|s] clava[A|n] a {victim} en el abdomen.",
-	"attacker":{"count":"-1","outcome":"nothing","killer":true},
-	"victim":{"count":"-1","outcome":"dies"},
-	"id":"124733888177111041/1565752347509-bloodbath0045",
-	"creator":"124733888177111041"
-}

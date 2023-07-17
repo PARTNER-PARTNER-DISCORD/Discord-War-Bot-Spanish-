@@ -1,7 +1,0 @@
-{
-    "message":"{attacker} encuentra un arco, 5 flechas y un carcaj.",
-    "attacker":{"count":"1","outcome":"nothing","weapon":{"count":5,"id":"124733888177111041/1565752347503-weapon0006"}},
-    "victim":{"count":"0","outcome":"nothing"},
-    "id":"124733888177111041/1565752347510-player0012",
-    "creator":"124733888177111041"
-}

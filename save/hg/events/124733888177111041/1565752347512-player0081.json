@@ -1,9 +1,0 @@
-{
-    "message":"{victim} grita[V|n] pidiendo ayuda, pero ya es demasiado tarde, {attacker} ha[A|n] ya disparado su[A|s] ballesta[A|s].",
-    "attacker":{"count":"-1","outcome":"nothing","killer":true},
-    "victim":{"count":"-1","outcome":"dies"},
-    "id":"124733888177111041/1565752347512-player0081",
-    "type":"normal",
-    "creator":"124733888177111041",
-    "privacy":"public"
-}
