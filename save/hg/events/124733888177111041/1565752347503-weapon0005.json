@@ -44,7 +44,7 @@
 			"id":"05weapon0005"
 		},
 		{
-			"message":"¡{victim} intenta[A|n] robar la pistola de {owner}, ¡pero {attacker} le[V|s] dispara[A|n]!",
+			"message":"¡{victim} intenta[V|n] robar la pistola de {owner}, ¡pero {attacker} le[V|s] dispara[A|n]!",
 			"attacker":{"count":"-2","outcome":"nothing","killer":true},
 			"victim":{"count":"-1","outcome":"dies"},
 			"consumes":1,
