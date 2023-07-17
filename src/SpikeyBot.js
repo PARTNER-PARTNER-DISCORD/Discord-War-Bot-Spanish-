@@ -537,10 +537,10 @@ function SpikeyBot() {
     Discord.IntentsBitField.Flags.MessageContent,
   ];
   let defaultPresence = {
-    status: 'idle',
+    status: 'online',
     activities: [{
-      name: 'Somehow still kicking!',
-      type: Discord.ActivityType.Watching,
+      name: 'a los Hungry Games!',
+      type: Discord.ActivityType.Playing,
     }],
   };
   if (isDev) {
@@ -639,7 +639,7 @@ function SpikeyBot() {
    * @default 2 Minutes
    * @type {number}
    */
-  const saveFrequency = 2 * 60 * 1000;
+  const saveFrequency = 10 * 60 * 1000;
 
   /**
    * Cache of all loaded guild's command prefixes. Populated asyncronously after
@@ -725,7 +725,7 @@ function SpikeyBot() {
         // updateGame('OFFLINE', 'PLAYING');
       } else {
         // updateGame('SpikeyBot.com');
-        updateGame('Thanks for the memories.');
+        updateGame('a los Hungry Games.');
       }
     }
     let logChannel = client.channels.resolve(common.logChannel);

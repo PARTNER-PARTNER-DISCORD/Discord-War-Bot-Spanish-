@@ -884,6 +884,21 @@ function SMLoader() {
         }
         subModules[i].helpMessage.forEach(send);
       }
+	  const hasPatron = null;
+	  if (msg.guild != null){
+		const hgPath = './hg/HungryGames.js';
+		delete require.cache[require.resolve(hgPath)];
+		const HungryGames = require(hgPath);
+		const hg = new HungryGames(self)
+		const game = hg.getGame(msg.guild.id);
+		const hasPatron =
+			game.currentGame.includedUsers.find((el) => el.settings.isPatron);
+	  }
+	  if (!hasPatron) {
+	    msg.author.send(
+		  'If you enjoy SpikeyBot, please consider supporting it on Patreon:\n' +
+		  '<https://www.patreon.com/campbellcrowley>');
+	  }
       if (msg.guild !== null) {
         self.common
             .reply(
