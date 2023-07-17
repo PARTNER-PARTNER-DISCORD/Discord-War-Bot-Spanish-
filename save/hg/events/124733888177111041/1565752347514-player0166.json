@@ -1,5 +1,5 @@
 {
-    "message":"{attacker} hace[A|n] algo, no sabe.",
+    "message":"{attacker} hace[A|n] algo, no se sabe.",
     "attacker":{"count":"-1","outcome":"nothing"},
     "victim":{"count":"0","outcome":"nothing"},
     "id":"124733888177111041/1565752347514-player0166",
