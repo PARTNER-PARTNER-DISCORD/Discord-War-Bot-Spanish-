@@ -4,12 +4,15 @@ save/reboot.json.crypt
 save/reboot-*.json.crypt
 *.log
 auth.js
+subModules.js
 
 save/guilds/*
 save/users/*
 save/shards/*
-save/hg/events/*
+save/hg/events/custom/*.json
 
+save/hgBattles.json
+save/hgDefaultEvents.json
 save/hgWebClients.json
 save/webClients.json
 save/rigged-counter.txt
@@ -29,3 +32,5 @@ config/shardMasterConfig.js
 config/shard_*_config.json
 
 gApiCredentials*.json
+
+.vscode/
