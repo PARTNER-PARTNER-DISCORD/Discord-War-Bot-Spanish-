@@ -45,7 +45,7 @@
 			"id":"05weapon0002"
 		},
 		{
-			"message":"?{victim} le roba [Cun |]explosivo[C|s] a {attacker}!",
+			"message":"¡{victim} le roba [Cun |]explosivo[C|s] a {attacker}!",
 			"attacker":{"count":1,"outcome":"nothing"},
 			"victim":{"count":1,"outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347503-weapon0002"}},
 			"consumes":1,
