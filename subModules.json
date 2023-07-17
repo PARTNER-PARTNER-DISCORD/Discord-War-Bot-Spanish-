@@ -65,6 +65,9 @@
   "release": [
     "./main.js",
     "./hungryGames.js",
+    "./chatbot.js",
+    "./cmdScheduling.js",
+    "./define.js",
     "./echo.js",
     "./roleColors.js",
     "./botCommands.js",
