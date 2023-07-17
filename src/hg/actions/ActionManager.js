@@ -144,7 +144,7 @@ class ActionManager {
               .then((mem) => go(mem, group, weapons))
               .catch((err) => {
                 console.error(
-                    'Unable to fetch member for action:', err.message,
+                    'No se puede recuperar el miembro para la acción:', err.message,
                     err.path);
               });
         } else {

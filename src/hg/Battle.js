@@ -105,13 +105,13 @@ class Battle extends HungryGames.Event {
 
     const startMessage =
         battles.starts[Math.floor(Math.random() * battles.starts.length)];
-    const battleString = '**A battle has broken out!**';
+    const battleString = '**¡Ha estallado una batalla!**';
     let healthText =
         affectedUsers
             .map(
                 (obj, index) => '`' +
                     (useNicknames ? (obj.nickname || obj.name) : obj.name) +
-                    '`: ' + Math.max((maxHealth - userHealth[index]), 0) + 'HP')
+                    ': ' + Math.max((maxHealth - userHealth[index]), 0) + ' 💗`')
             .sort()
             .join(', ');
     finalEvent.attacks.push(
@@ -135,9 +135,9 @@ class Battle extends HungryGames.Event {
 
       if (loop == 999) {
         console.log(
-            'Failed to find valid event for battle!\n', eventTry, flipRoles,
-            userHealth, '\nAttacker:', attackerIndex, '\nUsers:',
-            affectedUsers.length, '\nAlive:', numAlive, '\nFINAL:', finalEvent);
+            '¡No se pudo encontrar un evento válido para la batalla!\n', eventTry, flipRoles,
+            userHealth, '\nAtacantes:', attackerIndex, '\nUsuarios:',
+            affectedUsers.length, '\nVivos:', numAlive, '\nFINAL:', finalEvent);
       }
 
       if ((!flipRoles &&
@@ -192,7 +192,7 @@ class Battle extends HungryGames.Event {
                 const prePost = health === 0 ? '~~' : '';
                 return prePost + '`' +
                     (useNicknames ? (obj.nickname || obj.name) : obj.name) +
-                    '`: ' + health + 'HP' + prePost;
+                    ': ' + health + ' 💗`' + prePost;
               })
               .sort()
               .join(', ');

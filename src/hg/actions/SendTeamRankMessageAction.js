@@ -19,7 +19,7 @@ class SendTeamRankMessageAction extends ChannelAction {
       if (game.options.teamSize > 0) {
         const current = game.currentGame;
         const teamRankEmbed = new hg._parent.Discord.EmbedBuilder();
-        teamRankEmbed.setTitle('Final Team Ranks');
+        teamRankEmbed.setTitle('Ranking final de equipos');
         this._sortTeams(game);
         const splitEmbeds =
             game.currentGame.teams.length < 25 && game.options.teamSize > 0;
@@ -81,7 +81,7 @@ class SendTeamRankMessageAction extends ChannelAction {
         teamRankEmbed.setColor([255, 0, 255]);
         if (!game.options.disableOutput) {
           channel.send({embeds: [teamRankEmbed]}).catch((err) => {
-            hg._parent.error('Failed to send final team ranks: ' + channel.id);
+            hg._parent.error('Error al enviar el ranking final de equipos: ' + channel.id);
             console.error(err);
           });
         }

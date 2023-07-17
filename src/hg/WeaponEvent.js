@@ -18,7 +18,7 @@ class WeaponEvent extends HungryGames.Event {
    * @param {string} [name] The formattable name for this weapon.
    */
   constructor(outcomes, consumable, name) {
-    super('Weapon Message');
+    super('Mensaje de arma');
     /**
      * All possible events for this weapon event.
      *
@@ -51,7 +51,7 @@ class WeaponEvent extends HungryGames.Event {
    * @default
    */
   static get action() {
-    return '{attacker} {action} {victim} with {weapon}.';
+    return '{attacker} {action} {victim} con {weapon}.';
   }
   /**
    * @description Validate that the given data is properly typed and structured
@@ -63,7 +63,7 @@ class WeaponEvent extends HungryGames.Event {
    * @returns {?string} Error string, or null if no error.
    */
   static validate(evt) {
-    if (!evt.message) evt.message = 'Weapon Message';
+    if (!evt.message) evt.message = 'Mensaje de arma';
     const err = HungryGames.Event.validate(evt);
     if (err) return err;
 

@@ -55,7 +55,7 @@ class SendVictorAction extends ChannelAction {
     const teamName = team.name;
     const current = game.currentGame;
 
-    finalMessage.setTitle(`${teamName} has won ${current.name}!`);
+    finalMessage.setTitle(`${teamName} ha ganado ${current.name}!`);
     let teamPlayerList = team.players.map((player) => {
       const p = current.includedUsers.find((user) => user.id == player);
       return (game.options.useNicknames && p.nickname) || p.name;
@@ -117,7 +117,7 @@ class SendVictorAction extends ChannelAction {
             }
           }
         } catch (err) {
-          hg._parent.warn('Failed to blit victor image');
+          hg._parent.warn('Error al borrar la imagen del vencedor');
           console.error(err);
         }
         responses++;
@@ -131,7 +131,7 @@ class SendVictorAction extends ChannelAction {
                       out, {name: 'hgTeamVictor.png'})],
                 })
                 .catch((err) => {
-                  hg._parent.error('Failed to send team victor image message.');
+                  hg._parent.error('Error al enviar el mensaje de imagen del vencedor del equipo.');
                   console.error(err);
                 });
           });
@@ -144,7 +144,7 @@ class SendVictorAction extends ChannelAction {
         hg._parent.readImage(icon)
             .then((image) => newImage(image, userId))
             .catch((err) => {
-              hg._parent.error('Failed to read image');
+              hg._parent.error('Error al leer la imagen');
               console.log(err);
               responses++;
             });
@@ -168,13 +168,13 @@ class SendVictorAction extends ChannelAction {
         game.options.useNicknames ? (p.nickname || p.name) : p.name;
     let teamName = '';
     if (team) teamName = `(${team.name}) `;
-    finalMessage.setTitle(`\`${name}${teamName}\` has won ${current.name}!`);
+    finalMessage.setTitle(`\`${name}${teamName}\` ha ganado ${current.name}!`);
     finalMessage.setThumbnail(p.avatarURL);
     let winnerTag = '';
     if (game.options.mentionVictor && !p.isNPC) winnerTag = `<@${p.id}>`;
     if (game.options.disableOutput) return;
     channel.send({content: winnerTag, embeds: [finalMessage]}).catch((err) => {
-      hg._parent.error('Failed to send solo winner message: ' + channel.id);
+      hg._parent.error('Error al enviar el mensaje del ganador en solitario: ' + channel.id);
       console.error(err);
     });
   }
@@ -190,10 +190,10 @@ class SendVictorAction extends ChannelAction {
     finalMessage.setColor([255, 0, 255]);
     const current = game.currentGame;
     finalMessage.setTitle(
-        `Everyone has died in ${current.name}!\nThere are no winners!`);
+        `¡Todos han muerto en ${current.name}!\n¡No hay ganadores!`);
     if (game.options.disableOutput) return;
     channel.send({embeds: [finalMessage]}).catch((err) => {
-      hg._parent.error('Failed to send no winner message: ' + channel.id);
+      hg._parent.error('No se pudo enviar mensaje de ningún ganador: ' + channel.id);
       console.error(err);
     });
   }

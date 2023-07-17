@@ -39,7 +39,7 @@ class TakeRoleAction extends MemberAction {
   set role(rId) {
     const newRole = this._role.guild.roles.resolve(rId);
     if (!newRole) {
-      throw new TypeError('Failed to resolve role from given ID!');
+      throw new TypeError('¡No se pudo resolver el rol de la ID dada!');
     }
     this._role = newRole;
     this._saveData.role = newRole.id;

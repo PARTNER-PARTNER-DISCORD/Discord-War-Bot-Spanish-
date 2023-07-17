@@ -65,10 +65,10 @@ class SendStatusListAction extends ChannelAction {
       const finalMessage = new hg._parent.Discord.EmbedBuilder();
       finalMessage.setColor([255, 0, 255]);
       const keys = [];
-      if (showLiving) keys.push(`${emoji.redHeart}Alive`);
-      if (showWounded) keys.push(`${emoji.yellowHeart}Wounded`);
-      if (showRevived) keys.push(`${emoji.blueHeart}Revived`);
-      if (showDead) keys.push(`${emoji.skull}Dead`);
+      if (showLiving) keys.push(`${emoji.redHeart}Vivo`);
+      if (showWounded) keys.push(`${emoji.yellowHeart}Herido`);
+      if (showRevived) keys.push(`${emoji.blueHeart}Revivido`);
+      if (showDead) keys.push(`${emoji.skull}Muerto`);
       if (keys.length > 0) finalMessage.setAuthor({name: keys.join(', ')});
       let showKills = false;
       const statusList = playersToShow.map((obj) => {
@@ -111,7 +111,7 @@ class SendStatusListAction extends ChannelAction {
         return prefix + symbol + '`' + shortName + '`' +
             (obj.kills > 0 ? '(' + obj.kills + ')' : '');
       });
-      finalMessage.setTitle(`Status update!${showKills ? ' (kills)' : ''}`);
+      finalMessage.setTitle(`¡Actualización de estado!${showKills ? ' (asesinatos)' : ''}`);
       if (splitEmbeds) {
         game.currentGame.teams.reverse().forEach((el, i) => {
           const index = game.currentGame.teams.length - i - 1;
@@ -180,7 +180,7 @@ class SendStatusListAction extends ChannelAction {
       }
       if (game.options.disableOutput) return;
       channel.send({embeds: [finalMessage]}).catch((err) => {
-        hg._parent.error('Failed to send status list: ' + channel.id);
+        hg._parent.error('Error al enviar la lista de estado: ' + channel.id);
         console.error(err);
       });
     }, 1000);

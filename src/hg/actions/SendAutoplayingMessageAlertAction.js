@@ -18,7 +18,7 @@ class SendAutoplayingMessageAlertAction extends ChannelAction {
   constructor() {
     super((hg, game, channel) => {
       if (!game.options.disableOutput && game.autoPlay) {
-        channel.send({content: '`Autoplaying...`'})
+        channel.send({content: '`Reproducción automática...``'})
             .then((msg) => {
               setTimeout(
                   () => msg.delete().catch(() => {}),

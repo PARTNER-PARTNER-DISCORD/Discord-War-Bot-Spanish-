@@ -1274,7 +1274,6 @@ class ShardingMaster {
       done();
       console.log(dbg);
     }
-
     if (script.startsWith('this.runBotUpdate(')) this._runBotUpdate();
   }
 
@@ -1417,7 +1416,6 @@ class ShardingMaster {
         });
         return;
       }
-
       fs.readFile(filename, (err, data) => {
         if (err) {
           if (err.code === 'ENOENT') {
