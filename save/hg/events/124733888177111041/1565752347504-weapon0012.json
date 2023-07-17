@@ -1,0 +1,67 @@
+{
+	"name":"espada",
+	"consumable":"espada[C|s]",
+	"id":"124733888177111041/1565752347504-weapon0012",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"outcomes":[
+		{
+			"message":"¡{attacker} golpea[A|n] a {victim} hasta la muerte con la[C|s] espada[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0012"
+		},
+		{
+			"action":"mata[A|n] a",
+			"message":"{attacker} mata[A|n] a {victim} con [Cuna |]espada[C|s] de {owner}",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"02weapon0012"
+		},
+		{
+			"action":"hiere[A|n] a",
+			"message":"{attacker} hiere[A|n] a {victim} con [Cuna |]espada[C|s] de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"03weapon0012"
+		},
+		{
+			"message":"{attacker} brutalmente decapita a {victim} con la espada de {owner}.",
+			"attacker":{"count":"1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"04weapon0012"
+		},
+		{
+			"message":"{attacker} clava[A|n] lentamente la espada de {owner} en el pecho de {victim} y observa[A|n] cómo la luz se desvanece de sus ojos.",
+			"attacker":{"count":"1","outcome":"thrives","killer":true},
+			"victim":{"count":"1","outcome":"dies"},
+			"consumes":0,
+			"id":"05weapon0012"
+		},
+		{
+			"message":"{victim} mira[V|n] hacia abajo para ver una espada atravesando su pecho. Ha sido {attacker}",
+			"attacker":{"count":"1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"06weapon0012"
+		},
+		{
+			"message":"¡{victim} le roba una espada a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0012"}},
+			"consumes":1,
+			"id":"07weapon0012"
+		},
+		{
+			"message":"{attacker} rompe[A|n] la[C|s] espada[C|s] de {owner} accidentalmente.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"08weapon0012"
+		}
+	]
+}

@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566601385107-player0232",
+    "message":"Esto es culpa de {victim}. {attacker} te va[A|n] a matar. Y todo el pastel se ha ido. Ni siquiera te importa, ¿verdad?",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":1,"outcome":"dies"},
+    "attacker":{"count":-1,"outcome":"nothing","killer":true}
+}

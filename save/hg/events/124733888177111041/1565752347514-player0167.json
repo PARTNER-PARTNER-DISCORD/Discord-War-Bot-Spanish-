@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} hace[A|n] algo, y {victim} muere[V|n].",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347514-player0167",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

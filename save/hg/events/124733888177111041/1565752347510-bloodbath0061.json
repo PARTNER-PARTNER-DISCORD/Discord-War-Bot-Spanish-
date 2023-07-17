@@ -1,0 +1,7 @@
+{
+    "message":"{attacker} obliga[A|n] a {victim} a dispararse a sí mismo[V|s].",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347510-bloodbath0061",
+    "creator":"124733888177111041"
+}

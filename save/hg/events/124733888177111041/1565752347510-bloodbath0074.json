@@ -1,0 +1,7 @@
+{
+    "message":"{victim} encuentra[V|n] una pila de madera.",
+    "victim":{"count":"-1","outcome":"nothing","weapon":{"count":"3","id":"124733888177111041/1565752347504-weapon0018"}},
+    "attacker":{"count":"0","outcome":"nothing"},
+    "id":"124733888177111041/1565752347510-bloodbath0074",
+    "creator":"124733888177111041"
+}

@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} empuja[A|n] a {victim} hacia el borde de la arena, acabando con su[V|s] vida[V|s].",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347513-player0149",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

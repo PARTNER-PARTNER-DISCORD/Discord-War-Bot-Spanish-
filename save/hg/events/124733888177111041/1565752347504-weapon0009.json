@@ -1,0 +1,72 @@
+{
+	"id":"124733888177111041/1565752347504-weapon0009",
+	"creator":"124733888177111041",
+	"type":"weapon",
+	"consumable":"cuchillo[C|s] arrojadizo[C|s]",
+	"name":"cuchilloarrojadizo",
+	"outcomes":[
+		{
+			"id":"01weapon0009",
+			"message":"{attacker} lanza[A|n] [Cun |]cuchillo[C|s] al pecho a {victim}.",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":1,"outcome":"thrives","killer":true},
+			"consumes":"V"
+		},
+		{
+			"id":"02weapon0009",
+			"message":"{attacker} mata[A|n] a {victim} lanzando [Cun |]cuchillo[C|s] de {owner}.",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"thrives","killer":true},
+			"consumes":"V"
+		},
+		{
+			"id":"03weapon0009",
+			"message":"¡{attacker} lanza[A|n] [Cun |]cuchillo[C|s] a la pierna de {victim}!",
+			"victim":{"count":-1,"outcome":"wounded"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":"V"
+		},
+		{
+			"id":"04weapon0009",
+			"message":"{attacker} pierde[A|n] sus cuchillos!",
+			"victim":{"count":0,"outcome":"nothing"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":100
+		},
+		{
+			"id":"05weapon0009",
+			"message":"{attacker} afila [Cel|los] cuchillo[C|s] de {owner}.",
+			"victim":{"count":0,"outcome":"nothing"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":0
+		},
+		{
+			"id":"06weapon0009",
+			"message":"{attacker} clava[A|n] los brazos de {victim} a un árbol antes de lanzarle[V|s] [Cun |]cuchillo[C|s] arrojadizo[C|s] de {owner} entre sus ojos.",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":-1,"outcome":"nothing","killer":true},
+			"consumes":"1"
+		},
+		{
+			"id":"07weapon0009",
+			"message":"{attacker} lanza[A|n] [Cun |]cuchillo[C|s] a la cabeza de {victim}.",
+			"victim":{"count":-1,"outcome":"dies"},
+			"attacker":{"count":1,"outcome":"thrives","killer":true},
+			"consumes":"V"
+		},
+		{
+			"id":"08weapon0009",
+			"message":"¡{victim} le roba un cuchillo a {attacker}!",
+			"victim":{"count":1,"outcome":"nothing","weapon":{"id":"124733888177111041/1565752347504-weapon0009","count":1}},
+			"attacker":{"count":1,"outcome":"nothing"},
+			"consumes":"V"
+		},
+		{
+			"id":"09weapon0009",
+			"message":"{attacker} falla[A|n] al lanzarle[V|s] [Cun |]cuchillo[C|s] de {owner} a {victim}.",
+			"victim":{"count":-1,"outcome":"nothing"},
+			"attacker":{"count":-1,"outcome":"nothing"},
+			"consumes":"1"
+		}
+	]
+}

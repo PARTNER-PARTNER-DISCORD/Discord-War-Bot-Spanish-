@@ -1,0 +1,51 @@
+{
+	"name":"cuerda",
+	"consumable":"cuerda[C|s]",
+	"id":"124733888177111041/1565752347504-weapon0015",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"outcomes":[
+		{
+			"message":"{attacker} estrangula[A|n] a {victim} con [Cuna |]cuerda[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0015"
+		},
+		{
+			"message":"{attacker} coge la cuerda de {owner} y se suicida con ella.",
+			"attacker":{"count":"1","outcome":"dies"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"02weapon0015"
+		},
+		{
+			"message":"{attacker} hace[A|n] trompezar a {victim} con [Cuna |]cuerda[C|s] de {owner} y lo[V|s] mata[A|n] mientras está[A|n] en el suelo.",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0015"
+		},
+		{
+			"message":"{attacker} ata[A|n] los brazos y piernas de {victim} con [Cuna |]cuerda[C|s] de {owner}, luego los hace caminar sobre la tabla.",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":"V",
+			"id":"04weapon0015"
+		},
+		{
+			"message":"¡{victim} le roba una cuerda a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0015"}},
+			"consumes":1,
+			"id":"05weapon0015"
+		},
+		{
+			"message":"{attacker} corta la cuerda de {owner} y al ser más pequeña se vuelve inutilizable.",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"06weapon0015"
+		}
+	]
+}

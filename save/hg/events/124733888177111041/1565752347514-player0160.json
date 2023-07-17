@@ -1,0 +1,9 @@
+{
+    "message":"{victim} corre[V|n] a una cueva para escapar de {attacker}, pero queda[V|n] atrapado[V|s] y [Ves|son] asesinado[V|s].",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347514-player0160",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

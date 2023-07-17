@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} succiona la fuerza vital de {victim} para que {attacker} pueda volver a vivir.",
+    "victim":{"count":1,"outcome":"dies"},
+    "attacker":{"count":1,"outcome":"revived","killer":true},
+    "id":"124733888177111041/1565752347515-player0190",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

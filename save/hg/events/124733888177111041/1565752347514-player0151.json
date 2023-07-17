@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} acerca[A|n] la cara de {victim} a una fogata, provocándole quemaduras.",
+    "attacker":{"count":"-1","outcome":"nothing"},
+    "victim":{"count":"1","outcome":"wounded"},
+    "id":"124733888177111041/1565752347514-player0151",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

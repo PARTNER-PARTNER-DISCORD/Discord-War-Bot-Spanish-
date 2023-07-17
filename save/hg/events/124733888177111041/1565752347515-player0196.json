@@ -1,0 +1,10 @@
+{
+    "message":"{victim} le hace[V|n] una promesa a una chica que sabe[V|n] que no podrán cumplir.",
+    "victim":{"count":-1,"outcome":"nothing"},
+    "attacker":{"count":0,"outcome":"nothing"},
+    "_reference":"Halo 2/3/4",
+    "id":"124733888177111041/1565752347515-player0196",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

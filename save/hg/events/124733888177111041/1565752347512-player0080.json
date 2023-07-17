@@ -1,0 +1,9 @@
+{
+    "message":"{victim} grita[V|n] pidiendo ayuda, y recibe[V|n] un cuchillo de {attacker} en la espalda por culpa de ello.",
+    "attacker":{"count":"1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347512-player0080",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

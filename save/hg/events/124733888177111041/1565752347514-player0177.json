@@ -1,0 +1,9 @@
+{
+    "message":"{victim} encuentra[V|n] un lindo perrito en el bosque. No era un perro, era un lobo y terminó matándole[V|s].",
+    "victim":{"count":"-1","outcome":"dies"},
+    "attacker":{"count":"0","outcome":"nothing"},
+    "id":"124733888177111041/1565752347514-player0177",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

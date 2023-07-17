@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1565752347513-player0146",
+    "message":"In {attacker}'s bloodlust, they end up killing each other.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":0,"outcome":"nothing"},
+    "attacker":{"count":-2,"outcome":"dies"}
+}

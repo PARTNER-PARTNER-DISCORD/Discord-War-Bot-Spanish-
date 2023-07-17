@@ -1,0 +1,10 @@
+{
+    "message":"{attacker} le hace saber a {victim} que cree en el destino.",
+    "victim":{"count":1,"outcome":"dies"},
+    "attacker":{"count":1,"outcome":"nothing","killer":true},
+    "_reference":"RWBY",
+    "id":"124733888177111041/1565752347515-player0192",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

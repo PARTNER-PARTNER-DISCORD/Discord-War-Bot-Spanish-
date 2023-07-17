@@ -1,0 +1,62 @@
+{
+	"name":"tirachinas",
+	"consumable":"tirachinas",
+	"id":"124733888177111041/1565752347503-weapon0004",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"outcomes":[
+		{
+			"action":"dispara[A|n] a",
+			"message":"{attacker} dispara[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0004"
+		},
+		{
+			"action":"hiere[A|n] a",
+			"message":"{attacker} hiere[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"02weapon0004"
+		},
+		{
+			"action":"mata[A|n] a",
+			"message":"{attacker} mata[A|n] a {victim} con [Cel|los] tirachinas de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0004"
+		},
+		{
+			"message":"¡{attacker} hiere[A|n] a {victim} con la tirachinas de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"04weapon0004"
+		},
+		{
+			"message":"¡[AEl|Los] tirachinas de {attacker} se rompe[A|n] mientras lo está[A|n] probando!",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":"A",
+			"id":"05weapon0004"
+		},
+		{
+			"message":"¡{victim} le roba el tirachinas a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347503-weapon0004"}},
+			"consumes":1,
+			"id":"06weapon0004"
+		},
+		{
+			"action":"intenta[A|n] matar a",
+			"message":"{attacker} intenta[A|n] matar a {victim} con [Cel|los] tirachinas de {owner}",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"nothing"},
+			"consumes":0,
+			"id":"07weapon0004"
+		}
+	]
+}

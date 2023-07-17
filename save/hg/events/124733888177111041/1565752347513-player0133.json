@@ -1,0 +1,9 @@
+{
+    "message":"{attacker} deja[A|n] caer [Vuna |]roca[V|s] desde un árbol sobre {victim}, causándole[V|s] la muerte.",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347513-player0133",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

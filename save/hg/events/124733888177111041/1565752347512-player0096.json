@@ -1,0 +1,9 @@
+{
+    "message":"{victim} dej[Vó|aron] entrar a {attacker} en su refugio, y {victim} fue[V|ron] asesinado[V|s].",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347512-player0096",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

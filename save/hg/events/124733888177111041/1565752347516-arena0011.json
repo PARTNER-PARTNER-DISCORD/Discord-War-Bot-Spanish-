@@ -1,0 +1,45 @@
+{
+    "message":"¡Un volcán entra en erupción en el centro de la arena!",
+    "outcomes":[
+        {
+            "message":"{victim} sobrevive[V|n].",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"nothing"},
+            "id":"01arena0011"
+        },
+        {
+            "message":"{victim} está[V|n] enterrad@[V|s] en ceniza.",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"02arena0011"
+        },
+        {
+            "message":"{victim} se asfixia[V|n].",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"03arena0011"
+        },
+        {
+            "message":"{attacker} empuja[A|n] a {victim} a la lava.",
+            "attacker":{"count":"-1","outcome":"nothing","killer":true},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"04arena0011"
+        },
+        {
+            "message":"{attacker} calienta[A|n] sus armas en la lava y mata[A|n] a {victim} con ellas.",
+            "attacker":{"count":"-1","outcome":"nothing","killer":true},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"05arena0011"
+        },
+        {
+            "message":"{victim} tropieza con {attacker}, y ambos caen hacia la lava.",
+            "attacker":{"count":"1","outcome":"dies","killer":true},
+            "victim":{"count":"1","outcome":"dies","killer":true},
+            "id":"06arena0011"
+        }
+    ],
+    "id":"124733888177111041/1565752347516-arena0011",
+    "type":"arena",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

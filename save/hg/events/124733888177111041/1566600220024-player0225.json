@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566600220024-player0225",
+    "message":"La mejor solución a un problema suele ser la más fácil. Y seré honesto, matar a {victim} es bastante fácil.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":0,"outcome":"nothing"}
+}

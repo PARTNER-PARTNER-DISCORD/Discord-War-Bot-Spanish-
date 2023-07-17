@@ -1,0 +1,67 @@
+{
+	"name":"maza",
+	"consumable":"maza[C|s]",
+	"id":"124733888177111041/1565752347504-weapon0011",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"outcomes":[
+		{
+			"message":"¡{attacker} golpea[A|n] a {victim} hasta la muerte con la[C|s] maza[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0011"
+		},
+		{
+			"message":"¡{attacker} olvida[A|n] la[C|s] maza[C|s] de {owner} y la dej[Có|aron] atrás!",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"02weapon0011"
+		},
+		{
+			"message":"{attacker} golpea[A|n] la cara a {victim} con la[C|s] maza[C|s] de {owner}.",
+			"attacker":{"count":"1","outcome":"thrives","killer":true},
+			"victim":{"count":"1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0011"
+		},
+		{
+			"message":"{attacker} explota[A|n] la[V|s] cabeza[V|s] de {victim} usando la[C|s] maza[C|s] de {owner}.",
+			"attacker":{"count":"-1","outcome":"nothing","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"04weapon0011"
+		},
+		{
+			"message":"{attacker} mata[A|n] a {victim} con [Cuna |]maza[C|s] de {owner}",
+			"action":"mata[A|n] a",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"05weapon0011"
+		},
+		{
+			"message":"{attacker} hiere[A|n] a {victim} con [Cuna |]maza[C|s] de {owner}",
+			"action":"hiere[A|n] a",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"06weapon0011"
+		},
+		{
+			"message":"¡{victim} le roba una maza a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0011"}},
+			"consumes":1,
+			"id":"07weapon0011"
+		},
+		{
+			"message":"{attacker} rompe[A|n] la[C|s] maza[C|s] de {owner} mientras se exhibe[A|n] ante {victim}.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"nothing"},
+			"consumes":1,
+			"id":"08weapon0011"
+		}
+	]
+}

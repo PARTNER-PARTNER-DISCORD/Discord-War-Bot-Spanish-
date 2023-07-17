@@ -1,0 +1,10 @@
+{
+    "message":"¡Es peligroso ir solo, toma esto!",
+    "victim":{"count":0,"outcome":"nothing"},
+    "attacker":{"count":-1,"outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0012"}},
+    "_reference":"The Legend of Zelda",
+    "id":"124733888177111041/1565752347515-player0212",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

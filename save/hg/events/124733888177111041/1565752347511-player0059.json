@@ -1,0 +1,9 @@
+{
+    "message":"{victim} se vuelve completamente loco y comienza a pensar que es invencible. Para probar si esto era cierto, {victim} saltó de un acantilado.",
+    "attacker":{"count":"0","outcome":"nothing"},
+    "victim":{"count":"1","outcome":"dies"},
+    "id":"124733888177111041/1565752347511-player0059",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

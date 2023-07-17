@@ -1,0 +1,7 @@
+{
+    "message":"{attacker} mata[A|n] a {victim} por suministros.",
+    "attacker":{"count":"-1","outcome":"thrives","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347510-bloodbath0069",
+    "creator":"124733888177111041"
+}

@@ -1,0 +1,53 @@
+{
+	"name":"hacha",
+	"consumable":"hacha[C|s]",
+	"id":"124733888177111041/1565752347504-weapon0013",
+	"type":"weapon",
+	"creator":"124733888177111041",
+	"outcomes":[
+		{
+			"message":"¡{attacker} golpea[A|n] a {victim} hasta la muerte con [Cel|las] hacha[C|s] de {owner}!",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"01weapon0013"
+		},
+		{
+			"message":"{attacker} corta[A|n] un árbol para leña.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":0,
+			"id":"02weapon0013"
+		},
+		{
+			"message":"{attacker} mata[A|n] a {victim} con [Cun |]hacha[C|s] de {owner}",
+			"action":"mata[A|n] a",
+			"attacker":{"count":"-1","outcome":"thrives","killer":true},
+			"victim":{"count":"-1","outcome":"dies"},
+			"consumes":0,
+			"id":"03weapon0013"
+		},
+		{
+			"message":"{attacker} hiere[A|n] a {victim} con [Cun |]hacha[C|s] de {owner}",
+			"action":"hiere[A|n] a",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"-1","outcome":"wounded"},
+			"consumes":0,
+			"id":"04weapon0013"
+		},
+		{
+			"message":"¡{victim} le roba un hacha a {attacker}!",
+			"attacker":{"count":"1","outcome":"nothing"},
+			"victim":{"count":"1","outcome":"nothing","weapon":{"count":1,"id":"124733888177111041/1565752347504-weapon0013"}},
+			"consumes":1,
+			"id":"05weapon0013"
+		},
+		{
+			"message":"{attacker} rompe[A|n] [Cel|las] hacha[C|s] de {owner} mientras corta[A|n] un árbol.",
+			"attacker":{"count":"-1","outcome":"nothing"},
+			"victim":{"count":"0","outcome":"nothing"},
+			"consumes":1,
+			"id":"06weapon0013"
+		}
+	]
+}

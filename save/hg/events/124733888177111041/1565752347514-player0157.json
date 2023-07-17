@@ -1,0 +1,9 @@
+{
+    "message":"{victim} investiga[V|n] una luz en el bosque, pero {attacker} corta[A|n] su[V|s] cuello[V|s] antes de que puedan ver de dónde provenía.",
+    "attacker":{"count":"-1","outcome":"nothing","killer":true},
+    "victim":{"count":"-1","outcome":"dies"},
+    "id":"124733888177111041/1565752347514-player0157",
+    "type":"normal",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

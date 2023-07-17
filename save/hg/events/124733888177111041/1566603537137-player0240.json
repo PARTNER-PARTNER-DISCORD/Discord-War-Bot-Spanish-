@@ -1,0 +1,8 @@
+{
+    "id":"124733888177111041/1566603537137-player0240",
+    "message":"¿Sabes lo que le sucede a {victim} cuando le[V|s] cae un rayo? Lo mismo que sucede con todo lo demás.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":-1,"outcome":"dies"},
+    "attacker":{"count":0,"outcome":"nothing"}
+}

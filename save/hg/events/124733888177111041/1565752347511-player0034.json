@@ -1,0 +1,15 @@
+{
+    "message": "{victim} forma[V|n] un pacto de suicidio con {attacker}.",
+    "attacker": {
+        "count": "-1",
+        "outcome": "dies"
+    },
+    "victim": {
+        "count": "-1",
+        "outcome": "dies"
+    },
+    "id": "124733888177111041/1565752347511-player0034",
+    "type": "normal",
+    "creator": "124733888177111041",
+    "privacy": "public"
+}

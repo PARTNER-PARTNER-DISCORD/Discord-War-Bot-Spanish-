@@ -1,0 +1,7 @@
+{
+	"message":"¡{attacker} encuentra una pistola con una bala y mata a {victim} con ella!",
+	"attacker":{"count":"1","outcome":"nothing","killer":true},
+	"victim":{"count":"1","outcome":"dies"},
+	"id":"124733888177111041/1565752347508-bloodbath0009",
+	"creator":"124733888177111041"
+}
