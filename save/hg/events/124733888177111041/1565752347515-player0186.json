@@ -1,5 +1,5 @@
 {
-    "message":"Después de que {victim} fuera[V|n] derribad@[V|s], {atacante} le[A|s] clava[A|n] una lanza en el abdomen.",
+    "message":"Después de que {victim} fuera[V|n] derribad@[V|s], {attacker} le[A|s] clava[A|n] una lanza en el abdomen.",
     "victim":{"count":-1,"outcome":"dies"},
     "attacker":{"count":-1,"outcome":"nothing","killer":true},
     "id":"124733888177111041/1565752347515-player0186",

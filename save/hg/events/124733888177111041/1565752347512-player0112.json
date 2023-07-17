@@ -1,5 +1,5 @@
 {
-    "message":"{attacker} mata[A|n] a {víctima} mientras duerme[V|n].",
+    "message":"{attacker} mata[A|n] a {victim} mientras duerme[V|n].",
     "attacker":{"count":"-1","outcome":"nothing","killer":true},
     "victim":{"count":"-1","outcome":"dies"},
     "id":"124733888177111041/1565752347512-player0112",

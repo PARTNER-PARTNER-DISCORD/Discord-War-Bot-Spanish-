@@ -1,6 +1,6 @@
 {
     "id":"124733888177111041/1566600582859-player0227",
-    "message":"{atacante} le[A|s] da[A|n] un puñetazo a {víctima}. ¡[AEs|Son] súper efectivo!",
+    "message":"{attacker} le[A|s] da[A|n] un puñetazo a {victim}. ¡[AEs|Son] súper efectivo!",
     "creator":"124733888177111041",
     "type":"normal",
     "victim":{"count":-1,"outcome":"dies"},

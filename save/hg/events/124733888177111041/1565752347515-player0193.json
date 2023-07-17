@@ -1,5 +1,5 @@
 {
-    "message":"Mientras {victim} se preguntan por qué están aquí, {atacante} los mata.",
+    "message":"Mientras {victim} se preguntan por qué están aquí, {attacker} los mata.",
     "victim":{"count":2,"outcome":"dies"},
     "attacker":{"count":1,"outcome":"nothing","killer":true},
     "_reference":"Red Vs. Blue",

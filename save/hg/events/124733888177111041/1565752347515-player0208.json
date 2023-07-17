@@ -1,5 +1,5 @@
 {
-    "message":"{atacante}, mata[A|n] a {víctima}, ¿sería[A|n] tan amable[A|s]?",
+    "message":"{attacker}, mata[A|n] a {victim}, ¿sería[A|n] tan amable[A|s]?",
     "victim":{"count":-1,"outcome":"dies"},
     "attacker":{"count":-1,"outcome":"nothing","killer":true},
     "_reference":"Bioshock",

@@ -1,0 +1,9 @@
+{
+    "id":"124733888177111041/1566603153656-player0244",
+    "message":"Yo soy Groot.",
+    "creator":"124733888177111041",
+    "type":"normal",
+    "victim":{"count":1,"outcome":"revived","killer":false},
+    "attacker":{"count":0,"outcome":"nothing","killer":false},
+    "_reference": "Guardians of the Galaxy"
+}

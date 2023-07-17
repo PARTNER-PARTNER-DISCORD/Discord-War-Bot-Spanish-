@@ -1,5 +1,5 @@
 {
-    "message":"{victim} dej[Vó|aron] entrar a {atacante} en su refugio.",
+    "message":"{victim} dej[Vó|aron] entrar a {attacker} en su refugio.",
     "attacker":{"count":"-1","outcome":"nothing"},
     "victim":{"count":"-1","outcome":"nothing"},
     "id":"124733888177111041/1565752347512-player0095",

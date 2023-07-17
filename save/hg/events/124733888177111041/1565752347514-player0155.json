@@ -1,5 +1,5 @@
 {
-    "message":"{victim} confunde[V|n] a {atacante} con [Aun |]amig@[A|s] y termina[V|n] muerto[V|s].",
+    "message":"{victim} confunde[V|n] a {attacker} con [Aun |]amig@[A|s] y termina[V|n] muerto[V|s].",
     "attacker":{"count":"-1","outcome":"nothing","killer":true},
     "victim":{"count":"-1","outcome":"dies"},
     "id":"124733888177111041/1565752347514-player0155",

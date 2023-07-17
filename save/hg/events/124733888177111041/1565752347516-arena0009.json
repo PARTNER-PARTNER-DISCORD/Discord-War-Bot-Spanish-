@@ -1,44 +1,44 @@
 {
-    "message":"¡Lluvia ácida cae sobre la arena!",
+    "message":"¡Los monos callejeros llenan la arena!",
     "outcomes":[
         {
-            "message":"{victim} sobrevive[V|n].",
+            "message":"{victim} sobrevive[V|n]",
             "attacker":{"count":"0","outcome":"nothing"},
             "victim":{"count":"-1","outcome":"nothing"},
-            "id":"01arena0002"
+            "id":"01arena0009"
         },
         {
-            "message":"{victim} no puede[V|n] encontrar refugio y muere[V|n].",
+            "message":"{victim} muere[V|n] por una hemorragia interna causada por un mono.",
             "attacker":{"count":"0","outcome":"nothing"},
             "victim":{"count":"-1","outcome":"dies"},
-            "id":"02arena0002"
+            "id":"02arena0009"
         },
         {
-            "message":"{victim} tropieza[V|n] de cara en un charco de ácido.",
+            "message":"{victim} [Ves|son] golpeado[V|s] contra el suelo y asesinado[V|s] por una manada de monos callejeros.",
             "attacker":{"count":"0","outcome":"nothing"},
             "victim":{"count":"-1","outcome":"dies"},
-            "id":"03arena0002"
+            "id":"03arena0009"
         },
         {
-            "message":"{attacker} hiere[A|n] a {victim} y los deja[V|n] bajo la lluvia para que mueran.",
+            "message":"{attacker} usa[A|n] a {victim} como escudo contra los monos callejeros.",
             "attacker":{"count":"-1","outcome":"nothing","killer":true},
             "victim":{"count":"-1","outcome":"dies"},
-            "id":"04arena0002"
+            "id":"04arena0009"
         },
         {
-            "message":"{attacker} no deja[A|n] que {victim} entre[V|n] en el refugio, matándole[V|s].",
+            "message":"{attacker} hiere[A|n] a {victim} y le[V|n] deja[V|n] por los monos le[V|n] mate[V|n].",
             "attacker":{"count":"-1","outcome":"nothing","killer":true},
             "victim":{"count":"-1","outcome":"dies"},
-            "id":"05arena0002"
+            "id":"05arena0009"
         },
         {
-            "message":"{attacker} empuja a {victim} a un estanque de ácido, pero {victim} lo arrastra y mueren ambos.",
+            "message":"Mientras corre, {attacker} se cae y agarra a {victim}. Los monos callejeros los matan a ambos.",
             "attacker":{"count":"1","outcome":"dies","killer":true},
             "victim":{"count":"1","outcome":"dies","killer":true},
-            "id":"06arena0002"
+            "id":"06arena0009"
         }
     ],
-    "id":"124733888177111041/1565752347516-arena0002",
+    "id":"124733888177111041/1565752347516-arena0009",
     "type":"arena",
     "creator":"124733888177111041",
     "privacy":"public"

@@ -1,0 +1,45 @@
+{
+    "message":"¡Un enjambre de rastrevíspulas invade la arena!",
+    "outcomes":[
+        {
+            "message":"{victim} sobrevive[V|n].",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"nothing"},
+            "id":"01arena0005"
+        },
+        {
+            "message":"{victim} muere[V|n] por las picaduras.",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"02arena0005"
+        },
+        {
+            "message":"{victim} muere[V|n] lentamente por las toxinas de las rastrevíspulas.",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"03arena0005"
+        },
+        {
+            "message":"{attacker} deja[A|n] inconsciente a {victim} y l@[V|s] deja[V|n] allí como cebo.",
+            "attacker":{"count":"-1","outcome":"nothing","killer":true},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"04arena0005"
+        },
+        {
+            "message":"Mientras huye de las rastrevíspulas, {attacker} agarra a {victim} y le tira al suelo.",
+            "attacker":{"count":"1","outcome":"nothing","killer":true},
+            "victim":{"count":"1","outcome":"dies"},
+            "id":"05arena0005"
+        },
+        {
+            "message":"{victim} se topa[V|n] con un muro y no tiene salida. Muere[V|n] por las picaduras.",
+            "attacker":{"count":"0","outcome":"nothing"},
+            "victim":{"count":"-1","outcome":"dies"},
+            "id":"06arena0005"
+        }
+    ],
+    "id":"124733888177111041/1565752347516-arena0005",
+    "type":"arena",
+    "creator":"124733888177111041",
+    "privacy":"public"
+}

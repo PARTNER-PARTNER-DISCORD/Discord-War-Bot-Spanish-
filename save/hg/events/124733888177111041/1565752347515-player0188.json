@@ -1,5 +1,5 @@
 {
-    "message":"{victim} [Ves|son] atado[V|s] por {atacante} y lo[V|s] deja[V|n] morir.",
+    "message":"{victim} [Ves|son] atado[V|s] por {attacker} y lo[V|s] deja[V|n] morir.",
     "victim":{"count":-1,"outcome":"dies"},
     "attacker":{"count":-1,"outcome":"nothing","killer":true},
     "id":"124733888177111041/1565752347515-player0187",
