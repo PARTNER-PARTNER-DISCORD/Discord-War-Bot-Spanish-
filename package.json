@@ -41,9 +41,6 @@
     "zlib": "^1.0.5",
     "zlib-sync": "^0.1.7"
   },
-  "optionalPeerDependencies": {
-    "youtube-dl": "^3.0.2"
-  },
   "contributors": [
     {
       "name": "Campbell Crowley",

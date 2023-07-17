@@ -65,12 +65,9 @@
   "release": [
     "./main.js",
     "./hungryGames.js",
-    "./cmdScheduling.js",
     "./echo.js",
     "./roleColors.js",
     "./botCommands.js",
-    "./web/hg.js",
-    "./web/settings.js",
     "./memWatcher.js",
     "./images.js",
     "./dev.js"
