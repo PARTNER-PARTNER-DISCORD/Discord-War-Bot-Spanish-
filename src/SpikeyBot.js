@@ -539,7 +539,7 @@ function SpikeyBot() {
   let defaultPresence = {
     status: 'online',
     activities: [{
-      name: 'a los Hungry Games!',
+      name: 'los Hungry Games.',
       type: Discord.ActivityType.Playing,
     }],
   };
@@ -725,7 +725,7 @@ function SpikeyBot() {
         // updateGame('OFFLINE', 'PLAYING');
       } else {
         // updateGame('SpikeyBot.com');
-        updateGame('a los Hungry Games.');
+        updateGame('los Hungry Games.');
       }
     }
     let logChannel = client.channels.resolve(common.logChannel);

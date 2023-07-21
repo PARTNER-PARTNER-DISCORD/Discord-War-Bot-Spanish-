@@ -162,9 +162,13 @@ function Command() {
                     'Remaining command arguments'))
             .toJSON());
     self.log(`Registering slash commands: ${commands.length}`);
-    return self.rest.put(
-        self.Discord.Routes.applicationCommands(self.client.user.id),
-        {body: commands});
+    // return self.rest.put(
+    //     self.Discord.Routes.applicationCommands(self.client.user.id),
+    //     {body: commands});
+    return self.rest.put( // Delete all commands
+            self.Discord.Routes.applicationCommands(self.client.user.id), { body: [] }
+        ).then(() => console.log('Successfully deleted all application commands.'))
+        .catch(console.error);
   };
 
   /**

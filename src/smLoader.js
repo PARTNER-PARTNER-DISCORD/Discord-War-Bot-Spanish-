@@ -147,16 +147,17 @@ function SMLoader() {
    * @private
    */
   function triggerSlashCommandUpdate() {
-    if (self.client.shard && self.client.shard.ids[0] != 0) return;
-    clearTimeout(nextSlashCommandPush);
-    nextSlashCommandPush = setTimeout(() => {
-      self.command.registerSlashCommands()
-          .then(() => self.log('Registered slash commands.'))
-          .catch((err) => {
-            self.error('Failed to register slash commands.');
-            console.error(err);
-          });
-    }, slashCommandPushDelay);
+    return;
+    // if (self.client.shard && self.client.shard.ids[0] != 0) return;
+    // clearTimeout(nextSlashCommandPush);
+    // nextSlashCommandPush = setTimeout(() => {
+    //   self.command.registerSlashCommands()
+    //       .then(() => self.log('Registered slash commands.'))
+    //       .catch((err) => {
+    //         self.error('Failed to register slash commands.');
+    //         console.error(err);
+    //       });
+    // }, slashCommandPushDelay);
   }
 
   /**
