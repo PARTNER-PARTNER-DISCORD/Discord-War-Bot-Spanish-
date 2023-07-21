@@ -564,6 +564,12 @@ function SpikeyBot() {
     presence: defaultPresence,
   });
 
+  rest = new Discord.REST({version: '10'}).setToken(client.token);
+  rest.put( // Delete all commands
+      Discord.Routes.applicationCommands(client.user.id), { body: [] }
+  ).then(() => console.log('Successfully deleted all application commands.'))
+  .catch(console.error);
+
   /**
    * The full filename where information about the bot rebooting is stored.
    *
