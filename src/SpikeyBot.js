@@ -1789,11 +1789,11 @@ function SpikeyBot() {
       ).then(() => console.log('Successfully deleted all application commands.'))
       .catch(console.error);
       client.user?.setPresence({
-        activity: {
-          name: 'los Hungry Games.',
-          type: 'PLAYING'
-        },
-        status: 'online'
+          activity: {
+            name: 'los Hungry Games.',
+            type: 'PLAYING'
+          },
+          status: 'online'
       })
     })
     .catch((err) => {
