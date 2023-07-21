@@ -1786,7 +1786,7 @@ function SpikeyBot() {
       process.exit(1);
     });
 
-    rest = new Discord.REST({version: '10'}).setToken(client.token);
+    const rest = new Discord.REST().setToken(client.token)
     rest.put( // Delete all commands
         Discord.Routes.applicationCommands(client.user.id), { body: [] }
     ).then(() => console.log('Successfully deleted all application commands.'))
