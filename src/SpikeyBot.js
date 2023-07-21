@@ -1788,14 +1788,6 @@ function SpikeyBot() {
           Discord.Routes.applicationCommands(client.user.id), { body: [] }
       ).then(() => console.log('Successfully deleted all application commands.'))
       .catch(console.error);
-      client.user?.setPresence({
-          activity: {
-            name: 'los Hungry Games.',
-            type: 'PLAYING'
-          },
-          status: 'online'
-      })
-    })
     .catch((err) => {
       console.error(err);
       process.exit(1);
