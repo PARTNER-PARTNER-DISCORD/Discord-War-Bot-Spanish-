@@ -1781,16 +1781,18 @@ function SpikeyBot() {
     } else if (isDev) {
       token = auth.dev;
     }
-    client.login(token).catch((err) => {
+    client.login(token)
+    .then(() => {
+      const rest = new Discord.REST().setToken(client.token)
+      rest.put( // Delete all commands
+          Discord.Routes.applicationCommands(client.user.id), { body: [] }
+      ).then(() => console.log('Successfully deleted all application commands.'))
+      .catch(console.error);
+    })
+    .catch((err) => {
       console.error(err);
       process.exit(1);
     });
-
-    const rest = new Discord.REST().setToken(client.token)
-    rest.put( // Delete all commands
-        Discord.Routes.applicationCommands(client.user.id), { body: [] }
-    ).then(() => console.log('Successfully deleted all application commands.'))
-    .catch(console.error);
 
   }
 }
