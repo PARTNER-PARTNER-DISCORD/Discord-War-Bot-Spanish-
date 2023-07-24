@@ -14,7 +14,7 @@
             "id":"02arena0012"
         },
         {
-            "message":"{victim} toca[V|n] accidentalmente una plantas con espinas y venenosa.",
+            "message":"{victim} toca[V|n] accidentalmente una plantas con espinas venenosa.",
             "attacker":{"count":"0","outcome":"nothing"},
             "victim":{"count":"-1","outcome":"dies"},
             "id":"03arena0012"
