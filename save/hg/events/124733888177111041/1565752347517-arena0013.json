@@ -20,7 +20,7 @@
             "id":"03arena0013"
         },
         {
-            "message":"{attacker} confunde[A|n] a {victim} con [Vun |]oso[V|s] y l@[Vs] mata[V|n].",
+            "message":"{attacker} confunde[A|n] a {victim} con [Vun |]oso[V|s] y l@[V|s] mata[V|n].",
             "attacker":{"count":"-1","outcome":"nothing","killer":true},
             "victim":{"count":"-1","outcome":"dies"},
             "id":"04arena0013"
