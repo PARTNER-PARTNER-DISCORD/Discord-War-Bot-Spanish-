@@ -1787,7 +1787,7 @@ function SpikeyBot() {
       rest.put( // Delete all commands
           Discord.Routes.applicationCommands(client.user.id), { body: [] }
       ).then(() => console.log('Successfully deleted all application commands.'))
-      .catch(console.error);
+      .catch(console.error)})
     .catch((err) => {
       console.error(err);
       process.exit(1);
